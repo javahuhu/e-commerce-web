@@ -3,11 +3,11 @@ import 'package:ecommerce_admin/core/Theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:hooks_riverpod/legacy.dart';
 
-class DesktopMainScreen extends HookConsumerWidget {
-  DesktopMainScreen({super.key});
+class TabletHomePage extends HookConsumerWidget {
+  TabletHomePage({super.key});
 
   final List<Map<String, dynamic>> navbar = [
     {'Icons': "assets/dashboard.png"},
@@ -275,8 +275,6 @@ class DesktopMainScreen extends HookConsumerWidget {
             ),
           ),
 
-          
-
           BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
             child: Container(
@@ -471,7 +469,7 @@ class DesktopMainScreen extends HookConsumerWidget {
                                           child: IconButton(
                                             onPressed: () {},
                                             icon: Icon(Icons.search),
-                                            iconSize: 25,
+                                            iconSize: 20,
                                             color: Colors.black,
                                           ),
                                         ),
@@ -566,12 +564,9 @@ class DesktopMainScreen extends HookConsumerWidget {
                                                 right: 20,
                                               ),
                                               decoration: BoxDecoration(
-                                                color: const Color.fromARGB(
-                                                  255,
-                                                  235,
-                                                  235,
-                                                  237,
-                                                ).withValues(alpha: 0.2),
+                                                color: bgcolor.withValues(
+                                                  alpha: 0.2,
+                                                ),
                                                 border: Border.all(
                                                   color: Colors.white
                                                       .withValues(alpha: 0.5),
@@ -685,15 +680,15 @@ class DesktopMainScreen extends HookConsumerWidget {
                                                     itemCount:
                                                         myproducts.length,
                                                     gridDelegate:
-                                                        SliverGridDelegateWithMaxCrossAxisExtent(
-                                                          maxCrossAxisExtent:
-                                                              _myproducts(
-                                                                context,
-                                                              ),
+                                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                                          crossAxisCount: 2,
                                                           mainAxisSpacing: 20,
                                                           crossAxisSpacing:
                                                               gridWidth,
-                                                          childAspectRatio: 1.5,
+                                                          childAspectRatio:
+                                                              _myproductsAspectRatio(
+                                                                context,
+                                                              ),
                                                         ),
                                                     itemBuilder: (context, index) {
                                                       final val =
@@ -834,6 +829,207 @@ class DesktopMainScreen extends HookConsumerWidget {
                                         ),
                                       ),
 
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                          left: 40,
+                                          top: 15,
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                            20,
+                                          ),
+                                          child: BackdropFilter(
+                                            filter: ImageFilter.blur(
+                                              sigmaX: 5,
+                                              sigmaY: 5,
+                                            ),
+                                            child: Container(
+                                              margin: EdgeInsets.only(
+                                                right: 20,
+                                              ),
+                                              padding: EdgeInsets.all(20),
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                color: bgcolor.withValues(
+                                                  alpha: 0.2,
+                                                ),
+                                                border: Border.all(
+                                                  color: Colors.white
+                                                      .withValues(alpha: 0.5),
+                                                  width: 1.5,
+                                                ),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.black
+                                                        .withValues(
+                                                          alpha: 0.05,
+                                                        ),
+                                                    blurRadius: 10,
+                                                    offset: Offset(0, 4),
+                                                  ),
+                                                ],
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                              ),
+
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Padding(
+                                                    padding: EdgeInsets.only(
+                                                      left: 15,
+                                                      top: 10,
+                                                    ),
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.centerLeft,
+                                                      child: Text(
+                                                        'Order Details',
+                                                        style: TextStyle(
+                                                          fontSize: 22,
+                                                          color: txtcolor,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+
+                                                  SizedBox(height: 25),
+                                                  Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Transform.translate(
+                                                        offset: Offset(0, 15),
+                                                        child: CircularPercentIndicator(
+                                                          radius: 110.0,
+                                                          lineWidth: 20,
+                                                          percent: 0.8,
+                                                          progressColor: Colors
+                                                              .deepPurpleAccent,
+                                                          center: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Text(
+                                                                '3',
+                                                                style: TextStyle(
+                                                                  fontSize: 28,
+                                                                  color:
+                                                                      txtcolor,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
+
+                                                              Text(
+                                                                'Orders',
+                                                                style: TextStyle(
+                                                                  fontSize: 24,
+                                                                  color:
+                                                                      txtcolor,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+
+                                                      SizedBox(width: 20),
+
+                                                      Expanded(
+                                                        child: GridView.builder(
+                                                          gridDelegate:
+                                                              SliverGridDelegateWithFixedCrossAxisCount(
+                                                                crossAxisCount:
+                                                                    2,
+                                                                childAspectRatio:
+                                                                    2.3,
+                                                                mainAxisSpacing:
+                                                                    2,
+                                                                crossAxisSpacing:
+                                                                    10,
+                                                              ),
+                                                          physics:
+                                                              NeverScrollableScrollPhysics(),
+                                                          shrinkWrap: true,
+                                                          itemCount: 5,
+                                                          itemBuilder: (context, index) {
+                                                            return Container(
+                                                              padding:
+                                                                  EdgeInsets.all(
+                                                                    5,
+                                                                  ),
+                                                              margin:
+                                                                  EdgeInsets.symmetric(
+                                                                    vertical:
+                                                                        10,
+                                                                  ),
+                                                              decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius.circular(
+                                                                      10,
+                                                                    ),
+                                                                border: Border.all(
+                                                                  color: Colors
+                                                                      .white
+                                                                      .withValues(
+                                                                        alpha:
+                                                                            0.8,
+                                                                      ),
+                                                                  width: 1,
+                                                                ),
+                                                              ),
+
+                                                              child: ListTile(
+                                                                leading: Icon(
+                                                                  Icons
+                                                                      .delivery_dining_outlined,
+                                                                  size: 15,
+                                                                ),
+                                                                title: Text(
+                                                                  'All Orders',
+                                                                  style: TextStyle(
+                                                                    fontSize:
+                                                                        20,
+                                                                    color:
+                                                                        txtcolor,
+                                                                  ),
+                                                                ),
+                                                                subtitle: Text(
+                                                                  '3 Orders',
+                                                                  style: TextStyle(
+                                                                    fontSize:
+                                                                        15,
+                                                                    color:
+                                                                        txtcolor,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            );
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+
                                       SizedBox(height: 25),
                                       Padding(
                                         padding: EdgeInsets.only(left: 40),
@@ -852,14 +1048,11 @@ class DesktopMainScreen extends HookConsumerWidget {
                                               margin: EdgeInsets.only(
                                                 right: 20,
                                               ),
-                                              padding: EdgeInsets.all(10),
+                                              padding: EdgeInsets.all(20),
                                               decoration: BoxDecoration(
-                                                color: const Color.fromARGB(
-                                                  255,
-                                                  235,
-                                                  235,
-                                                  237,
-                                                ).withValues(alpha: 0.2),
+                                                color: bgcolor.withValues(
+                                                  alpha: 0.2,
+                                                ),
                                                 border: Border.all(
                                                   color: Colors.white
                                                       .withValues(alpha: 0.5),
@@ -902,92 +1095,151 @@ class DesktopMainScreen extends HookConsumerWidget {
 
                                                   SizedBox(
                                                     width: double.infinity,
-                                                    child: DataTable(
-                                                      columnSpacing: 0,
-                                                      horizontalMargin: 20,
-                                                      dataRowMaxHeight: 60,
-                                                      headingRowHeight: 60,
-                                                      columns: [
-                                                        DataColumn(
-                                                          label: Text(
-                                                            'Product Name',
-                                                            style: TextStyle(
-                                                              color: txtcolor,
-                                                              fontSize: 15,
+                                                    child: Theme(
+                                                      data: Theme.of(context).copyWith(
+                                                        dividerColor:
+                                                            Colors.transparent,
+                                                        dividerTheme:
+                                                            const DividerThemeData(
+                                                              color: Colors
+                                                                  .transparent,
+                                                              space: 0,
+                                                              thickness: 0,
+                                                              indent: 0,
+                                                              endIndent: 0,
                                                             ),
-                                                          ),
-                                                        ),
+                                                      ),
+                                                      child: SingleChildScrollView(
+                                                        scrollDirection:
+                                                            Axis.horizontal,
+                                                        child: DataTable(
+                                                          dividerThickness: 0.0,
+                                                          columnSpacing: 50,
+                                                          horizontalMargin: 20,
+                                                          dataRowMaxHeight: 60,
+                                                          headingRowHeight: 60,
+                                                          columns: [
+                                                            DataColumn(
+                                                              label: Text(
+                                                                'Product Name',
+                                                                style: TextStyle(
+                                                                  color:
+                                                                      txtcolor,
+                                                                  fontSize: 15,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
+                                                            ),
 
-                                                        DataColumn(
-                                                          label: Text(
-                                                            'Category',
-                                                            style: TextStyle(
-                                                              color: txtcolor,
-                                                              fontSize: 15,
+                                                            DataColumn(
+                                                              label: Text(
+                                                                'Category',
+                                                                style: TextStyle(
+                                                                  color:
+                                                                      txtcolor,
+                                                                  fontSize: 15,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
                                                             ),
-                                                          ),
-                                                        ),
 
-                                                        DataColumn(
-                                                          label: Text(
-                                                            'Sub Category',
-                                                            style: TextStyle(
-                                                              color: txtcolor,
-                                                              fontSize: 15,
+                                                            DataColumn(
+                                                              label: Text(
+                                                                'Sub Category',
+                                                                style: TextStyle(
+                                                                  color:
+                                                                      txtcolor,
+                                                                  fontSize: 15,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
                                                             ),
-                                                          ),
-                                                        ),
 
-                                                        DataColumn(
-                                                          label: Text(
-                                                            'Price',
-                                                            style: TextStyle(
-                                                              color: txtcolor,
-                                                              fontSize: 15,
+                                                            DataColumn(
+                                                              label: Text(
+                                                                'Price',
+                                                                style: TextStyle(
+                                                                  color:
+                                                                      txtcolor,
+                                                                  fontSize: 15,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
                                                             ),
-                                                          ),
-                                                        ),
 
-                                                        DataColumn(
-                                                          label: Text(
-                                                            'Edit',
-                                                            style: TextStyle(
-                                                              color: txtcolor,
-                                                              fontSize: 15,
+                                                            DataColumn(
+                                                              label: Text(
+                                                                'Edit',
+                                                                style: TextStyle(
+                                                                  color:
+                                                                      txtcolor,
+                                                                  fontSize: 15,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
                                                             ),
-                                                          ),
-                                                        ),
 
-                                                        DataColumn(
-                                                          label: Text(
-                                                            'Delete',
-                                                            style: TextStyle(
-                                                              color: txtcolor,
-                                                              fontSize: 15,
+                                                            DataColumn(
+                                                              label: Text(
+                                                                'Delete',
+                                                                style: TextStyle(
+                                                                  color:
+                                                                      txtcolor,
+                                                                  fontSize: 15,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
                                                             ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                      rows: products.asMap().entries.map((
-                                                        entry,
-                                                      ) {
-                                                        final value =
-                                                            entry.value;
-                                                        return DataRow(
-                                                          cells: [
-                                                            DataCell(
-                                                              Row(
-                                                                children: [
-                                                                  Image.asset(
-                                                                    value['image'],
-                                                                    width: 30,
-                                                                    height: 30,
+                                                          ],
+                                                          rows: products.asMap().entries.map((
+                                                            entry,
+                                                          ) {
+                                                            final value =
+                                                                entry.value;
+                                                            return DataRow(
+                                                              cells: [
+                                                                DataCell(
+                                                                  Row(
+                                                                    children: [
+                                                                      Image.asset(
+                                                                        value['image'],
+                                                                        width:
+                                                                            30,
+                                                                        height:
+                                                                            30,
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width:
+                                                                            10,
+                                                                      ),
+                                                                      Text(
+                                                                        value["name"],
+                                                                        style: TextStyle(
+                                                                          fontSize:
+                                                                              12,
+                                                                          color:
+                                                                              txtcolor,
+                                                                        ),
+                                                                      ),
+                                                                    ],
                                                                   ),
-                                                                  SizedBox(
-                                                                    width: 10,
-                                                                  ),
+                                                                ),
+
+                                                                DataCell(
                                                                   Text(
-                                                                    value["name"],
+                                                                    value['category'],
                                                                     style: TextStyle(
                                                                       fontSize:
                                                                           12,
@@ -995,69 +1247,61 @@ class DesktopMainScreen extends HookConsumerWidget {
                                                                           txtcolor,
                                                                     ),
                                                                   ),
-                                                                ],
-                                                              ),
-                                                            ),
-
-                                                            DataCell(
-                                                              Text(
-                                                                value['category'],
-                                                                style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color:
-                                                                      txtcolor,
                                                                 ),
-                                                              ),
-                                                            ),
 
-                                                            DataCell(
-                                                              Text(
-                                                                value['subCategory'],
-                                                                style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color:
-                                                                      txtcolor,
-                                                                ),
-                                                              ),
-                                                            ),
-
-                                                            DataCell(
-                                                              Text(
-                                                                value['price']
-                                                                    .toString(),
-                                                                style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color:
-                                                                      txtcolor,
-                                                                ),
-                                                              ),
-                                                            ),
-
-                                                            DataCell(
-                                                              Icon(
-                                                                Icons.edit,
-                                                                color:
-                                                                    const Color.fromARGB(
-                                                                      255,
-                                                                      255,
-                                                                      255,
-                                                                      255,
+                                                                DataCell(
+                                                                  Text(
+                                                                    value['subCategory'],
+                                                                    style: TextStyle(
+                                                                      fontSize:
+                                                                          12,
+                                                                      color:
+                                                                          txtcolor,
                                                                     ),
-                                                                size: 20,
-                                                              ),
-                                                            ),
+                                                                  ),
+                                                                ),
 
-                                                            DataCell(
-                                                              Icon(
-                                                                Icons.delete,
-                                                                color:
-                                                                    Colors.red,
-                                                                size: 20,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        );
-                                                      }).toList(),
+                                                                DataCell(
+                                                                  Text(
+                                                                    value['price']
+                                                                        .toString(),
+                                                                    style: TextStyle(
+                                                                      fontSize:
+                                                                          12,
+                                                                      color:
+                                                                          txtcolor,
+                                                                    ),
+                                                                  ),
+                                                                ),
+
+                                                                DataCell(
+                                                                  Icon(
+                                                                    Icons.edit,
+                                                                    color:
+                                                                        const Color.fromARGB(
+                                                                          255,
+                                                                          255,
+                                                                          255,
+                                                                          255,
+                                                                        ),
+                                                                    size: 20,
+                                                                  ),
+                                                                ),
+
+                                                                DataCell(
+                                                                  Icon(
+                                                                    Icons
+                                                                        .delete,
+                                                                    color: Colors
+                                                                        .red,
+                                                                    size: 20,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            );
+                                                          }).toList(),
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
                                                 ],
@@ -1069,80 +1313,6 @@ class DesktopMainScreen extends HookConsumerWidget {
 
                                       SizedBox(height: 50),
                                     ],
-                                  ),
-                                ),
-
-                                Expanded(
-                                  flex: 2,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                      right: 15,
-                                      top: 192,
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(20),
-                                      child: BackdropFilter(
-                                        filter: ImageFilter.blur(
-                                          sigmaX: 5,
-                                          sigmaY: 5,
-                                        ),
-                                        child: Container(
-                                          height: 1000,
-                                          padding: EdgeInsets.all(20),
-                                          width: double.infinity,
-                                          decoration: BoxDecoration(
-                                            color: const Color.fromARGB(
-                                              255,
-                                              235,
-                                              235,
-                                              237,
-                                            ).withValues(alpha: 0.2),
-                                            border: Border.all(
-                                              color: Colors.white.withValues(
-                                                alpha: 0.5,
-                                              ),
-                                              width: 1.5,
-                                            ),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black.withValues(
-                                                  alpha: 0.05,
-                                                ),
-                                                blurRadius: 10,
-                                                offset: Offset(0, 4),
-                                              ),
-                                            ],
-                                            borderRadius: BorderRadius.circular(
-                                              20,
-                                            ),
-                                          ),
-
-                                          child: Column(
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsets.only(
-                                                  left: 15,
-                                                  top: 10,
-                                                ),
-                                                child: Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(
-                                                    'Order Details',
-                                                    style: TextStyle(
-                                                      fontSize: 22,
-                                                      color: txtcolor,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
                                   ),
                                 ),
                               ],
@@ -1162,16 +1332,41 @@ class DesktopMainScreen extends HookConsumerWidget {
   }
 }
 
-double _myproducts(BuildContext context) {
+
+
+double _myproductsAspectRatio(BuildContext context) {
   double screenWidth = MediaQuery.of(context).size.width;
 
-  if (screenWidth >= 1773 && screenWidth <= 1825) {
-    return 311; // wider cards, fewer columns
-  } else if (screenWidth >= 1285 && screenWidth <= 1425) {
-    return 355; // narrower cards, more columns
-  } else if (screenWidth < 1285) {
-    return 355; // mobile, smaller cards
+  if (screenWidth >= 968 &&  screenWidth <= 1099) {
+    return 2;
+  } else if (screenWidth >= 955 && screenWidth <= 967) {
+    return 2;
+  } else if (screenWidth >= 815 && screenWidth <= 845) {
+    return 1.6;
+  } else if (screenWidth >= 687 && screenWidth <= 749) {
+    return 1.2;
+  } else if (screenWidth >= 629 && screenWidth <= 687) {
+    return 1;
+  } else if (screenWidth >= 563 && screenWidth <= 629) {
+    return 0.7;
+  } else if (screenWidth >= 500 && screenWidth <= 562) {
+    return 0.5;
   }
 
-  return 300; // fallback
+
+  return 1.4;
+}
+
+double _orderDetails(BuildContext context) {
+  double screenWidth = MediaQuery.of(context).size.width;
+
+  if (screenWidth <= 1042) {
+    return 1.4;
+  } else if (screenWidth >= 1252 && screenWidth <= 1368) {
+    return 1.8;
+  } else if (screenWidth <= 1249) {
+    return 1.65;
+  }
+
+  return 1.4;
 }

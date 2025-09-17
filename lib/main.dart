@@ -1,7 +1,4 @@
-import 'package:ecommerce_admin/Views/Desktop/desktop_main.dart';
-import 'package:ecommerce_admin/Views/Mobile/mobile_main.dart';
-import 'package:ecommerce_admin/Views/Tablet/tablet_main.dart';
-import 'package:ecommerce_admin/responsive_layout.dart';
+import 'package:ecommerce_admin/Router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -22,13 +19,9 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       // Use builder only if you need to use library outside ScreenUtilInit context
       builder: (_, child) {
-        return MaterialApp(
+        return MaterialApp.router(
           debugShowCheckedModeBanner: false,
-          home: ResponsiveLayout(
-            mobileBody: MobileMainScreen(),
-            tabletBody: TabletMainScreen(),
-            desktopBody: DesktopMainScreen(),
-          ),
+          routerConfig: router,
         );
       },
     );

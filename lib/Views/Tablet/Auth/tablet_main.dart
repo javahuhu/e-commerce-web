@@ -39,7 +39,7 @@ class TabletMainScreen extends HookConsumerWidget {
       ),
     ]).animate(CurvedAnimation(parent: controller, curve: Curves.easeInOut));
 
-    final toTablet = MediaQuery.of(context).size.width < 800;
+    final toTablet = MediaQuery.of(context).size.width < 801;
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,

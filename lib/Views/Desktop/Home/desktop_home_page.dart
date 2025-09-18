@@ -17,6 +17,8 @@ class DesktopHomePage extends HookConsumerWidget {
     {'Icons': "assets/dashboard.png"},
 
     {'Icons': "assets/dashboard.png"},
+
+    {'Icons': "assets/dashboard.png"},
   ];
 
   final List<Map<String, dynamic>> myproducts = [
@@ -211,6 +213,8 @@ class DesktopHomePage extends HookConsumerWidget {
     final dark = ref.watch(isDark);
     double width = MediaQuery.of(context).size.width;
     double gridWidth = (width > 2265) ? 150 : 50;
+    double widthmode = MediaQuery.of(context).size.width;
+    double modeWidth = (widthmode < 1800) ? 0 : 105;
     return Scaffold(
         body: Stack(
           fit: StackFit.expand,
@@ -293,7 +297,7 @@ class DesktopHomePage extends HookConsumerWidget {
 
             Column(
               children: [
-                SizedBox(height: 15),
+                
 
                 Expanded(
                   child: Row(
@@ -313,7 +317,7 @@ class DesktopHomePage extends HookConsumerWidget {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(top: 150),
+                            padding: EdgeInsets.only(top: 100),
 
                             child: SizedBox(
                               height: 550,
@@ -323,7 +327,7 @@ class DesktopHomePage extends HookConsumerWidget {
                                 shrinkWrap: true,
                                 padding: EdgeInsets.only(left: 35),
                                 separatorBuilder: (_, _) =>
-                                    SizedBox(height: 15),
+                                    SizedBox(height: 30),
                                 itemCount: navbar.length,
                                 itemBuilder: (context, index) {
                                   final icons = navbar[index];
@@ -361,30 +365,7 @@ class DesktopHomePage extends HookConsumerWidget {
                             ),
                           ),
 
-                          Padding(
-                            padding: EdgeInsets.only(left: 35, bottom: 10),
-                            child: Container(
-                              height: 50,
-                              width: 50,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: const Color.fromARGB(255, 255, 255, 255),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black12,
-                                    blurRadius: 2,
-                                  ),
-                                ],
-                              ),
-
-                              child: Icon(
-                                Icons.exit_to_app,
-                                size: 30,
-                                color: txtcolor,
-                              ),
-                            ),
-                          ),
+                       
                         ],
                       ),
 
@@ -460,7 +441,7 @@ class DesktopHomePage extends HookConsumerWidget {
                                     ),
 
                                     Spacer(),
-                                    SizedBox(width: 105),
+                                    SizedBox(width: modeWidth),
                                     Padding(
                                       padding: EdgeInsets.only(right: 15),
                                       child: Row(
@@ -887,6 +868,7 @@ class DesktopHomePage extends HookConsumerWidget {
                                                 ),
 
                                                 child: Column(
+                                                  
                                                   children: [
                                                     Align(
                                                       alignment:
@@ -926,7 +908,7 @@ class DesktopHomePage extends HookConsumerWidget {
                                                         ),
                                                         child: DataTable(
                                                           dividerThickness: 0.0,
-                                                          columnSpacing: 0,
+                                                          columnSpacing: 15,
                                                           horizontalMargin: 20,
                                                           dataRowMaxHeight: 60,
                                                           headingRowHeight: 60,
@@ -1325,12 +1307,14 @@ double _myproducts(BuildContext context) {
 double _myproductsAspectRatio(BuildContext context) {
   double screenWidth = MediaQuery.of(context).size.width;
 
-  if (screenWidth >= 1500 && screenWidth <= 1726) {
-    return 1.6;
+  if (screenWidth >= 1500 && screenWidth <= 1731) {
+    return 1.5;
   } else if (screenWidth >= 1252 && screenWidth <= 1368) {
     return 1.8;
   } else if (screenWidth <= 1249) {
     return 1.65;
+  } else if (screenWidth >= 1732 && screenWidth <= 1738) {
+    return 1.3;
   } 
 
   return 1.4;

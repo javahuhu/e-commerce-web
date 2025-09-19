@@ -10,8 +10,8 @@ class DesktopMainScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final TextEditingController _usernamecontroller = TextEditingController();
-    final TextEditingController _passwordcontroller = TextEditingController();
+    final TextEditingController usernamecontroller = TextEditingController();
+    final TextEditingController passwordcontroller = TextEditingController();
     final controller = useAnimationController(
       duration: const Duration(seconds: 5),
     )..repeat(reverse: true);
@@ -162,7 +162,7 @@ class DesktopMainScreen extends HookConsumerWidget {
                                         horizontal: 140,
                                       ),
                                       child: TextField(
-                                        controller: _usernamecontroller,
+                                        controller: usernamecontroller,
                                         decoration: InputDecoration(
                                           hintText: 'Username',
                                           filled: true,
@@ -206,7 +206,7 @@ class DesktopMainScreen extends HookConsumerWidget {
                                         vertical: 15,
                                       ),
                                       child: TextField(
-                                        controller: _passwordcontroller,
+                                        controller: passwordcontroller,
                                         decoration: InputDecoration(
                                           hintText: 'Password',
                                           filled: true,

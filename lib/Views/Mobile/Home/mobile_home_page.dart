@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:ecommerce_admin/core/Theme/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -27,6 +26,42 @@ class MobileHomePage extends HookConsumerWidget {
   ];
 
   final List<Map<String, dynamic>> products = [
+    {
+      "image": "assets/sampleuser.jpg",
+      "name": "Samsung A53 Mobile",
+      "category": "Electronics",
+      "subCategory": "Mobile",
+      "price": 15000.0,
+    },
+    {
+      "image": "assets/sampleuser.jpg",
+      "name": "iPhone 14 Pro",
+      "category": "Electronics",
+      "subCategory": "Mobile",
+      "price": 5000.0,
+    },
+    {
+      "image": "assets/sampleuser.jpg",
+      "name": "iPhone 15 Pro",
+      "category": "Electronics",
+      "subCategory": "Mobile",
+      "price": 20000.0,
+    },
+    {
+      "image": "assets/sampleuser.jpg",
+      "name": "S24 Ultra Mobile",
+      "category": "Electronics",
+      "subCategory": "Mobile",
+      "price": 60000.0,
+    },
+    {
+      "image": "assets/sampleuser.jpg",
+      "name": "Apple Smart Watch",
+      "category": "Electronics",
+      "subCategory": "Gadgets",
+      "price": 10000.0,
+    },
+
     {
       "image": "assets/sampleuser.jpg",
       "name": "Samsung A53 Mobile",
@@ -104,7 +139,7 @@ class MobileHomePage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: const Color.fromARGB(0, 240, 238, 238),
         elevation: 0,
         leading: Builder(
           builder: (context) => GestureDetector(
@@ -117,8 +152,8 @@ class MobileHomePage extends HookConsumerWidget {
                 child: Image.asset(
                   'assets/analysis.png',
                   fit: BoxFit.contain,
-                  height: 50.h,
-                  width: 50.w,
+                  height: 60.h,
+                  width: 60.w,
                 ),
               ),
             ),
@@ -129,14 +164,14 @@ class MobileHomePage extends HookConsumerWidget {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
             child: Container(
-              height: 50.h,
+              height: 20.h,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Color.fromARGB(78, 245, 246, 248), // light gray
-                    Color.fromARGB(85, 217, 219, 225), // lavender gray
+                    Color.fromARGB(0, 245, 246, 248), // light gray
+                    Color.fromARGB(0, 217, 219, 225), // lavender gray
                   ],
                 ),
               ),
@@ -146,8 +181,9 @@ class MobileHomePage extends HookConsumerWidget {
         title: _header(context, ref, dark),
       ),
       drawer: Container(
+        padding: EdgeInsets.only(bottom: 10.h),
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.r)),
-        width: 200.w,
+        width: 100.w,
         child: Drawer(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -199,7 +235,7 @@ class MobileHomePage extends HookConsumerWidget {
                   ),
 
                   SizedBox(height: 250.h),
-                  _themeToggle(context, ref, dark)
+                  _themeToggle(context, ref, dark),
                 ],
               ),
             ),
@@ -238,7 +274,7 @@ class MobileHomePage extends HookConsumerWidget {
     return Stack(
       children: [
         Positioned(
-          right: -80,
+          right: -150.w,
           top: -80,
           child: AnimatedBuilder(
             animation: controller,
@@ -246,8 +282,8 @@ class MobileHomePage extends HookConsumerWidget {
               return Transform.scale(
                 scale: scaleAnimation.value,
                 child: Container(
-                  height: 100,
-                  width: 100,
+                  height: 25.w,
+                  width: 25.w,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     boxShadow: [
@@ -264,7 +300,7 @@ class MobileHomePage extends HookConsumerWidget {
           ),
         ),
         Positioned(
-          left: -70,
+          left: -150.w,
           bottom: -70,
           child: AnimatedBuilder(
             animation: controller,
@@ -272,8 +308,8 @@ class MobileHomePage extends HookConsumerWidget {
               return Transform.scale(
                 scale: scaleAnimation.value,
                 child: Container(
-                  height: 100,
-                  width: 100,
+                  height: 25.w,
+                  width: 25.w,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     boxShadow: [
@@ -358,8 +394,7 @@ class MobileHomePage extends HookConsumerWidget {
             'Laza',
             style: TextStyle(fontSize: 20.sp, color: txtcolor),
           ),
-          
-          
+
           Spacer(),
           _headerIcons(),
         ],
@@ -458,7 +493,7 @@ class MobileHomePage extends HookConsumerWidget {
             children: [
               SizedBox(height: 35),
               Padding(
-                padding: EdgeInsets.only(top: 20.h, left: 40.w),
+                padding: EdgeInsets.only(top: 20.h, left: 30.w),
                 child: Text(
                   'Good morning, Mike',
                   style: TextStyle(
@@ -469,7 +504,7 @@ class MobileHomePage extends HookConsumerWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 10, left: 45),
+                padding: const EdgeInsets.only(top: 10, left: 40),
                 child: Text(
                   "Let's make this day productive",
                   style: TextStyle(
@@ -487,7 +522,7 @@ class MobileHomePage extends HookConsumerWidget {
 
   Widget _myProductsSection(BuildContext context, double gridWidth) {
     return Padding(
-      padding: EdgeInsets.only(left: 40.w, top: 20.h, bottom: 10.h),
+      padding: EdgeInsets.only(left: 20.w, top: 20.h, bottom: 10.h),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: BackdropFilter(
@@ -522,7 +557,7 @@ class MobileHomePage extends HookConsumerWidget {
                     crossAxisCount: 2,
                     mainAxisSpacing: 10,
                     crossAxisSpacing: 10,
-                    childAspectRatio: 0.9,
+                    childAspectRatio: 1,
                   ),
                   itemBuilder: (context, index) {
                     final val = myproducts[index];
@@ -649,289 +684,148 @@ class MobileHomePage extends HookConsumerWidget {
   }
 
   Widget _orderDetailsSection(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    if (screenWidth < 818) {
-      return Padding(
-        padding: EdgeInsets.only(left: 40, top: 15),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-            child: Container(
-              margin: EdgeInsets.only(right: 20),
-              padding: EdgeInsets.all(20),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: bgcolor.withValues(alpha: 0.2),
-                border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.5),
-                  width: 1.5,
+    return Padding(
+      padding: EdgeInsets.only(left: 20, top: 15),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+          child: Container(
+            margin: EdgeInsets.only(right: 20),
+            padding: EdgeInsets.all(20),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: bgcolor.withValues(alpha: 0.2),
+              border: Border.all(
+                color: Colors.white.withValues(alpha: 0.5),
+                width: 1.5,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                  offset: Offset(0, 4),
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 10,
-                    offset: Offset(0, 4),
-                  ),
-                ],
-                borderRadius: BorderRadius.circular(20.r),
-              ),
+              ],
+              borderRadius: BorderRadius.circular(20.r),
+            ),
 
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 15.w, top: 10.h),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Order Details',
-                        style: TextStyle(
-                          fontSize: 18.sp,
-                          color: txtcolor,
-                          fontWeight: FontWeight.bold,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: 15.w, top: 10.h),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Order Details',
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        color: txtcolor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 15),
+
+                Transform.translate(
+                  offset: Offset(0, 15),
+                  child: CircularPercentIndicator(
+                    radius: 70.0.r,
+                    lineWidth: 15,
+                    percent: 0.8,
+                    progressColor: Colors.deepPurpleAccent,
+                    center: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '3',
+                          style: TextStyle(
+                            fontSize: 22.sp,
+                            color: txtcolor,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
+
+                        Text(
+                          'Orders',
+                          style: TextStyle(
+                            fontSize: 15.sp,
+                            color: txtcolor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                ),
 
-                  SizedBox(height: 15),
+                SizedBox(height: 25),
 
-                  Transform.translate(
-                    offset: Offset(0, 15),
-                    child: CircularPercentIndicator(
-                      radius: 70.0.r,
-                      lineWidth: 15,
-                      percent: 0.8,
-                      progressColor: Colors.deepPurpleAccent,
-                      center: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '3',
-                            style: TextStyle(
-                              fontSize: 22.sp,
-                              color: txtcolor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-
-                          Text(
-                            'Orders',
-                            style: TextStyle(
-                              fontSize: 15.sp,
-                              color: txtcolor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
+                SizedBox(
+                  
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 1,
+                      childAspectRatio: _orderDetailsRatio(context),
+                      mainAxisSpacing: 2,
+                      crossAxisSpacing: 15,
                     ),
-                  ),
-
-                  SizedBox(height: 25),
-
-                  SizedBox(
-                    width: 500,
-                    child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 1,
-                        childAspectRatio: 2.7,
-                        mainAxisSpacing: 2,
-                        crossAxisSpacing: 15,
-                      ),
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: 5,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          padding: EdgeInsets.all(5),
-                          margin: EdgeInsets.symmetric(vertical: 10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.8),
-                              width: 1,
-                            ),
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: 5,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        padding: EdgeInsets.all(5),
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.symmetric(vertical: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.8),
+                            width: 1,
                           ),
+                        ),
 
-                          child: ListTile(
-                            leading: Icon(
-                              Icons.delivery_dining_outlined,
-                              size: 15,
-                            ),
-                            title: Text(
-                              'All Orders',
-                              style: TextStyle(fontSize: 20, color: txtcolor),
-                            ),
-                            subtitle: Text(
-                              '3 Orders',
-                              style: TextStyle(fontSize: 15, color: txtcolor),
-                            ),
+                        child: ListTile(
+                          leading: Icon(
+                            Icons.delivery_dining_outlined,
+                            size: 15,
                           ),
-                        );
-                      },
-                    ),
+                          title: Text(
+                            'All Orders',
+                            style: TextStyle(fontSize:  18.sp, color: txtcolor),
+                          ),
+                          subtitle: Text(
+                            '3 Orders',
+                            style: TextStyle(fontSize: 15.sp, color: txtcolor),
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
-      );
-    } else {
-      return Padding(
-        padding: EdgeInsets.only(left: 40, top: 15),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-            child: Container(
-              margin: EdgeInsets.only(right: 20),
-              padding: EdgeInsets.all(20),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: bgcolor.withValues(alpha: 0.2),
-                border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.5),
-                  width: 1.5,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 10,
-                    offset: Offset(0, 4),
-                  ),
-                ],
-                borderRadius: BorderRadius.circular(20),
-              ),
-
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 15, top: 10),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Order Details',
-                        style: TextStyle(
-                          fontSize: 18.sp,
-                          color: txtcolor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height: 25),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Transform.translate(
-                        offset: Offset(0, 15),
-                        child: CircularPercentIndicator(
-                          radius: 110.0,
-                          lineWidth: 20,
-                          percent: 0.8,
-                          progressColor: Colors.deepPurpleAccent,
-                          center: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '3',
-                                style: TextStyle(
-                                  fontSize: 28,
-                                  color: txtcolor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-
-                              Text(
-                                'Orders',
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  color: txtcolor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-
-                      SizedBox(width: 20),
-
-                      Expanded(
-                        child: GridView.builder(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: _orderDetails(context),
-                                childAspectRatio: _orderDetailsRatio(context),
-                                mainAxisSpacing: 2,
-                                crossAxisSpacing: 10,
-                              ),
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: 5,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              padding: EdgeInsets.all(5),
-                              margin: EdgeInsets.symmetric(vertical: 10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: Colors.white.withValues(alpha: 0.8),
-                                  width: 1,
-                                ),
-                              ),
-
-                              child: ListTile(
-                                leading: Icon(
-                                  Icons.delivery_dining_outlined,
-                                  size: 15,
-                                ),
-                                title: Text(
-                                  'All Orders',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: txtcolor,
-                                  ),
-                                ),
-                                subtitle: Text(
-                                  '3 Orders',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: txtcolor,
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-    }
+      ),
+    );
   }
 
   Widget _allProductsSection(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 40),
+      padding: EdgeInsets.only(left: 20),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
           child: Container(
             width: double.infinity,
+
             margin: EdgeInsets.only(right: 20),
             padding: EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -966,6 +860,7 @@ class MobileHomePage extends HookConsumerWidget {
                   ),
                 ),
                 SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.497,
                   width: double.infinity,
                   child: Theme(
                     data: Theme.of(context).copyWith(
@@ -979,9 +874,9 @@ class MobileHomePage extends HookConsumerWidget {
                       ),
                     ),
                     child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
+                      scrollDirection: Axis.vertical,
                       child: SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
+                        scrollDirection: Axis.horizontal,
                         child: DataTable(
                           dividerThickness: 0.0,
                           columnSpacing: 50,
@@ -1136,62 +1031,16 @@ class MobileHomePage extends HookConsumerWidget {
   }
 }
 
-double _myproductsAspectRatio(BuildContext context) {
-  double screenWidth = MediaQuery.of(context).size.width;
-
-  if (screenWidth >= 968 && screenWidth <= 1099) {
-    return 2;
-  } else if (screenWidth >= 955 && screenWidth <= 967) {
-    return 1.9;
-  } else if (screenWidth >= 851 && screenWidth <= 955) {
-    return 1.6;
-  } else if (screenWidth >= 815 && screenWidth <= 845) {
-    return 1.6;
-  } else if (screenWidth >= 689 && screenWidth <= 749) {
-    return 1.2;
-  } else if (screenWidth >= 629 && screenWidth <= 688) {
-    return 1.1;
-  } else if (screenWidth >= 575 && screenWidth <= 629) {
-    return 0.94;
-  } else if (screenWidth >= 500 && screenWidth <= 574) {
-    return 0.9;
-  }
-
-  return 1.4;
-}
-
-int _orderDetails(BuildContext context) {
-  double screenWidth = MediaQuery.of(context).size.width;
-
-  if (screenWidth <= 952) {
-    return 1;
-  }
-
-  return 2;
-}
-
 double _orderDetailsRatio(BuildContext context) {
   double screenWidth = MediaQuery.of(context).size.width;
 
-  if (screenWidth >= 897 && screenWidth <= 952) {
-    return 4.2;
-  } else if (screenWidth >= 816 && screenWidth <= 896) {
+  if (screenWidth >= 392 && screenWidth <= 440) {
     return 3.5;
-  } else if (screenWidth >= 769 && screenWidth <= 815) {
-    return 3;
+  } else if (screenWidth >= 362 &&  screenWidth <= 391) {
+    return 2.9;
+  } else if (screenWidth <= 361) {
+    return 2.7;
   }
-
-  return 2.3;
+  return 4;
 }
 
-double _orderDetailsWidth(BuildContext context) {
-  double screenWidth = MediaQuery.of(context).size.width;
-
-  if (screenWidth >= 600 && screenWidth <= 700) {
-    return 4;
-  } else if (screenWidth >= 501 && screenWidth <= 600) {
-    return 3.5;
-  }
-
-  return 2.3;
-}

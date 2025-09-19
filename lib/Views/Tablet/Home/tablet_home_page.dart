@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:ecommerce_admin/core/Theme/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -61,6 +60,43 @@ class TabletHomePage extends HookConsumerWidget {
       "subCategory": "Gadgets",
       "price": 10000.0,
     },
+
+     {
+      "image": "assets/sampleuser.jpg",
+      "name": "Samsung A53 Mobile",
+      "category": "Electronics",
+      "subCategory": "Mobile",
+      "price": 15000.0,
+    },
+    {
+      "image": "assets/sampleuser.jpg",
+      "name": "iPhone 14 Pro",
+      "category": "Electronics",
+      "subCategory": "Mobile",
+      "price": 5000.0,
+    },
+    {
+      "image": "assets/sampleuser.jpg",
+      "name": "iPhone 15 Pro",
+      "category": "Electronics",
+      "subCategory": "Mobile",
+      "price": 20000.0,
+    },
+    {
+      "image": "assets/sampleuser.jpg",
+      "name": "S24 Ultra Mobile",
+      "category": "Electronics",
+      "subCategory": "Mobile",
+      "price": 60000.0,
+    },
+    {
+      "image": "assets/sampleuser.jpg",
+      "name": "Apple Smart Watch",
+      "category": "Electronics",
+      "subCategory": "Gadgets",
+      "price": 10000.0,
+    },
+    // ... (re
     // ... (rest of your products list)
   ];
 
@@ -317,9 +353,6 @@ class TabletHomePage extends HookConsumerWidget {
                 ),
               ),
             ),
-        
-         
-            
         ],
       ),
     );
@@ -961,6 +994,9 @@ class TabletHomePage extends HookConsumerWidget {
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
           child: Container(
+            constraints: BoxConstraints(
+              minHeight: 200
+            ),
             width: double.infinity,
             margin: EdgeInsets.only(right: 20),
             padding: EdgeInsets.all(20),
@@ -996,6 +1032,7 @@ class TabletHomePage extends HookConsumerWidget {
                   ),
                 ),
                 SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.497,
                   width: double.infinity,
                   child: Theme(
                     data: Theme.of(context).copyWith(
@@ -1009,9 +1046,9 @@ class TabletHomePage extends HookConsumerWidget {
                       ),
                     ),
                     child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
+                      scrollDirection: Axis.vertical,
                       child: SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
+                        scrollDirection: Axis.horizontal,
                         child: DataTable(
                           dividerThickness: 0.0,
                           columnSpacing: 50,

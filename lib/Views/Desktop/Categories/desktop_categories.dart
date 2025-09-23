@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:hooks_riverpod/legacy.dart';
 
-class DesktopHomePage extends HookConsumerWidget {
-  DesktopHomePage({super.key});
+class DesktopCategoriesPage extends HookConsumerWidget {
+  DesktopCategoriesPage({super.key});
 
   final List<Map<String, dynamic>> navbar = [
     {'Icons': "assets/dashboard.png", 'NavigateTo': 'Dashboard'},
@@ -43,145 +42,45 @@ class DesktopHomePage extends HookConsumerWidget {
   final List<Map<String, dynamic>> products = [
     {
       "image": "assets/sampleuser.jpg",
-      "name": "Samsung A53 Mobile",
       "category": "Electronics",
-      "subCategory": "Mobile",
-      "price": 15000.0,
+      "Date": "2024",
+      "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "name": "iPhone 14 Pro",
-      "category": "Electronics",
-      "subCategory": "Mobile",
-      "price": 5000.0,
+      "category": "Books",
+      "Date": "2024",
+      "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "name": "iPhone 15 Pro",
-      "category": "Electronics",
-      "subCategory": "Mobile",
-      "price": 20000.0,
+      "category": "Cloths",
+      "Date": "2024",
+      "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "name": "S24 Ultra Mobile",
-      "category": "Electronics",
-      "subCategory": "Mobile",
-      "price": 60000.0,
+      "category": "Grossory",
+      "Date": "2024",
+      "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "name": "Apple Smart Watch",
-      "category": "Electronics",
-      "subCategory": "Gadgets",
-      "price": 10000.0,
-    },
-
-    {
-      "image": "assets/sampleuser.jpg",
-      "name": "Samsung A53 Mobile",
-      "category": "Electronics",
-      "subCategory": "Mobile",
-      "price": 15000.0,
+      "category": "Slippers",
+      "Date": "2024",
+      "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "name": "iPhone 14 Pro",
-      "category": "Electronics",
-      "subCategory": "Mobile",
-      "price": 5000.0,
+      "category": "Top",
+      "Date": "2024",
+      "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "name": "iPhone 15 Pro",
-      "category": "Electronics",
-      "subCategory": "Mobile",
-      "price": 20000.0,
-    },
-    {
-      "image": "assets/sampleuser.jpg",
-      "name": "S24 Ultra Mobile",
-      "category": "Electronics",
-      "subCategory": "Mobile",
-      "price": 60000.0,
-    },
-    {
-      "image": "assets/sampleuser.jpg",
-      "name": "Apple Smart Watch",
-      "category": "Electronics",
-      "subCategory": "Gadgets",
-      "price": 10000.0,
-    },
-
-    {
-      "image": "assets/sampleuser.jpg",
-      "name": "Samsung A53 Mobile",
-      "category": "Electronics",
-      "subCategory": "Mobile",
-      "price": 15000.0,
-    },
-    {
-      "image": "assets/sampleuser.jpg",
-      "name": "iPhone 14 Pro",
-      "category": "Electronics",
-      "subCategory": "Mobile",
-      "price": 5000.0,
-    },
-    {
-      "image": "assets/sampleuser.jpg",
-      "name": "iPhone 15 Pro",
-      "category": "Electronics",
-      "subCategory": "Mobile",
-      "price": 20000.0,
-    },
-    {
-      "image": "assets/sampleuser.jpg",
-      "name": "S24 Ultra Mobile",
-      "category": "Electronics",
-      "subCategory": "Mobile",
-      "price": 60000.0,
-    },
-    {
-      "image": "assets/sampleuser.jpg",
-      "name": "Apple Smart Watch",
-      "category": "Electronics",
-      "subCategory": "Gadgets",
-      "price": 10000.0,
-    },
-    {
-      "image": "assets/sampleuser.jpg",
-      "name": "Samsung A53 Mobile",
-      "category": "Electronics",
-      "subCategory": "Mobile",
-      "price": 15000.0,
-    },
-    {
-      "image": "assets/sampleuser.jpg",
-      "name": "iPhone 14 Pro",
-      "category": "Electronics",
-      "subCategory": "Mobile",
-      "price": 5000.0,
-    },
-    {
-      "image": "assets/sampleuser.jpg",
-      "name": "iPhone 15 Pro",
-      "category": "Electronics",
-      "subCategory": "Mobile",
-      "price": 20000.0,
-    },
-    {
-      "image": "assets/sampleuser.jpg",
-      "name": "S24 Ultra Mobile",
-      "category": "Electronics",
-      "subCategory": "Mobile",
-      "price": 60000.0,
-    },
-    {
-      "image": "assets/sampleuser.jpg",
-      "name": "Apple Smart Watch",
-      "category": "Electronics",
-      "subCategory": "Gadgets",
-      "price": 10000.0,
+      "category": "Bottom",
+      "Date": "2024",
+      "Value": 0.5,
     },
   ];
 
@@ -222,8 +121,6 @@ class DesktopHomePage extends HookConsumerWidget {
 
     final dark = ref.watch(isDark);
     final isHover = ref.watch(hover);
-    double width = MediaQuery.of(context).size.width;
-    double gridWidth = (width > 2265) ? 150 : 50;
     double widthmode = MediaQuery.of(context).size.width;
     double modeWidth = (widthmode < 1800) ? 0 : 105;
     return Scaffold(
@@ -350,13 +247,13 @@ class DesktopHomePage extends HookConsumerWidget {
                                       cursor: SystemMouseCursors.click,
                                       child: GestureDetector(
                                         onTap: () {
-                                            
-                                            switch(index){
-                                              case 0: context.push('/HomePage');
+                                          switch (index) {
+                                            case 0:
+                                              context.push('/HomePage');
                                               break;
-                                              case 1: context.go('/Categories');
-                                            }
-
+                                            case 1:
+                                              context.go('/Categories');
+                                          }
                                         },
                                         child: Container(
                                           height: 50,
@@ -530,7 +427,7 @@ class DesktopHomePage extends HookConsumerWidget {
                                           left: 40,
                                         ),
                                         child: Text(
-                                          'Good morning, Mike',
+                                          'Categories',
                                           style: TextStyle(
                                             fontSize: 50,
                                             color: txtcolor,
@@ -544,7 +441,7 @@ class DesktopHomePage extends HookConsumerWidget {
                                           left: 45,
                                         ),
                                         child: Text(
-                                          "Let's make this day productive",
+                                          "Different Categories for Product",
                                           style: TextStyle(
                                             fontSize: 25,
                                             color: Color.fromARGB(
@@ -557,296 +454,7 @@ class DesktopHomePage extends HookConsumerWidget {
                                         ),
                                       ),
 
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                          left: 40,
-                                          top: 20,
-                                          bottom: 10,
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                            20,
-                                          ),
-                                          child: BackdropFilter(
-                                            filter: ImageFilter.blur(
-                                              sigmaX: 5,
-                                              sigmaY: 5,
-                                            ),
-                                            child: Container(
-                                              padding: EdgeInsets.all(20),
-                                              margin: EdgeInsets.only(
-                                                right: 20,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                color: bgcolor.withValues(
-                                                  alpha: 0.2,
-                                                ),
-                                                border: Border.all(
-                                                  color: Colors.white
-                                                      .withValues(alpha: 0.5),
-                                                  width: 1.5,
-                                                ),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.black
-                                                        .withValues(
-                                                          alpha: 0.05,
-                                                        ),
-                                                    blurRadius: 10,
-                                                    offset: Offset(0, 4),
-                                                  ),
-                                                ],
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                              ),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                          bottom: 30,
-                                                        ),
-                                                    child: SizedBox(
-                                                      width: double.infinity,
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Text(
-                                                            "My Products",
-                                                            style: TextStyle(
-                                                              fontSize: 22,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              color: txtcolor,
-                                                            ),
-                                                          ),
-
-                                                          Spacer(),
-
-                                                          Container(
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                  10,
-                                                                ),
-                                                            decoration:
-                                                                BoxDecoration(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  borderRadius:
-                                                                      BorderRadius.circular(
-                                                                        7,
-                                                                      ),
-                                                                ),
-
-                                                            child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              children: [
-                                                                Icon(
-                                                                  Icons.add,
-                                                                  color: Colors
-                                                                      .black,
-                                                                  size: 25,
-                                                                ),
-
-                                                                Text(
-                                                                  "Add New",
-                                                                  style: TextStyle(
-                                                                    fontSize:
-                                                                        18,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
-                                                                    color:
-                                                                        Color.fromARGB(
-                                                                          200,
-                                                                          50,
-                                                                          50,
-                                                                          50,
-                                                                        ),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-
-                                                          SizedBox(width: 20),
-                                                          Icon(
-                                                            Icons.refresh,
-                                                            color: Colors.black,
-                                                            size: 25,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-
-                                                  GridView.builder(
-                                                    physics:
-                                                        NeverScrollableScrollPhysics(),
-                                                    shrinkWrap: true,
-                                                    itemCount:
-                                                        myproducts.length,
-                                                    gridDelegate:
-                                                        SliverGridDelegateWithMaxCrossAxisExtent(
-                                                          maxCrossAxisExtent:
-                                                              _myproducts(
-                                                                context,
-                                                              ),
-                                                          mainAxisSpacing: 20,
-                                                          crossAxisSpacing:
-                                                              gridWidth,
-                                                          childAspectRatio:
-                                                              _myproductsAspectRatio(
-                                                                context,
-                                                              ),
-                                                        ),
-                                                    itemBuilder: (context, index) {
-                                                      final val =
-                                                          myproducts[index];
-                                                      return Container(
-                                                        padding: EdgeInsets.all(
-                                                          10,
-                                                        ),
-                                                        decoration: BoxDecoration(
-                                                          color: Colors.white,
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                15,
-                                                              ),
-                                                        ),
-
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Padding(
-                                                              padding:
-                                                                  EdgeInsets.symmetric(
-                                                                    horizontal:
-                                                                        5,
-                                                                  ),
-                                                              child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  Container(
-                                                                    padding:
-                                                                        EdgeInsets.all(
-                                                                          3,
-                                                                        ),
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .center,
-                                                                    decoration: BoxDecoration(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                            3,
-                                                                          ),
-                                                                      boxShadow: [
-                                                                        BoxShadow(
-                                                                          color:
-                                                                              Colors.black12,
-                                                                          blurRadius:
-                                                                              2,
-                                                                        ),
-                                                                      ],
-                                                                    ),
-
-                                                                    child: Icon(
-                                                                      val["Icons"],
-                                                                      size: 30,
-                                                                    ),
-                                                                  ),
-
-                                                                  IconButton(
-                                                                    padding:
-                                                                        EdgeInsets
-                                                                            .zero,
-                                                                    constraints:
-                                                                        BoxConstraints(),
-                                                                    onPressed:
-                                                                        () {},
-                                                                    icon: Icon(
-                                                                      Icons
-                                                                          .more_vert,
-                                                                      size: 35,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-
-                                                            SizedBox(
-                                                              height: 10,
-                                                            ),
-
-                                                            Text(
-                                                              val["text"],
-                                                              style: TextStyle(
-                                                                fontSize: 20,
-                                                                color: txtcolor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ),
-
-                                                            SizedBox(
-                                                              height: 10,
-                                                            ),
-                                                            LinearProgressIndicator(
-                                                              value: 0.5,
-                                                              backgroundColor:
-                                                                  Colors
-                                                                      .grey[300],
-                                                              minHeight: 8,
-                                                              borderRadius:
-                                                                  BorderRadius.circular(
-                                                                    50,
-                                                                  ),
-                                                            ),
-
-                                                            SizedBox(
-                                                              height: 10,
-                                                            ),
-
-                                                            Text(
-                                                              "2 Products",
-                                                              style: TextStyle(
-                                                                fontSize: 15,
-                                                                color: txtcolor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      );
-                                                    },
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-
-                                      SizedBox(height: 25),
+                                      SizedBox(height: 20),
                                       Padding(
                                         padding: EdgeInsets.only(left: 40),
                                         child: ClipRRect(
@@ -889,28 +497,88 @@ class DesktopHomePage extends HookConsumerWidget {
                                               ),
 
                                               child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
-                                                  Align(
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    child: Padding(
-                                                      padding: EdgeInsets.only(
-                                                        left: 15,
-                                                      ),
-                                                      child: Text(
-                                                        'All Product',
-                                                        style: TextStyle(
-                                                          color: txtcolor,
-                                                          fontSize: 22,
-                                                          fontWeight:
-                                                              FontWeight.bold,
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                          horizontal: 15,
                                                         ),
-                                                      ),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Text(
+                                                          'My Categories',
+                                                          style: TextStyle(
+                                                            color: txtcolor,
+                                                            fontSize: 22,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+
+                                                        Spacer(),
+
+                                                        Container(
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                10,
+                                                              ),
+                                                          decoration: BoxDecoration(
+                                                            color: Colors.white,
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                  7,
+                                                                ),
+                                                          ),
+
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Icon(
+                                                                Icons.add,
+                                                                color: Colors
+                                                                    .black,
+                                                                size: 25,
+                                                              ),
+
+                                                              Text(
+                                                                "Add New",
+                                                                style: TextStyle(
+                                                                  fontSize: 18,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  color:
+                                                                      Color.fromARGB(
+                                                                        200,
+                                                                        50,
+                                                                        50,
+                                                                        50,
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+
+                                                        SizedBox(width: 50),
+                                                        Icon(
+                                                          Icons.refresh,
+                                                          color: Colors.black,
+                                                          size: 25,
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
 
                                                   SizedBox(
-                                                    width: double.infinity,
+                                                    width: 1000,
                                                     child: Theme(
                                                       data: Theme.of(context).copyWith(
                                                         dividerColor:
@@ -927,14 +595,14 @@ class DesktopHomePage extends HookConsumerWidget {
                                                       ),
                                                       child: DataTable(
                                                         dividerThickness: 0.0,
-                                                        columnSpacing: 15,
-                                                        horizontalMargin: 20,
+                                                        columnSpacing: 0,
+                                                        horizontalMargin: 17,
                                                         dataRowMaxHeight: 60,
                                                         headingRowHeight: 60,
                                                         columns: [
                                                           DataColumn(
                                                             label: Text(
-                                                              'Product Name',
+                                                              'Category Name',
                                                               style: TextStyle(
                                                                 color: txtcolor,
                                                                 fontSize: 15,
@@ -947,33 +615,7 @@ class DesktopHomePage extends HookConsumerWidget {
 
                                                           DataColumn(
                                                             label: Text(
-                                                              'Category',
-                                                              style: TextStyle(
-                                                                color: txtcolor,
-                                                                fontSize: 15,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ),
-                                                          ),
-
-                                                          DataColumn(
-                                                            label: Text(
-                                                              'Sub Category',
-                                                              style: TextStyle(
-                                                                color: txtcolor,
-                                                                fontSize: 15,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ),
-                                                          ),
-
-                                                          DataColumn(
-                                                            label: Text(
-                                                              'Price',
+                                                              'Added Date',
                                                               style: TextStyle(
                                                                 color: txtcolor,
                                                                 fontSize: 15,
@@ -1030,7 +672,7 @@ class DesktopHomePage extends HookConsumerWidget {
                                                                       width: 10,
                                                                     ),
                                                                     Text(
-                                                                      value["name"],
+                                                                      value["category"],
                                                                       style: TextStyle(
                                                                         fontSize:
                                                                             12,
@@ -1044,32 +686,7 @@ class DesktopHomePage extends HookConsumerWidget {
 
                                                               DataCell(
                                                                 Text(
-                                                                  value['category'],
-                                                                  style: TextStyle(
-                                                                    fontSize:
-                                                                        12,
-                                                                    color:
-                                                                        txtcolor,
-                                                                  ),
-                                                                ),
-                                                              ),
-
-                                                              DataCell(
-                                                                Text(
-                                                                  value['subCategory'],
-                                                                  style: TextStyle(
-                                                                    fontSize:
-                                                                        12,
-                                                                    color:
-                                                                        txtcolor,
-                                                                  ),
-                                                                ),
-                                                              ),
-
-                                                              DataCell(
-                                                                Text(
-                                                                  value['price']
-                                                                      .toString(),
+                                                                  value['Date'],
                                                                   style: TextStyle(
                                                                     fontSize:
                                                                         12,
@@ -1173,7 +790,7 @@ class DesktopHomePage extends HookConsumerWidget {
                                                   alignment:
                                                       Alignment.centerLeft,
                                                   child: Text(
-                                                    'Order Details',
+                                                    'Product Stock',
                                                     style: TextStyle(
                                                       fontSize: 22,
                                                       color: txtcolor,
@@ -1184,87 +801,72 @@ class DesktopHomePage extends HookConsumerWidget {
                                                 ),
                                               ),
 
-                                              SizedBox(height: 50),
-                                              CircularPercentIndicator(
-                                                radius: 110.0,
-                                                lineWidth: 20,
-                                                percent: 0.8,
-                                                progressColor:
-                                                    Colors.deepPurpleAccent,
-                                                center: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      '3',
-                                                      style: TextStyle(
-                                                        fontSize: 28,
-                                                        color: txtcolor,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-
-                                                    Text(
-                                                      'Orders',
-                                                      style: TextStyle(
-                                                        fontSize: 24,
-                                                        color: txtcolor,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-
-                                              SizedBox(height: 50),
+                                              SizedBox(height: 25),
                                               ListView.builder(
                                                 physics:
                                                     NeverScrollableScrollPhysics(),
                                                 shrinkWrap: true,
-                                                itemCount: 5,
+                                                itemCount: products.length,
                                                 itemBuilder: (context, index) {
-                                                  return Container(
-                                                    padding: EdgeInsets.all(5),
-                                                    margin:
-                                                        EdgeInsets.symmetric(
-                                                          vertical: 10,
-                                                        ),
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            10,
-                                                          ),
-                                                      border: Border.all(
-                                                        color: Colors.white
-                                                            .withValues(
-                                                              alpha: 0.8,
-                                                            ),
-                                                        width: 1,
-                                                      ),
+                                                  final categories =
+                                                      products[index];
+                                                  return Padding(
+                                                    padding: EdgeInsets.only(
+                                                      right: 13,
+                                                      left: 13,
                                                     ),
+                                                    child: Container(
+                                                      padding: EdgeInsets.all(
+                                                        5,
+                                                      ),
+                                                      margin:
+                                                          EdgeInsets.symmetric(
+                                                            vertical: 10,
+                                                          ),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              10,
+                                                            ),
+                                                        color: Colors.white,
+                                                      ),
 
-                                                    child: ListTile(
-                                                      leading: Icon(
-                                                        Icons
-                                                            .delivery_dining_outlined,
-                                                        size: 25,
-                                                      ),
-                                                      title: Text(
-                                                        'All Orders',
-                                                        style: TextStyle(
-                                                          fontSize: 20,
-                                                          color: txtcolor,
+                                                      child: ListTile(
+                                                        leading: Icon(
+                                                          Icons
+                                                              .delivery_dining_outlined,
+                                                          size: 25,
                                                         ),
-                                                      ),
-                                                      subtitle: Text(
-                                                        '3 Orders',
-                                                        style: TextStyle(
-                                                          fontSize: 15,
-                                                          color: txtcolor,
+                                                        title: Text(
+                                                          categories['category'],
+                                                          style: TextStyle(
+                                                            fontSize: 18,
+                                                            color: txtcolor,
+                                                          ),
+                                                          textScaler:
+                                                              MediaQuery.of(
+                                                                context,
+                                                              ).textScaler,
+                                                        ),
+                                                        subtitle: Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                top: 5,
+                                                              ),
+                                                          child: LinearProgressIndicator(
+                                                            value:
+                                                                (categories['Value']
+                                                                        as num)
+                                                                    .toDouble(),
+                                                            backgroundColor:
+                                                                Colors
+                                                                    .grey[300],
+                                                            minHeight: 8,
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                  50,
+                                                                ),
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
@@ -1280,6 +882,8 @@ class DesktopHomePage extends HookConsumerWidget {
                                 ),
                               ],
                             ),
+
+                            SizedBox(height: 50),
                           ],
                         ),
                       ),
@@ -1335,38 +939,6 @@ class DesktopHomePage extends HookConsumerWidget {
       ),
     );
   }
-}
-
-double _myproducts(BuildContext context) {
-  double screenWidth = MediaQuery.of(context).size.width;
-
-  if (screenWidth >= 1773 && screenWidth <= 1825) {
-    return 250; // wider cards, fewer columns
-  } else if (screenWidth >= 1500 && screenWidth <= 1770) {
-    return 290; // narrower cards, more columns
-  } else if (screenWidth >= 1285 && screenWidth <= 1425) {
-    return 330; // narrower cards, more columns
-  } else if (screenWidth < 1285) {
-    return 350; // mobile, smaller cards
-  }
-
-  return 300; // fallback
-}
-
-double _myproductsAspectRatio(BuildContext context) {
-  double screenWidth = MediaQuery.of(context).size.width;
-
-  if (screenWidth >= 1500 && screenWidth <= 1731) {
-    return 1.5;
-  } else if (screenWidth >= 1252 && screenWidth <= 1368) {
-    return 1.8;
-  } else if (screenWidth <= 1249) {
-    return 1.65;
-  } else if (screenWidth >= 1732 && screenWidth <= 1738) {
-    return 1.3;
-  }
-
-  return 1.4;
 }
 
 class TooltipShape extends ShapeBorder {

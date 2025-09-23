@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:hooks_riverpod/legacy.dart';
 
-class TabletHomePage extends HookConsumerWidget {
-  TabletHomePage({super.key});
+class TabletCategoriesPage extends HookConsumerWidget {
+  TabletCategoriesPage({super.key});
 
   final List<Map<String, dynamic>> navbar = [
     {'Icons': "assets/dashboard.png", 'NavigateTo': 'Dashboard'},
@@ -30,87 +29,49 @@ class TabletHomePage extends HookConsumerWidget {
     {'Icons': "assets/dashboard.png", 'NavigateTo': 'Notification'},
   ];
 
-  final List<Map<String, dynamic>> myproducts = [
-    {'Icons': Icons.production_quantity_limits, "text": 'All Products'},
-    {'Icons': Icons.category_outlined, "text": 'Out of Stock'},
-    {'Icons': Icons.production_quantity_limits, "text": 'Limited Stock'},
-    {'Icons': Icons.production_quantity_limits, "text": 'Other Stock'},
-  ];
-
   final List<Map<String, dynamic>> products = [
     {
       "image": "assets/sampleuser.jpg",
-      "name": "Samsung A53 Mobile",
       "category": "Electronics",
-      "subCategory": "Mobile",
-      "price": 15000.0,
+      "Date": "2024",
+      "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "name": "iPhone 14 Pro",
-      "category": "Electronics",
-      "subCategory": "Mobile",
-      "price": 5000.0,
+      "category": "Books",
+      "Date": "2024",
+      "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "name": "iPhone 15 Pro",
-      "category": "Electronics",
-      "subCategory": "Mobile",
-      "price": 20000.0,
+      "category": "Cloths",
+      "Date": "2024",
+      "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "name": "S24 Ultra Mobile",
-      "category": "Electronics",
-      "subCategory": "Mobile",
-      "price": 60000.0,
+      "category": "Grossory",
+      "Date": "2024",
+      "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "name": "Apple Smart Watch",
-      "category": "Electronics",
-      "subCategory": "Gadgets",
-      "price": 10000.0,
-    },
-
-    {
-      "image": "assets/sampleuser.jpg",
-      "name": "Samsung A53 Mobile",
-      "category": "Electronics",
-      "subCategory": "Mobile",
-      "price": 15000.0,
+      "category": "Slippers",
+      "Date": "2024",
+      "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "name": "iPhone 14 Pro",
-      "category": "Electronics",
-      "subCategory": "Mobile",
-      "price": 5000.0,
+      "category": "Top",
+      "Date": "2024",
+      "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "name": "iPhone 15 Pro",
-      "category": "Electronics",
-      "subCategory": "Mobile",
-      "price": 20000.0,
+      "category": "Bottom",
+      "Date": "2024",
+      "Value": 0.5,
     },
-    {
-      "image": "assets/sampleuser.jpg",
-      "name": "S24 Ultra Mobile",
-      "category": "Electronics",
-      "subCategory": "Mobile",
-      "price": 60000.0,
-    },
-    {
-      "image": "assets/sampleuser.jpg",
-      "name": "Apple Smart Watch",
-      "category": "Electronics",
-      "subCategory": "Gadgets",
-      "price": 10000.0,
-    },
-    // ... (re
-    // ... (rest of your products list)
   ];
 
   final isDark = StateProvider<bool>((ref) => false);
@@ -283,10 +244,17 @@ class TabletHomePage extends HookConsumerWidget {
                       SizedBox(height: 35),
                       _header(context, ref, dark),
                       _welcomeSection(context),
-                      _myProductsSection(context, gridWidth),
-                      _orderDetailsSection(context),
                       SizedBox(height: 25),
-                      _allProductsSection(context),
+                      _allProductsSection(
+                        context,
+                        expandDrawer,
+                        ref,
+                        () =>
+                            ref.read(thedrawer.notifier).state = !expandDrawer,
+                      ),
+                      SizedBox(height: 25),
+                      _orderDetailsSection(context),
+
                       SizedBox(height: 50),
                     ],
                   ),
@@ -557,7 +525,7 @@ class TabletHomePage extends HookConsumerWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 20, left: 40),
                 child: Text(
-                  'Good morning, Mike',
+                  'Categories',
                   style: TextStyle(
                     fontSize: 50,
                     color: txtcolor,
@@ -568,7 +536,7 @@ class TabletHomePage extends HookConsumerWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 10, left: 45),
                 child: Text(
-                  "Let's make this day productive",
+                  "Different Categories for Product",
                   style: TextStyle(
                     fontSize: 25,
                     color: Color.fromARGB(200, 50, 50, 50),
@@ -579,170 +547,6 @@ class TabletHomePage extends HookConsumerWidget {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _myProductsSection(BuildContext context, double gridWidth) {
-    return Padding(
-      padding: EdgeInsets.only(left: 40, top: 20, bottom: 10),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-          child: Container(
-            padding: EdgeInsets.all(20),
-            margin: EdgeInsets.only(right: 20),
-            decoration: BoxDecoration(
-              color: bgcolor.withValues(alpha: 0.2),
-              border: Border.all(
-                color: Colors.white.withValues(alpha: 0.5),
-                width: 1.5,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: Offset(0, 4),
-                ),
-              ],
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _myProductsHeader(),
-                GridView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: myproducts.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 20,
-                    crossAxisSpacing: gridWidth,
-                    childAspectRatio: _myproductsAspectRatio(context),
-                  ),
-                  itemBuilder: (context, index) {
-                    final val = myproducts[index];
-                    return Container(
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 5),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.all(3),
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(3),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black12,
-                                        blurRadius: 2,
-                                      ),
-                                    ],
-                                  ),
-                                  child: Icon(val["Icons"], size: 30),
-                                ),
-                                IconButton(
-                                  padding: EdgeInsets.zero,
-                                  constraints: BoxConstraints(),
-                                  onPressed: () {},
-                                  icon: Icon(Icons.more_vert, size: 35),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            val["text"],
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: txtcolor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          LinearProgressIndicator(
-                            value: 0.5,
-                            backgroundColor: Colors.grey[300],
-                            minHeight: 8,
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            "2 Products",
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: txtcolor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _myProductsHeader() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 30),
-      child: SizedBox(
-        width: double.infinity,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "My Products",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: txtcolor,
-              ),
-            ),
-            Spacer(),
-            Container(
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(7),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Icon(Icons.add, color: Colors.black, size: 25),
-                  Text(
-                    "Add New",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Color.fromARGB(200, 50, 50, 50),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(width: 20),
-            Icon(Icons.refresh, color: Colors.black, size: 25),
-          ],
-        ),
-      ),
     );
   }
 
@@ -783,47 +587,12 @@ class TabletHomePage extends HookConsumerWidget {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Order Details',
+                        'Product Stock',
                         style: TextStyle(
                           fontSize: 22,
                           color: txtcolor,
                           fontWeight: FontWeight.bold,
                         ),
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height: 25),
-
-                  Transform.translate(
-                    offset: Offset(0, 15),
-                    child: CircularPercentIndicator(
-                      radius: 110.0,
-                      lineWidth: 20,
-                      percent: 0.8,
-                      progressColor: Colors.deepPurpleAccent,
-                      center: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '3',
-                            style: TextStyle(
-                              fontSize: 28,
-                              color: txtcolor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-
-                          Text(
-                            'Orders',
-                            style: TextStyle(
-                              fontSize: 24,
-                              color: txtcolor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
                       ),
                     ),
                   ),
@@ -841,8 +610,9 @@ class TabletHomePage extends HookConsumerWidget {
                       ),
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: 5,
+                      itemCount: products.length,
                       itemBuilder: (context, index) {
+                        final categories = products[index];
                         return Container(
                           padding: EdgeInsets.all(5),
                           margin: EdgeInsets.symmetric(vertical: 10),
@@ -860,12 +630,19 @@ class TabletHomePage extends HookConsumerWidget {
                               size: 15,
                             ),
                             title: Text(
-                              'All Orders',
-                              style: TextStyle(fontSize: 20, color: txtcolor),
+                              categories['category'],
+                              style: TextStyle(fontSize: 18, color: txtcolor),
+                              textScaler: MediaQuery.of(context).textScaler,
                             ),
-                            subtitle: Text(
-                              '3 Orders',
-                              style: TextStyle(fontSize: 15, color: txtcolor),
+
+                            subtitle: Padding(
+                              padding: EdgeInsets.only(top: 5),
+                              child: LinearProgressIndicator(
+                                value: (categories['Value'] as num).toDouble(),
+                                backgroundColor: Colors.grey[300],
+                                minHeight: 8,
+                                borderRadius: BorderRadius.circular(50),
+                              ),
                             ),
                           ),
                         );
@@ -913,7 +690,7 @@ class TabletHomePage extends HookConsumerWidget {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Order Details',
+                        'Product Stock',
                         style: TextStyle(
                           fontSize: 22,
                           color: txtcolor,
@@ -927,41 +704,6 @@ class TabletHomePage extends HookConsumerWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Transform.translate(
-                        offset: Offset(0, 15),
-                        child: CircularPercentIndicator(
-                          radius: 110.0,
-                          lineWidth: 20,
-                          percent: 0.8,
-                          progressColor: Colors.deepPurpleAccent,
-                          center: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '3',
-                                style: TextStyle(
-                                  fontSize: 28,
-                                  color: txtcolor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-
-                              Text(
-                                'Orders',
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  color: txtcolor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-
-                      SizedBox(width: 20),
-
                       Expanded(
                         child: GridView.builder(
                           gridDelegate:
@@ -973,8 +715,9 @@ class TabletHomePage extends HookConsumerWidget {
                               ),
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: 5,
+                          itemCount: products.length,
                           itemBuilder: (context, index) {
+                            final categories = products[index];
                             return Container(
                               padding: EdgeInsets.all(5),
                               margin: EdgeInsets.symmetric(vertical: 10),
@@ -992,17 +735,22 @@ class TabletHomePage extends HookConsumerWidget {
                                   size: 15,
                                 ),
                                 title: Text(
-                                  'All Orders',
+                                  categories['category'],
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     color: txtcolor,
                                   ),
+                                  textScaler: MediaQuery.of(context).textScaler,
                                 ),
-                                subtitle: Text(
-                                  '3 Orders',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: txtcolor,
+
+                                subtitle: Padding(
+                                  padding: EdgeInsets.only(top: 5),
+                                  child: LinearProgressIndicator(
+                                    value: (categories['Value'] as num)
+                                        .toDouble(),
+                                    backgroundColor: Colors.grey[300],
+                                    minHeight: 8,
+                                    borderRadius: BorderRadius.circular(50),
                                   ),
                                 ),
                               ),
@@ -1021,7 +769,12 @@ class TabletHomePage extends HookConsumerWidget {
     }
   }
 
-  Widget _allProductsSection(BuildContext context) {
+  Widget _allProductsSection(
+    BuildContext context,
+    bool drawer,
+    ref,
+    VoidCallback toggleDrawer,
+  ) {
     return Padding(
       padding: EdgeInsets.only(left: 40),
       child: ClipRRect(
@@ -1050,23 +803,52 @@ class TabletHomePage extends HookConsumerWidget {
             ),
             child: Column(
               children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 15),
-                    child: Text(
-                      'All Product',
-                      style: TextStyle(
-                        color: txtcolor,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "My Categories",
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: txtcolor,
+                          ),
+                        ),
+                        Spacer(),
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(7),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Icon(Icons.add, color: Colors.black, size: 25),
+                              Text(
+                                "Add New",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color.fromARGB(200, 50, 50, 50),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 20),
+                        Icon(Icons.refresh, color: Colors.black, size: 25),
+                      ],
                     ),
                   ),
                 ),
+
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.497,
-                  width: double.infinity,
+                  width: 1000,
                   child: Theme(
                     data: Theme.of(context).copyWith(
                       dividerColor: Colors.transparent,
@@ -1084,14 +866,14 @@ class TabletHomePage extends HookConsumerWidget {
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
                           dividerThickness: 0.0,
-                          columnSpacing: 50,
-                          horizontalMargin: 20,
+                          columnSpacing: 100,
+                          horizontalMargin: 2,
                           dataRowMaxHeight: 60,
                           headingRowHeight: 60,
                           columns: [
                             DataColumn(
                               label: Text(
-                                'Product Name',
+                                'Category Name',
                                 style: TextStyle(
                                   color: txtcolor,
                                   fontSize: 15,
@@ -1099,9 +881,10 @@ class TabletHomePage extends HookConsumerWidget {
                                 ),
                               ),
                             ),
+
                             DataColumn(
                               label: Text(
-                                'Category',
+                                'Added Date',
                                 style: TextStyle(
                                   color: txtcolor,
                                   fontSize: 15,
@@ -1109,26 +892,7 @@ class TabletHomePage extends HookConsumerWidget {
                                 ),
                               ),
                             ),
-                            DataColumn(
-                              label: Text(
-                                'Sub Category',
-                                style: TextStyle(
-                                  color: txtcolor,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Text(
-                                'Price',
-                                style: TextStyle(
-                                  color: txtcolor,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
+
                             DataColumn(
                               label: Text(
                                 'Edit',
@@ -1139,6 +903,7 @@ class TabletHomePage extends HookConsumerWidget {
                                 ),
                               ),
                             ),
+
                             DataColumn(
                               label: Text(
                                 'Delete',
@@ -1164,7 +929,7 @@ class TabletHomePage extends HookConsumerWidget {
                                       ),
                                       SizedBox(width: 10),
                                       Text(
-                                        value["name"],
+                                        value["category"],
                                         style: TextStyle(
                                           fontSize: 12,
                                           color: txtcolor,
@@ -1173,33 +938,17 @@ class TabletHomePage extends HookConsumerWidget {
                                     ],
                                   ),
                                 ),
+
                                 DataCell(
                                   Text(
-                                    value['category'],
+                                    value['Date'],
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: txtcolor,
                                     ),
                                   ),
                                 ),
-                                DataCell(
-                                  Text(
-                                    value['subCategory'],
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: txtcolor,
-                                    ),
-                                  ),
-                                ),
-                                DataCell(
-                                  Text(
-                                    value['price'].toString(),
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: txtcolor,
-                                    ),
-                                  ),
-                                ),
+
                                 DataCell(
                                   Icon(
                                     Icons.edit,
@@ -1212,6 +961,7 @@ class TabletHomePage extends HookConsumerWidget {
                                     size: 20,
                                   ),
                                 ),
+
                                 DataCell(
                                   Icon(
                                     Icons.delete,
@@ -1236,30 +986,6 @@ class TabletHomePage extends HookConsumerWidget {
   }
 }
 
-double _myproductsAspectRatio(BuildContext context) {
-  double screenWidth = MediaQuery.of(context).size.width;
-
-  if (screenWidth >= 968 && screenWidth <= 1099) {
-    return 2;
-  } else if (screenWidth >= 955 && screenWidth <= 967) {
-    return 1.9;
-  } else if (screenWidth >= 851 && screenWidth <= 955) {
-    return 1.6;
-  } else if (screenWidth >= 815 && screenWidth <= 845) {
-    return 1.6;
-  } else if (screenWidth >= 689 && screenWidth <= 749) {
-    return 1.2;
-  } else if (screenWidth >= 629 && screenWidth <= 688) {
-    return 1.1;
-  } else if (screenWidth >= 575 && screenWidth <= 629) {
-    return 0.94;
-  } else if (screenWidth >= 500 && screenWidth <= 574) {
-    return 0.9;
-  }
-
-  return 1.4;
-}
-
 int _orderDetails(BuildContext context) {
   double screenWidth = MediaQuery.of(context).size.width;
 
@@ -1274,14 +1000,14 @@ double _orderDetailsRatio(BuildContext context) {
   double screenWidth = MediaQuery.of(context).size.width;
 
   if (screenWidth >= 897 && screenWidth <= 952) {
-    return 4.2;
+    return 6;
   } else if (screenWidth >= 816 && screenWidth <= 896) {
-    return 3.5;
+    return 5.5;
   } else if (screenWidth >= 769 && screenWidth <= 815) {
     return 3;
   }
 
-  return 2.3;
+  return 3.3;
 }
 
 double _orderDetailsWidth(BuildContext context) {

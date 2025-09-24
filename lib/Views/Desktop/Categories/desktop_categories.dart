@@ -279,8 +279,8 @@ class DesktopCategoriesPage extends HookConsumerWidget {
                                             child: Image.asset(
                                               icons['Icons'],
                                               fit: BoxFit.contain,
-                                              height: 30,
-                                              width: 30,
+                                              height: 31,
+                                              width: 31,
                                             ),
                                           ),
                                         ),

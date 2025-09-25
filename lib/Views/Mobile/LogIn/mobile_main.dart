@@ -39,8 +39,6 @@ class MobileMainScreen extends HookConsumerWidget {
         weight: 1,
       ),
     ]).animate(CurvedAnimation(parent: controller, curve: Curves.easeInOut));
-
-
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
@@ -102,8 +100,8 @@ class MobileMainScreen extends HookConsumerWidget {
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 15.w),
                       child: Container(
-                        height: 350.h,
-                        width: 300.w,
+                        height: 480.h,
+                        width: 275.w,
 
                         decoration: BoxDecoration(
                           color: const Color.fromARGB(255, 255, 255, 255),
@@ -154,7 +152,7 @@ class MobileMainScreen extends HookConsumerWidget {
                                   prefixIcon: Icon(
                                     Icons.person_outline,
                                     color: Colors.black,
-                                    size: 25.r,
+                                    size: 25,
                                   ),
                                   contentPadding: EdgeInsets.symmetric(
                                     horizontal: 15.w,
@@ -192,7 +190,7 @@ class MobileMainScreen extends HookConsumerWidget {
                                   prefixIcon: Icon(
                                     Icons.lock_outline,
                                     color: Colors.black,
-                                    size: 25.r,
+                                    size: 25,
                                   ),
                                   contentPadding: EdgeInsets.symmetric(
                                     horizontal: 15.w,
@@ -200,47 +198,192 @@ class MobileMainScreen extends HookConsumerWidget {
                                   ),
 
                                   border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(15.r),
                                     borderSide: BorderSide.none,
                                   ),
                                   enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(15.r),
                                     borderSide: BorderSide.none,
                                   ),
 
                                   focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(15.r),
                                     borderSide: BorderSide.none,
                                   ),
                                 ),
                               ),
                             ),
 
-                            SizedBox(height: 70.h),
-                            ElevatedButton(
-                              onPressed: () {
-                                // Router.neglect(context, () {
-                                context.go('/HomePage');
-                                // });
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.black,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                minimumSize: Size(250.w, 45.h),
-                              ),
-                              child: Text(
-                                'Log In',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: const Color.fromARGB(
-                                    255,
-                                    255,
-                                    255,
-                                    255,
+                            SizedBox(height: 50.h),
+
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10.w),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  // Router.neglect(context, () {
+                                  context.go('/HomePage');
+                                  // });
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.black,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
-                                  fontWeight: FontWeight.w500,
+                                  minimumSize: Size(380, 60),
+                                ),
+                                child: Text(
+                                  'Log In',
+                                  style: TextStyle(
+                                    fontSize: 22,
+                                    color: const Color.fromARGB(
+                                      255,
+                                      255,
+                                      255,
+                                      255,
+                                    ),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            SizedBox(height: 20),
+
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10.w),
+                              child: ElevatedButton(
+                                onPressed: () {},
+                                style: ButtonStyle(
+                                  minimumSize: WidgetStateProperty.all(
+                                    Size(380, 60),
+                                  ),
+
+                                  side:
+                                      WidgetStateProperty.resolveWith<
+                                        BorderSide
+                                      >((Set<WidgetState> states) {
+                                        if (states.contains(
+                                          WidgetState.hovered,
+                                        )) {
+                                          return BorderSide(
+                                            color: Colors.red,
+                                            width: 2,
+                                          );
+                                        }
+
+                                        return BorderSide(
+                                          color: Colors.black,
+                                          width: 1,
+                                        );
+                                      }),
+
+                                  backgroundColor: WidgetStateProperty.all(
+                                    Colors.white,
+                                  ),
+                                  elevation: WidgetStateProperty.all(0),
+                                  splashFactory: NoSplash.splashFactory,
+                                  overlayColor: WidgetStateProperty.all(
+                                    Colors.transparent,
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+
+                                  children: [
+                                    ClipRRect(
+                                      child: Image.asset(
+                                        'assets/googleicon.png',
+                                        fit: BoxFit.contain,
+                                        height: 25,
+                                        width: 25,
+                                      ),
+                                    ),
+
+                                    SizedBox(width: 25),
+                                    Flexible(
+                                      child: Text(
+                                        'Log In using Google',
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black,
+                                        ),
+                                        maxLines: 1,
+                                        softWrap: true,
+                                      ),
+                                    ),
+
+                                    SizedBox(width: 20),
+                                  ],
+                                ),
+                              ),
+                            ),
+
+                            SizedBox(height: 10),
+
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10.w),
+                              child: ElevatedButton(
+                                onPressed: () {},
+                                style: ButtonStyle(
+                                  minimumSize: WidgetStateProperty.all(
+                                    Size(380, 60),
+                                  ),
+
+                                  side:
+                                      WidgetStateProperty.resolveWith<
+                                        BorderSide
+                                      >((Set<WidgetState> states) {
+                                        if (states.contains(
+                                          WidgetState.hovered,
+                                        )) {
+                                          return BorderSide(
+                                            color: Colors.blueAccent,
+                                            width: 2,
+                                          );
+                                        }
+
+                                        return BorderSide(
+                                          color: Colors.black,
+                                          width: 1,
+                                        );
+                                      }),
+
+                                  backgroundColor: WidgetStateProperty.all(
+                                    Colors.white,
+                                  ),
+                                  elevation: WidgetStateProperty.all(0),
+                                  splashFactory: NoSplash.splashFactory,
+                                  overlayColor: WidgetStateProperty.all(
+                                    Colors.transparent,
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      child: Image.asset(
+                                        'assets/facebooklogo.png',
+                                        fit: BoxFit.contain,
+                                        height: 25,
+                                        width: 25,
+                                      ),
+                                    ),
+
+                                    SizedBox(width: 25),
+                                    Flexible(
+                                      child: Text(
+                                        'Log In using Facebook',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black,
+                                        ),
+                                        maxLines: 1,
+                                        softWrap: true,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),

@@ -480,7 +480,7 @@ class MobileCategoriesPage extends HookConsumerWidget {
             children: [
               SizedBox(height: 35),
               Padding(
-                padding: EdgeInsets.only(top: 20.h, left: 15.w),
+                padding: EdgeInsets.only(top: 20.h, left: 24.w),
                 child: Text(
                   'Categories',
                   style: TextStyle(
@@ -491,7 +491,7 @@ class MobileCategoriesPage extends HookConsumerWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 10, left: 27),
+                padding: const EdgeInsets.only(top: 10, left: 37),
                 child: Text(
                   "Different Categories for Product",
                   style: TextStyle(

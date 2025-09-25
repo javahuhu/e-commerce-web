@@ -6,6 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:hooks_riverpod/legacy.dart';
+import 'package:glassmorphism/glassmorphism.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 class TabletHomePage extends HookConsumerWidget {
   TabletHomePage({super.key});
@@ -29,6 +31,499 @@ class TabletHomePage extends HookConsumerWidget {
 
     {'Icons': "assets/dashboard.png", 'NavigateTo': 'Notification'},
   ];
+
+  final List<Map<String, dynamic>> upload = [
+    {'icon': Icons.camera_alt_rounded, "label": 'Main Image'},
+    {'icon': Icons.camera_alt_rounded, "label": 'Second Image'},
+    {'icon': Icons.camera_alt_rounded, "label": 'Third Image'},
+    {'icon': Icons.camera_alt_rounded, "label": 'Fourth Image'},
+    {'icon': Icons.camera_alt_rounded, "label": 'Fifth Image'},
+  ];
+
+  final List<Map<String, dynamic>> category = [
+    {
+      "Select Brand": ["Apple", "Samsung", "Xiaomi"],
+    },
+    {
+      "Select Category": ["Phone", "Tablet", "Laptop"],
+    },
+
+    {
+      "Select Size": ["Small", "Medium", "Large"],
+    },
+  ];
+
+  final selectedValue = StateProvider<String?>((ref) => null);
+  void _showAddNew(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return LayoutBuilder(
+          builder: (context, contraints) {
+            final width = MediaQuery.of(context).size.width;
+            final smallTab = width < 1000;
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (width <= 575 && context.mounted ||
+                  width >= 1080 && context.mounted) {
+                context.pop();
+              }
+            });
+
+            return Consumer(
+              builder: (context, ref, child) {
+                final selected = ref.watch(selectedValue);
+                return Dialog(
+                  elevation: 5,
+                  child: Container(
+                    height: 700,
+                    width: 1000,
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 230, 233, 243),
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: Column(
+                      children: [
+                        Center(
+                          child: Text(
+                            'ADD PRODUCT',
+                            style: TextStyle(
+                              fontFamily: 'Sono',
+                              fontSize: 35,
+                              color: txtcolor,
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(height: 10),
+                        GlassmorphicContainer(
+                          width: double.infinity,
+                          height: 600,
+                          borderRadius: 20,
+                          blur: 5,
+                          border: 2,
+                          linearGradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Color.fromARGB(
+                                255,
+                                255,
+                                255,
+                                255,
+                              ).withValues(alpha: 0.1),
+                              Color.fromARGB(
+                                255,
+                                255,
+                                255,
+                                255,
+                              ).withValues(alpha: 0.1),
+                            ],
+                            stops: [0.1, 1],
+                          ),
+                          borderGradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Color.fromARGB(
+                                255,
+                                255,
+                                255,
+                                255,
+                              ).withValues(alpha: 0.3),
+                              Color.fromARGB(
+                                255,
+                                255,
+                                255,
+                                255,
+                              ).withValues(alpha: 0.3),
+                            ],
+                          ),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                SizedBox(height: 30),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 25),
+                                  child: SizedBox(
+                                    height: smallTab ? 400 : 170,
+                                    child: GridView.builder(
+                                      gridDelegate:
+                                          SliverGridDelegateWithMaxCrossAxisExtent(
+                                            maxCrossAxisExtent:
+                                                200, // each item max width
+                                            mainAxisSpacing: 10,
+                                            crossAxisSpacing: 10,
+                                            childAspectRatio: 1,
+                                          ),
+                                      itemCount: upload.length,
+                                      itemBuilder: (context, index) {
+                                        final val = upload[index];
+                                        return GestureDetector(
+                                          onTap: () {},
+                                          child: MouseRegion(
+                                            cursor: SystemMouseCursors.click,
+                                            child: Container(
+                                              width: 150,
+                                              decoration: BoxDecoration(
+                                                color: const Color.fromARGB(
+                                                  255,
+                                                  255,
+                                                  255,
+                                                  255,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  ClipRRect(
+                                                    child: Icon(
+                                                      val['icon'],
+                                                      size: 50,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 15),
+                                                  Text(
+                                                    val['label'],
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 18,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+
+                                SizedBox(height: 15),
+
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 30),
+                                  child: TextField(
+                                    decoration: InputDecoration(
+                                      hintText: 'Product Name',
+                                      filled: false,
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.black54,
+                                          width: 2,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.black,
+                                          width: 2,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                SizedBox(height: 15),
+
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 30),
+                                  child: Container(
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.black54,
+                                        width: 2,
+                                      ),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+
+                                    child: TextField(
+                                      scrollPhysics:
+                                          AlwaysScrollableScrollPhysics(),
+                                      textAlignVertical: TextAlignVertical.top,
+                                      maxLines: null,
+                                      expands: true,
+                                      decoration: InputDecoration(
+                                        hintText: 'Product Details',
+                                        filled: false,
+                                        hintStyle: TextStyle(
+                                          color: Colors.grey,
+                                        ),
+
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                SizedBox(height: 15),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 30),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: category.asMap().entries.map((
+                                      entry,
+                                    ) {
+                                      final label = entry.value.keys.first;
+                                      final options = List<String>.from(
+                                        entry.value.values.first,
+                                      );
+                                      return DropdownButton2<String>(
+                                        underline: SizedBox.shrink(),
+                                        hint: Text(
+                                          label,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        buttonStyleData: ButtonStyleData(
+                                          height: 48,
+                                          width: 270,
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 10,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                            border: Border.all(
+                                              color: Colors.black54,
+                                              width: 2,
+                                            ),
+                                          ),
+                                        ),
+                                        dropdownStyleData: DropdownStyleData(
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                          ),
+                                        ),
+                                        value: selected,
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          color: const Color.fromARGB(
+                                            255,
+                                            0,
+                                            0,
+                                            0,
+                                          ),
+                                        ),
+                                        items: options.map((String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
+                                        onChanged: (newValue) {
+                                          ref
+                                                  .read(selectedValue.notifier)
+                                                  .state =
+                                              newValue;
+                                        },
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+
+                                SizedBox(height: 15),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 30),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      SizedBox(
+                                        width: 270,
+                                        child: TextField(
+                                          decoration: InputDecoration(
+                                            hintText: 'Price',
+                                            filled: false,
+                                            hintStyle: TextStyle(
+                                              color: Colors.grey,
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              borderSide: BorderSide(
+                                                color: Colors.black54,
+                                                width: 2,
+                                              ),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              borderSide: BorderSide(
+                                                color: Colors.black54,
+                                                width: 2,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+
+                                      SizedBox(
+                                        width: 270,
+                                        child: TextField(
+                                          decoration: InputDecoration(
+                                            hintText: 'Offer Price',
+                                            filled: false,
+                                            hintStyle: TextStyle(
+                                              color: Colors.grey,
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              borderSide: BorderSide(
+                                                color: Colors.black54,
+                                                width: 2,
+                                              ),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              borderSide: BorderSide(
+                                                color: Colors.black54,
+                                                width: 2,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+
+                                      SizedBox(
+                                        width: 270,
+                                        child: TextField(
+                                          decoration: InputDecoration(
+                                            hintText: 'Quantity',
+                                            filled: false,
+                                            hintStyle: TextStyle(
+                                              color: Colors.grey,
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              borderSide: BorderSide(
+                                                color: Colors.black54,
+                                                width: 2,
+                                              ),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              borderSide: BorderSide(
+                                                color: Colors.black54,
+                                                width: 2,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 50),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 30),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      ElevatedButton(
+                                        onPressed: () {},
+                                        style: ElevatedButton.styleFrom(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                          ),
+                                          splashFactory: NoSplash.splashFactory,
+                                          shadowColor: Colors.transparent,
+                                          elevation: 0,
+                                          backgroundColor: const Color.fromARGB(
+                                            255,
+                                            240,
+                                            124,
+                                            124,
+                                          ),
+                                          foregroundColor: const Color.fromARGB(
+                                            255,
+                                            255,
+                                            255,
+                                            255,
+                                          ),
+                                          minimumSize: Size(250, 55),
+                                        ),
+                                        child: Text(
+                                          'Cancel',
+                                          style: TextStyle(fontSize: 15),
+                                        ),
+                                      ),
+
+                                      ElevatedButton(
+                                        onPressed: () {},
+                                        style: ElevatedButton.styleFrom(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                          ),
+                                          splashFactory: NoSplash.splashFactory,
+                                          shadowColor: Colors.transparent,
+                                          elevation: 0,
+                                          backgroundColor: const Color.fromARGB(
+                                            255,
+                                            128,
+                                            196,
+                                            130,
+                                          ),
+                                          foregroundColor: const Color.fromARGB(
+                                            255,
+                                            255,
+                                            255,
+                                            255,
+                                          ),
+                                          minimumSize: Size(250, 55),
+                                        ),
+                                        child: Text(
+                                          'Save',
+                                          style: TextStyle(fontSize: 15),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+  }
 
   final List<Map<String, dynamic>> myproducts = [
     {'Icons': Icons.production_quantity_limits, "text": 'All Products'},
@@ -283,7 +778,7 @@ class TabletHomePage extends HookConsumerWidget {
                       SizedBox(height: 35),
                       _header(context, ref, dark),
                       _welcomeSection(context),
-                      _myProductsSection(context, gridWidth),
+                      _myProductsSection(context, ref, gridWidth),
                       _orderDetailsSection(context),
                       SizedBox(height: 25),
                       _allProductsSection(context),
@@ -582,7 +1077,11 @@ class TabletHomePage extends HookConsumerWidget {
     );
   }
 
-  Widget _myProductsSection(BuildContext context, double gridWidth) {
+  Widget _myProductsSection(
+    BuildContext context,
+    WidgetRef ref,
+    double gridWidth,
+  ) {
     return Padding(
       padding: EdgeInsets.only(left: 40, top: 20, bottom: 10),
       child: ClipRRect(
@@ -610,7 +1109,7 @@ class TabletHomePage extends HookConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _myProductsHeader(),
+                _myProductsHeader(context, ref),
                 GridView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
@@ -700,7 +1199,7 @@ class TabletHomePage extends HookConsumerWidget {
     );
   }
 
-  Widget _myProductsHeader() {
+  Widget _myProductsHeader(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 30),
       child: SizedBox(
@@ -717,25 +1216,31 @@ class TabletHomePage extends HookConsumerWidget {
               ),
             ),
             Spacer(),
-            Container(
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(7),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Icon(Icons.add, color: Colors.black, size: 25),
-                  Text(
-                    "Add New",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Color.fromARGB(200, 50, 50, 50),
+
+            GestureDetector(
+              onTap: () {
+                _showAddNew(context, ref);
+              },
+              child: Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(7),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Icon(Icons.add, color: Colors.black, size: 25),
+                    Text(
+                      "Add New",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Color.fromARGB(200, 50, 50, 50),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             SizedBox(width: 20),

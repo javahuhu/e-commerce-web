@@ -122,7 +122,7 @@ class DesktopCategoriesPage extends HookConsumerWidget {
     final dark = ref.watch(isDark);
     final isHover = ref.watch(hover);
     double widthmode = MediaQuery.of(context).size.width;
-    double modeWidth = (widthmode < 1800) ? 0 : 105;
+    double modeWidth = (widthmode < 1800) ? 0 : 157;
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
@@ -279,8 +279,8 @@ class DesktopCategoriesPage extends HookConsumerWidget {
                                             child: Image.asset(
                                               icons['Icons'],
                                               fit: BoxFit.contain,
-                                              height: 31,
-                                              width: 31,
+                                              height: 30,
+                                              width: 30,
                                             ),
                                           ),
                                         ),

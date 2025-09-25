@@ -40,6 +40,7 @@ class TabletMainScreen extends HookConsumerWidget {
     ]).animate(CurvedAnimation(parent: controller, curve: Curves.easeInOut));
 
     final toTablet = MediaQuery.of(context).size.width < 801;
+    final smallHeight = MediaQuery.of(context).size.height < 601;
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
@@ -276,6 +277,133 @@ class TabletMainScreen extends HookConsumerWidget {
                                         ),
                                       ),
                                     ),
+
+                                    SizedBox(height: 20),
+                                    ElevatedButton(
+                                      onPressed: () {},
+                                      style: ButtonStyle(
+                                        minimumSize: WidgetStateProperty.all(
+                                          Size(325, 60),
+                                        ),
+
+                                        side:
+                                            WidgetStateProperty.resolveWith<
+                                              BorderSide
+                                            >((Set<WidgetState> states) {
+                                              if (states.contains(
+                                                WidgetState.hovered,
+                                              )) {
+                                                return BorderSide(
+                                                  color: Colors.red,
+                                                  width: 2,
+                                                );
+                                              }
+
+                                              return BorderSide(
+                                                color: Colors.black,
+                                                width: 1,
+                                              );
+                                            }),
+
+                                        backgroundColor:
+                                            WidgetStateProperty.all(
+                                              Colors.white,
+                                            ),
+                                        elevation: WidgetStateProperty.all(0),
+                                        splashFactory: NoSplash.splashFactory,
+                                        overlayColor: WidgetStateProperty.all(
+                                          Colors.transparent,
+                                        ),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+
+                                        children: [
+                                          ClipRRect(
+                                            child: Image.asset(
+                                              'assets/googleicon.png',
+                                              fit: BoxFit.contain,
+                                              height: 25,
+                                              width: 25,
+                                            ),
+                                          ),
+
+                                          SizedBox(width: 25),
+                                          Text(
+                                            'Log In using Google',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+
+                                          SizedBox(width: 20),
+                                        ],
+                                      ),
+                                    ),
+
+                                    SizedBox(height: 10),
+                                    ElevatedButton(
+                                      onPressed: () {},
+                                      style: ButtonStyle(
+                                        minimumSize: WidgetStateProperty.all(
+                                          Size(325, 60),
+                                        ),
+
+                                        side:
+                                            WidgetStateProperty.resolveWith<
+                                              BorderSide
+                                            >((Set<WidgetState> states) {
+                                              if (states.contains(
+                                                WidgetState.hovered,
+                                              )) {
+                                                return BorderSide(
+                                                  color: Colors.blueAccent,
+                                                  width: 2,
+                                                );
+                                              }
+
+                                              return BorderSide(
+                                                color: Colors.black,
+                                                width: 1,
+                                              );
+                                            }),
+
+                                        backgroundColor:
+                                            WidgetStateProperty.all(
+                                              Colors.white,
+                                            ),
+                                        elevation: WidgetStateProperty.all(0),
+                                        splashFactory: NoSplash.splashFactory,
+                                        overlayColor: WidgetStateProperty.all(
+                                          Colors.transparent,
+                                        ),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                            child: Image.asset(
+                                              'assets/facebooklogo.png',
+                                              fit: BoxFit.contain,
+                                              height: 25,
+                                              width: 25,
+                                            ),
+                                          ),
+
+                                          SizedBox(width: 25),
+                                          Text(
+                                            'Log In using Facebook',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -312,6 +440,7 @@ class TabletMainScreen extends HookConsumerWidget {
             ],
           ),
 
+          smallHeight ? SizedBox.shrink() :
           Positioned(
             left: -70,
             top: -180,
@@ -324,7 +453,8 @@ class TabletMainScreen extends HookConsumerWidget {
               ),
             ),
           ),
-
+          
+          smallHeight ? SizedBox.shrink() :
           Positioned(
             right: -100,
             bottom: -180,
@@ -346,13 +476,10 @@ class TabletMainScreen extends HookConsumerWidget {
   }
 }
 
-
-
-
 double _textfield(BuildContext context) {
   double screenWidth = MediaQuery.of(context).size.width;
 
-  if (screenWidth >= 825 && screenWidth <= 1055) {
+  if (screenWidth >= 825 && screenWidth <= 1099) {
     return 100;
   } else if (screenWidth < 824) {
     return 90;
@@ -368,7 +495,7 @@ double _containerHeight(BuildContext context) {
     return 600;
   } else if (screenWidth < 771) {
     return 600;
-  } 
+  }
 
   return 600;
 }

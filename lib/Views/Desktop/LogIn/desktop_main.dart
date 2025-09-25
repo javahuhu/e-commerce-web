@@ -145,6 +145,7 @@ class DesktopMainScreen extends HookConsumerWidget {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
+                                    SizedBox(height: 50),
                                     Text(
                                       'LOGIN',
                                       style: TextStyle(
@@ -244,7 +245,7 @@ class DesktopMainScreen extends HookConsumerWidget {
                                       ),
                                     ),
 
-                                    SizedBox(height: 100),
+                                    SizedBox(height: 80),
                                     ElevatedButton(
                                       onPressed: () {
                                         // Router.neglect(context, () {
@@ -272,6 +273,133 @@ class DesktopMainScreen extends HookConsumerWidget {
                                           ),
                                           fontWeight: FontWeight.w500,
                                         ),
+                                      ),
+                                    ),
+
+                                    SizedBox(height: 20),
+                                    ElevatedButton(
+                                      onPressed: () {},
+                                      style: ButtonStyle(
+                                        minimumSize: WidgetStateProperty.all(
+                                          Size(325, 60),
+                                        ),
+
+                                        side:
+                                            WidgetStateProperty.resolveWith<
+                                              BorderSide
+                                            >((Set<WidgetState> states) {
+                                              if (states.contains(
+                                                WidgetState.hovered,
+                                              )) {
+                                                return BorderSide(
+                                                  color: Colors.red,
+                                                  width: 2,
+                                                );
+                                              }
+
+                                              return BorderSide(
+                                                color: Colors.black,
+                                                width: 1,
+                                              );
+                                            }),
+
+                                        backgroundColor:
+                                            WidgetStateProperty.all(
+                                              Colors.white,
+                                            ),
+                                        elevation: WidgetStateProperty.all(0),
+                                        splashFactory: NoSplash.splashFactory,
+                                        overlayColor: WidgetStateProperty.all(
+                                          Colors.transparent,
+                                        ),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+
+                                        children: [
+                                          ClipRRect(
+                                            child: Image.asset(
+                                              'assets/googleicon.png',
+                                              fit: BoxFit.contain,
+                                              height: 25,
+                                              width: 25,
+                                            ),
+                                          ),
+
+                                          SizedBox(width: 25),
+                                          Text(
+                                            'Log In using Google',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+
+                                          SizedBox(width: 20),
+                                        ],
+                                      ),
+                                    ),
+
+                                    SizedBox(height: 10),
+                                    ElevatedButton(
+                                      onPressed: () {},
+                                      style: ButtonStyle(
+                                        minimumSize: WidgetStateProperty.all(
+                                          Size(325, 60),
+                                        ),
+
+                                        side:
+                                            WidgetStateProperty.resolveWith<
+                                              BorderSide
+                                            >((Set<WidgetState> states) {
+                                              if (states.contains(
+                                                WidgetState.hovered,
+                                              )) {
+                                                return BorderSide(
+                                                  color: Colors.blueAccent,
+                                                  width: 2,
+                                                );
+                                              }
+
+                                              return BorderSide(
+                                                color: Colors.black,
+                                                width: 1,
+                                              );
+                                            }),
+
+                                        backgroundColor:
+                                            WidgetStateProperty.all(
+                                              Colors.white,
+                                            ),
+                                        elevation: WidgetStateProperty.all(0),
+                                        splashFactory: NoSplash.splashFactory,
+                                        overlayColor: WidgetStateProperty.all(
+                                          Colors.transparent,
+                                        ),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                            child: Image.asset(
+                                              'assets/facebooklogo.png',
+                                              fit: BoxFit.contain,
+                                              height: 25,
+                                              width: 25,
+                                            ),
+                                          ),
+
+                                          SizedBox(width: 25),
+                                          Text(
+                                            'Log In using Facebook',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],

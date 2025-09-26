@@ -39,6 +39,7 @@ class MobileMainScreen extends HookConsumerWidget {
         weight: 1,
       ),
     ]).animate(CurvedAnimation(parent: controller, curve: Curves.easeInOut));
+    final smallHeight = MediaQuery.of(context).size.height < 700;
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
@@ -100,7 +101,7 @@ class MobileMainScreen extends HookConsumerWidget {
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 15.w),
                       child: Container(
-                        height: 480.h,
+                        height: smallHeight ? 550.h : 480.h,
                         width: 275.w,
 
                         decoration: BoxDecoration(
@@ -246,6 +247,35 @@ class MobileMainScreen extends HookConsumerWidget {
                                 ),
                               ),
                             ),
+
+                            SizedBox(height: 5),
+
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 10.w,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text("Don't Have an Account Yet?", style: TextStyle(fontSize: 13.sp),),
+
+                                          TextButton(
+                                            onPressed: () {},
+                                            style: ButtonStyle(
+                                              overlayColor: WidgetStateProperty.all(Colors.transparent)
+                                            ),
+                                            child: Text(
+                                              'Sign Up',
+                                              style: TextStyle(
+                                                fontSize: 13.sp,
+                                                color: txtcolor,
+                                                fontFamily: 'Sono',
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
 
                             SizedBox(height: 20),
 
@@ -430,3 +460,5 @@ class MobileMainScreen extends HookConsumerWidget {
     );
   }
 }
+
+

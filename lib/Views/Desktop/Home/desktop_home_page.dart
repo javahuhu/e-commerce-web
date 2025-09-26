@@ -33,7 +33,11 @@ class DesktopHomePage extends HookConsumerWidget {
     },
   ];
 
-  final selectedValue = StateProvider<String?>((ref) => null);
+  final selectedValue = StateProvider<Map<String, String?>>((ref) => {
+    "Select Brand": null,
+    "Select Category": null,
+    "Select Size": null
+  });
   void _showAddNew(BuildContext context, WidgetRef ref) {
     showDialog(
       context: context,
@@ -77,7 +81,7 @@ class DesktopHomePage extends HookConsumerWidget {
                         SizedBox(height: 10),
                         GlassmorphicContainer(
                           width: double.infinity,
-                          height: 600,
+                          height: 595,
                           borderRadius: 20,
                           blur: 5,
                           border: 2,
@@ -287,7 +291,7 @@ class DesktopHomePage extends HookConsumerWidget {
                                           ),
                                         ),
                                       ),
-                                      value: selected,
+                                      value: options.contains(selected[label]) ? selected[label] : null,
                                       style: TextStyle(
                                         fontSize: 15,
                                         color: const Color.fromARGB(
@@ -304,8 +308,11 @@ class DesktopHomePage extends HookConsumerWidget {
                                         );
                                       }).toList(),
                                       onChanged: (newValue) {
-                                        ref.read(selectedValue.notifier).state =
-                                            newValue;
+                                        ref.read(selectedValue.notifier).state = {
+                                          ...selected,
+                                          label: newValue
+                                        };
+                                        
                                       },
                                     );
                                   }).toList(),

@@ -44,6 +44,7 @@ dependencies:
   responsive_framework: ^1.5.1
   glassmorphism: ^3.0.0
   dropdown_button2: ^2.3.9
+  supabase_flutter: ^2.10.1
 
 dev_dependencies:
   flutter_test:

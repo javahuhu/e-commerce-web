@@ -53,7 +53,13 @@ class TabletHomePage extends HookConsumerWidget {
     },
   ];
 
-  final selectedValue = StateProvider<String?>((ref) => null);
+  final selectedValue = StateProvider<Map<String, String?>>(
+    (ref) => {
+      "Select Brand": null,
+      "Select Category": null,
+      "Select Size": null,
+    },
+  );
   void _showAddNew(BuildContext context, WidgetRef ref) {
     showDialog(
       context: context,
@@ -61,7 +67,8 @@ class TabletHomePage extends HookConsumerWidget {
         return LayoutBuilder(
           builder: (context, contraints) {
             final width = MediaQuery.of(context).size.width;
-            final smallTab = width < 1000;
+            final wrapWidth = MediaQuery.of(context).size.width <= 735;
+
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (width <= 575 && context.mounted ||
                   width >= 1080 && context.mounted) {
@@ -146,7 +153,7 @@ class TabletHomePage extends HookConsumerWidget {
                                 Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 25),
                                   child: SizedBox(
-                                    height: smallTab ? 400 : 170,
+                                    height: _responsiveAddProduct(context),
                                     child: GridView.builder(
                                       gridDelegate:
                                           SliverGridDelegateWithMaxCrossAxisExtent(
@@ -271,9 +278,9 @@ class TabletHomePage extends HookConsumerWidget {
                                 SizedBox(height: 15),
                                 Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 30),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                  child: Wrap(
+                                    spacing: 15,
+                                    runSpacing: 10,
                                     children: category.asMap().entries.map((
                                       entry,
                                     ) {
@@ -292,8 +299,7 @@ class TabletHomePage extends HookConsumerWidget {
                                           ),
                                         ),
                                         buttonStyleData: ButtonStyleData(
-                                          height: 48,
-                                          width: 270,
+                                          width: wrapWidth ? 540 : 270,
                                           padding: EdgeInsets.symmetric(
                                             horizontal: 10,
                                           ),
@@ -315,7 +321,9 @@ class TabletHomePage extends HookConsumerWidget {
                                             ),
                                           ),
                                         ),
-                                        value: selected,
+                                        value: options.contains(selected[label])
+                                            ? selected[label]
+                                            : null,
                                         style: TextStyle(
                                           fontSize: 15,
                                           color: const Color.fromARGB(
@@ -333,9 +341,11 @@ class TabletHomePage extends HookConsumerWidget {
                                         }).toList(),
                                         onChanged: (newValue) {
                                           ref
-                                                  .read(selectedValue.notifier)
-                                                  .state =
-                                              newValue;
+                                              .read(selectedValue.notifier)
+                                              .state = {
+                                            ...selected,
+                                            label: newValue,
+                                          };
                                         },
                                       );
                                     }).toList(),
@@ -345,12 +355,12 @@ class TabletHomePage extends HookConsumerWidget {
                                 SizedBox(height: 15),
                                 Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 30),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                  child: Wrap(
+                                    spacing: 15,
+                                    runSpacing: 10,
                                     children: [
                                       SizedBox(
-                                        width: 270,
+                                        width: wrapWidth ? 540 : 270,
                                         child: TextField(
                                           decoration: InputDecoration(
                                             hintText: 'Price',
@@ -379,7 +389,7 @@ class TabletHomePage extends HookConsumerWidget {
                                       ),
 
                                       SizedBox(
-                                        width: 270,
+                                        width: wrapWidth ? 540 : 270,
                                         child: TextField(
                                           decoration: InputDecoration(
                                             hintText: 'Offer Price',
@@ -408,7 +418,7 @@ class TabletHomePage extends HookConsumerWidget {
                                       ),
 
                                       SizedBox(
-                                        width: 270,
+                                        width: wrapWidth ? 540 : 270,
                                         child: TextField(
                                           decoration: InputDecoration(
                                             hintText: 'Quantity',
@@ -441,9 +451,9 @@ class TabletHomePage extends HookConsumerWidget {
                                 SizedBox(height: 50),
                                 Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 30),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                  child: Wrap(
+                                    spacing: 29,
+                                    runSpacing: 10,
                                     children: [
                                       ElevatedButton(
                                         onPressed: () {},
@@ -1799,4 +1809,18 @@ double _orderDetailsWidth(BuildContext context) {
   }
 
   return 2.3;
+}
+
+_responsiveAddProduct(BuildContext context) {
+  double screenWidth = MediaQuery.of(context).size.width;
+
+  if (screenWidth >= 632 && screenWidth <= 1000) {
+    return 415;
+  } else if (screenWidth >= 587 && screenWidth <= 631) {
+    return 325;
+  } else if (screenWidth <= 586) {
+    return 650;
+  }
+
+  return 170;
 }

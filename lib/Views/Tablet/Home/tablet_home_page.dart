@@ -855,6 +855,10 @@ class TabletHomePage extends HookConsumerWidget {
                             break;
                           case 1:
                             context.go('/Categories');
+                            break;
+                          case 2:
+                            context.go('/SubCategories');
+                            break;
                         }
                       },
                       child: Container(

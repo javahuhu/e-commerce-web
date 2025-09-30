@@ -7,8 +7,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hooks_riverpod/legacy.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class MobileCategoriesPage extends HookConsumerWidget {
-  MobileCategoriesPage({super.key});
+class MobileSubCategoriesPage extends HookConsumerWidget {
+  MobileSubCategoriesPage({super.key});
 
   final List<Map<String, dynamic>> navbar = [
     {'Icons': "assets/dashboard.png", 'NavigateTo': 'Dashboard'},
@@ -33,42 +33,49 @@ class MobileCategoriesPage extends HookConsumerWidget {
   final List<Map<String, dynamic>> products = [
     {
       "image": "assets/sampleuser.jpg",
+      "subcategory": "Mobile",
       "category": "Electronics",
       "Date": "2024",
       "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
+      "subcategory": "Mobile",
       "category": "Books",
       "Date": "2024",
       "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
+      "subcategory": "Mobile",
       "category": "Cloths",
       "Date": "2024",
       "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
+      "subcategory": "Mobile",
       "category": "Grossory",
       "Date": "2024",
       "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
+      "subcategory": "Mobile",
       "category": "Slippers",
       "Date": "2024",
       "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
+      "subcategory": "Mobile",
       "category": "Top",
       "Date": "2024",
       "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
+      "subcategory": "Mobile",
       "category": "Bottom",
       "Date": "2024",
       "Value": 0.5,
@@ -193,10 +200,6 @@ class MobileCategoriesPage extends HookConsumerWidget {
                                 break;
                               case 1:
                                 context.go('/Categories');
-                                break;
-                              case 2:
-                                context.go('/SubCategories');
-                                break;
                             }
                           },
                           child: Container(
@@ -361,7 +364,6 @@ class MobileCategoriesPage extends HookConsumerWidget {
                       SizedBox(height: 25),
                       _allProductsSection(context),
                       SizedBox(height: 25),
-                      _orderDetailsSection(context),
 
                       SizedBox(height: 50),
                     ],
@@ -486,7 +488,7 @@ class MobileCategoriesPage extends HookConsumerWidget {
               Padding(
                 padding: EdgeInsets.only(top: 20.h, left: 24.w),
                 child: Text(
-                  'Categories',
+                  'Sub Categories',
                   style: TextStyle(
                     fontSize: 28.sp,
                     color: txtcolor,
@@ -497,7 +499,7 @@ class MobileCategoriesPage extends HookConsumerWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 10, left: 37),
                 child: Text(
-                  "Different Categories for Product",
+                  "Different Sub Categories of Products",
                   style: TextStyle(
                     fontSize: 18.sp,
                     color: Color.fromARGB(200, 50, 50, 50),
@@ -508,109 +510,6 @@ class MobileCategoriesPage extends HookConsumerWidget {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _orderDetailsSection(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: 20, top: 15),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-          child: Container(
-            margin: EdgeInsets.only(right: 20),
-            padding: EdgeInsets.all(20),
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: bgcolor.withValues(alpha: 0.2),
-              border: Border.all(
-                color: Colors.white.withValues(alpha: 0.5),
-                width: 1.5,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: Offset(0, 4),
-                ),
-              ],
-              borderRadius: BorderRadius.circular(20.r),
-            ),
-
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(left: 15.w, top: 10.h),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Product Stock',
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        color: txtcolor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-
-                SizedBox(height: 15),
-
-                SizedBox(
-                  child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 1,
-                      childAspectRatio: _orderDetailsRatio(context),
-                      mainAxisSpacing: 2,
-                      crossAxisSpacing: 15,
-                    ),
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: products.length,
-                    itemBuilder: (context, index) {
-                      final categories = products[index];
-                      return Container(
-                        padding: EdgeInsets.all(5),
-                        alignment: Alignment.center,
-                        margin: EdgeInsets.symmetric(vertical: 10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.8),
-                            width: 1,
-                          ),
-                        ),
-
-                        child: ListTile(
-                          leading: Icon(
-                            Icons.delivery_dining_outlined,
-                            size: 15,
-                          ),
-                          title: Text(
-                            categories['category'],
-                            style: TextStyle(fontSize: 18.sp, color: txtcolor),
-                          ),
-                          subtitle: Padding(
-                            padding: EdgeInsets.only(top: 5),
-                            child: LinearProgressIndicator(
-                              value: (categories['Value'] as num).toDouble(),
-                              backgroundColor: Colors.grey[300],
-                              minHeight: 8,
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
     );
   }
 
@@ -713,7 +612,18 @@ class MobileCategoriesPage extends HookConsumerWidget {
                           columns: [
                             DataColumn(
                               label: Text(
-                                'Category Name',
+                                'Sub Category Name',
+                                style: TextStyle(
+                                  color: txtcolor,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+
+                            DataColumn(
+                              label: Text(
+                                'Category',
                                 style: TextStyle(
                                   color: txtcolor,
                                   fontSize: 15,
@@ -734,23 +644,32 @@ class MobileCategoriesPage extends HookConsumerWidget {
                             ),
 
                             DataColumn(
-                              label: Text(
-                                'Edit',
-                                style: TextStyle(
-                                  color: txtcolor,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
+                              label: SizedBox(
+                                width: 42,
+                                child: Center(
+                                  child: Text(
+                                    'Edit',
+                                    style: TextStyle(
+                                      color: txtcolor,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-
                             DataColumn(
-                              label: Text(
-                                'Delete',
-                                style: TextStyle(
-                                  color: txtcolor,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
+                              label: SizedBox(
+                                width: 42.5,
+                                child: Center(
+                                  child: Text(
+                                    'Delete',
+                                    style: TextStyle(
+                                      color: txtcolor,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
@@ -769,13 +688,23 @@ class MobileCategoriesPage extends HookConsumerWidget {
                                       ),
                                       SizedBox(width: 10),
                                       Text(
-                                        value["category"],
+                                        value["subcategory"],
                                         style: TextStyle(
                                           fontSize: 12,
                                           color: txtcolor,
                                         ),
                                       ),
                                     ],
+                                  ),
+                                ),
+
+                                DataCell(
+                                  Text(
+                                    value['category'],
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: txtcolor,
+                                    ),
                                   ),
                                 ),
 
@@ -790,23 +719,32 @@ class MobileCategoriesPage extends HookConsumerWidget {
                                 ),
 
                                 DataCell(
-                                  Icon(
-                                    Icons.edit,
-                                    color: const Color.fromARGB(
-                                      255,
-                                      255,
-                                      255,
-                                      255,
+                                  SizedBox(
+                                    width: 42,
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.edit,
+                                        color: const Color.fromARGB(
+                                          255,
+                                          255,
+                                          255,
+                                          255,
+                                        ),
+                                        size: 20,
+                                      ),
                                     ),
-                                    size: 20,
                                   ),
                                 ),
-
                                 DataCell(
-                                  Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
-                                    size: 20,
+                                  SizedBox(
+                                    width: 42.5, // Match the column width
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                        size: 20,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -824,17 +762,4 @@ class MobileCategoriesPage extends HookConsumerWidget {
       ),
     );
   }
-}
-
-double _orderDetailsRatio(BuildContext context) {
-  double screenWidth = MediaQuery.of(context).size.width;
-
-  if (screenWidth >= 392 && screenWidth <= 440) {
-    return 3.5;
-  } else if (screenWidth >= 362 && screenWidth <= 391) {
-    return 2.9;
-  } else if (screenWidth <= 361) {
-    return 2.7;
-  }
-  return 4;
 }

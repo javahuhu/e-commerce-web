@@ -287,8 +287,8 @@ Widget _signUp(
         borderRadius: toTablet
             ? BorderRadius.circular(20)
             : BorderRadius.only(
-                topLeft: Radius.circular(20),
-                bottomLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+                bottomRight: Radius.circular(20),
               ),
       ),
 
@@ -309,7 +309,7 @@ Widget _signUp(
           SizedBox(height: 25),
 
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 140),
+            padding: EdgeInsets.symmetric(horizontal: _textfield(context)),
             child: TextField(
               controller: usernamecontroller,
               decoration: InputDecoration(
@@ -344,7 +344,7 @@ Widget _signUp(
           ),
 
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 140, vertical: 15),
+            padding: EdgeInsets.symmetric(horizontal: _textfield(context), vertical: 15),
             child: TextField(
               controller: passwordcontroller,
               decoration: InputDecoration(

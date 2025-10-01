@@ -322,6 +322,9 @@ class TabletCategoriesPage extends HookConsumerWidget {
                           case 2:
                             context.go('/SubCategories');
                             break;
+                          case 3:
+                            context.go('/Brands');
+                            break;
                         }
                       },
                       child: Container(
@@ -389,6 +392,13 @@ class TabletCategoriesPage extends HookConsumerWidget {
                         break;
                       case 1:
                         context.go('/Categories');
+                        break;
+                      case 2:
+                        context.go('/SubCategories');
+                        break;
+                      case 3:
+                        context.go('/Brands');
+                        break;
                     }
                   },
                   child: Container(

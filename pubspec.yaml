@@ -45,6 +45,8 @@ dependencies:
   glassmorphism: ^3.0.0
   dropdown_button2: ^2.3.9
   supabase_flutter: ^2.10.1
+  http: ^1.5.0
+  logger: ^2.6.1
 
 dev_dependencies:
   flutter_test:

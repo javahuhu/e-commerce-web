@@ -6,8 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hooks_riverpod/legacy.dart';
 
-class DesktopSubCategoriesPage extends HookConsumerWidget {
-  DesktopSubCategoriesPage({super.key});
+class DesktopBrandPage extends HookConsumerWidget {
+  DesktopBrandPage({super.key});
 
   final List<Map<String, dynamic>> navbar = [
     {'Icons': "assets/dashboard.png", 'NavigateTo': 'Dashboard'},
@@ -441,7 +441,7 @@ class DesktopSubCategoriesPage extends HookConsumerWidget {
                                           left: 40,
                                         ),
                                         child: Text(
-                                          'Sub Categories',
+                                          'Brands',
                                           style: TextStyle(
                                             fontSize: 50,
                                             color: txtcolor,
@@ -455,7 +455,7 @@ class DesktopSubCategoriesPage extends HookConsumerWidget {
                                           left: 45,
                                         ),
                                         child: Text(
-                                          "Different Sub Categories of Products",
+                                          "Different Brands of Products",
                                           style: TextStyle(
                                             fontSize: 25,
                                             color: Color.fromARGB(
@@ -525,7 +525,7 @@ class DesktopSubCategoriesPage extends HookConsumerWidget {
                                                               .spaceBetween,
                                                       children: [
                                                         Text(
-                                                          'All Sub Categories',
+                                                          'All Brands',
                                                           style: TextStyle(
                                                             color: txtcolor,
                                                             fontSize: 22,
@@ -616,7 +616,7 @@ class DesktopSubCategoriesPage extends HookConsumerWidget {
                                                         columns: [
                                                           DataColumn(
                                                             label: Text(
-                                                              'Sub Category Name',
+                                                              'Brand Name',
                                                               style: TextStyle(
                                                                 color: txtcolor,
                                                                 fontSize: 15,
@@ -628,7 +628,7 @@ class DesktopSubCategoriesPage extends HookConsumerWidget {
                                                           ),
                                                           DataColumn(
                                                             label: Text(
-                                                              'Category',
+                                                              'Sub Category',
                                                               style: TextStyle(
                                                                 color: txtcolor,
                                                                 fontSize: 15,

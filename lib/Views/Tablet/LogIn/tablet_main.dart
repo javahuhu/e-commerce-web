@@ -1,20 +1,26 @@
 import 'dart:ui';
+import 'package:ecommerce_admin/Core/Auth/auth_service.dart';
 import 'package:ecommerce_admin/Core/Theme/colors.dart';
+import 'package:ecommerce_admin/Model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:logger/web.dart';
 
 class TabletMainScreen extends HookConsumerWidget {
   TabletMainScreen({super.key});
 
   final toSignUp = StateProvider<bool>((ref) => true);
-
+  final authProvider = StateProvider<AuthService>((ref) => AuthService());
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final TextEditingController usernamecontroller = TextEditingController();
+    final TextEditingController emailcontroller = TextEditingController();
     final TextEditingController passwordcontroller = TextEditingController();
+    final TextEditingController confirmpasswordcontroller =
+        TextEditingController();
     final controller = useAnimationController(
       duration: const Duration(seconds: 5),
     )..repeat(reverse: true);
@@ -158,6 +164,7 @@ class TabletMainScreen extends HookConsumerWidget {
                                       usernamecontroller,
                                       passwordcontroller,
                                       toSignUp,
+                                      authProvider,
                                       ref,
                                     ),
                                     toTablet
@@ -176,8 +183,11 @@ class TabletMainScreen extends HookConsumerWidget {
                                       context,
                                       toTablet,
                                       usernamecontroller,
+                                      emailcontroller,
                                       passwordcontroller,
+                                      confirmpasswordcontroller,
                                       toSignUp,
+                                      authProvider,
                                       ref,
                                     ),
                                   ],
@@ -273,10 +283,14 @@ Widget _signUp(
   BuildContext context,
   bool toTablet,
   TextEditingController usernamecontroller,
+  TextEditingController emailcontroller,
   TextEditingController passwordcontroller,
+  TextEditingController confirmpasswordcontroller,
   StateProvider<bool> toSignUp,
+  StateProvider<AuthService> authService,
   WidgetRef ref,
 ) {
+  final logger = Logger();
   return Expanded(
     flex: 1,
     child: Container(
@@ -344,11 +358,14 @@ Widget _signUp(
           ),
 
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: _textfield(context), vertical: 15),
+            padding: EdgeInsets.symmetric(
+              horizontal: _textfield(context),
+              vertical: 15,
+            ),
             child: TextField(
-              controller: passwordcontroller,
+              controller: emailcontroller,
               decoration: InputDecoration(
-                hintText: 'Password',
+                hintText: 'Email',
                 filled: true,
                 fillColor: bgcolor,
                 prefixIcon: Icon(
@@ -378,11 +395,100 @@ Widget _signUp(
             ),
           ),
 
-          SizedBox(height: 60),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: _textfield(context)),
+            child: TextField(
+              controller: passwordcontroller,
+              decoration: InputDecoration(
+                hintText: 'Password',
+                filled: true,
+                fillColor: bgcolor,
+                prefixIcon: Icon(
+                  Icons.person_outline,
+                  color: Colors.black,
+                  size: 25,
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 10,
+                ),
+
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide.none,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide.none,
+                ),
+
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+            ),
+          ),
+
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: _textfield(context),
+              vertical: 15,
+            ),
+            child: TextField(
+              controller: confirmpasswordcontroller,
+              decoration: InputDecoration(
+                hintText: 'Confirm Password',
+                filled: true,
+                fillColor: bgcolor,
+                prefixIcon: Icon(
+                  Icons.lock_outline,
+                  color: Colors.black,
+                  size: 25,
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 10,
+                ),
+
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide.none,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide.none,
+                ),
+
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+            ),
+          ),
+
+          SizedBox(height: 50),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               // Router.neglect(context, () {
-              context.go('/HomePage');
+              final sendRegister = ref.read(authService);
+              try {
+                await sendRegister.register(
+                  SignUpModel(
+                    username: usernamecontroller.text,
+                    email: emailcontroller.text,
+                    password: passwordcontroller.text,
+                    confirmpassword: confirmpasswordcontroller.text,
+                  ),
+                );
+              } catch (e) {
+                logger.e("Error: $e");
+              }
+              if (context.mounted) {
+                context.go('/HomePage');
+              }
+
               // });
             },
             style: ElevatedButton.styleFrom(
@@ -430,94 +536,6 @@ Widget _signUp(
               ],
             ),
           ),
-
-          SizedBox(height: 50),
-          ElevatedButton(
-            onPressed: () {},
-            style: ButtonStyle(
-              minimumSize: WidgetStateProperty.all(Size(325, 60)),
-
-              side: WidgetStateProperty.resolveWith<BorderSide>((
-                Set<WidgetState> states,
-              ) {
-                if (states.contains(WidgetState.hovered)) {
-                  return BorderSide(color: Colors.red, width: 2);
-                }
-
-                return BorderSide(color: Colors.black, width: 1);
-              }),
-
-              backgroundColor: WidgetStateProperty.all(Colors.white),
-              elevation: WidgetStateProperty.all(0),
-              splashFactory: NoSplash.splashFactory,
-              overlayColor: WidgetStateProperty.all(Colors.transparent),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-
-              children: [
-                ClipRRect(
-                  child: Image.asset(
-                    'assets/googleicon.png',
-                    fit: BoxFit.contain,
-                    height: 25,
-                    width: 25,
-                  ),
-                ),
-
-                SizedBox(width: 25),
-                Text(
-                  'Log In using Google',
-                  style: TextStyle(fontSize: 16, color: Colors.black),
-                ),
-
-                SizedBox(width: 20),
-              ],
-            ),
-          ),
-
-          SizedBox(height: 10),
-          ElevatedButton(
-            onPressed: () {},
-            style: ButtonStyle(
-              minimumSize: WidgetStateProperty.all(Size(325, 60)),
-
-              side: WidgetStateProperty.resolveWith<BorderSide>((
-                Set<WidgetState> states,
-              ) {
-                if (states.contains(WidgetState.hovered)) {
-                  return BorderSide(color: Colors.blueAccent, width: 2);
-                }
-
-                return BorderSide(color: Colors.black, width: 1);
-              }),
-
-              backgroundColor: WidgetStateProperty.all(Colors.white),
-              elevation: WidgetStateProperty.all(0),
-              splashFactory: NoSplash.splashFactory,
-              overlayColor: WidgetStateProperty.all(Colors.transparent),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  child: Image.asset(
-                    'assets/facebooklogo.png',
-                    fit: BoxFit.contain,
-                    height: 25,
-                    width: 25,
-                  ),
-                ),
-
-                SizedBox(width: 25),
-                Text(
-                  'Log In using Facebook',
-                  style: TextStyle(fontSize: 16, color: Colors.black),
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     ),
@@ -530,8 +548,10 @@ Widget _login(
   TextEditingController usernamecontroller,
   TextEditingController passwordcontroller,
   StateProvider<bool> toSignUp,
+  StateProvider<AuthService> authService,
   WidgetRef ref,
 ) {
+  final logger = Logger();
   return Expanded(
     flex: 1,
     child: Container(
@@ -638,9 +658,22 @@ Widget _login(
 
           SizedBox(height: 60),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               // Router.neglect(context, () {
-              context.go('/HomePage');
+              final sendLogin = ref.read(authService);
+              try {
+                await sendLogin.login(
+                  LoginModel(
+                    username: usernamecontroller.text,
+                    password: passwordcontroller.text,
+                  ),
+                );
+              } catch (e) {
+                logger.e("Error: $e");
+              }
+              if (context.mounted) {
+                context.go('/HomePage');
+              }
               // });
             },
             style: ElevatedButton.styleFrom(

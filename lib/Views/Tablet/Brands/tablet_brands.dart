@@ -6,8 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hooks_riverpod/legacy.dart';
 
-class TabletSubCategoriesPage extends HookConsumerWidget {
-  TabletSubCategoriesPage({super.key});
+class TabletBrandsPage extends HookConsumerWidget {
+  TabletBrandsPage({super.key});
 
   final List<Map<String, dynamic>> navbar = [
     {'Icons': "assets/dashboard.png", 'NavigateTo': 'Dashboard'},
@@ -543,7 +543,7 @@ class TabletSubCategoriesPage extends HookConsumerWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 20, left: 40),
                 child: Text(
-                  'Sub Categories',
+                  'Brands',
                   style: TextStyle(
                     fontSize: 50,
                     color: txtcolor,
@@ -554,7 +554,7 @@ class TabletSubCategoriesPage extends HookConsumerWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 10, left: 45),
                 child: Text(
-                  "Different Sub Categories of Products",
+                  "Different Brands of Products",
                   style: TextStyle(
                     fontSize: 25,
                     color: Color.fromARGB(200, 50, 50, 50),
@@ -610,7 +610,7 @@ class TabletSubCategoriesPage extends HookConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "All Sub Categories",
+                          "All Brands",
                           style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
@@ -672,7 +672,7 @@ class TabletSubCategoriesPage extends HookConsumerWidget {
                           columns: [
                             DataColumn(
                               label: Text(
-                                'Sub Category Name',
+                                'Brand Name',
                                 style: TextStyle(
                                   color: txtcolor,
                                   fontSize: 15,
@@ -683,7 +683,7 @@ class TabletSubCategoriesPage extends HookConsumerWidget {
 
                             DataColumn(
                               label: Text(
-                                'Category',
+                                'Sub Category',
                                 style: TextStyle(
                                   color: txtcolor,
                                   fontSize: 15,

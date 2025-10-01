@@ -1,11 +1,14 @@
+import 'package:ecommerce_admin/Views/Desktop/Brands/desktop_brand.dart';
 import 'package:ecommerce_admin/Views/Desktop/Categories/desktop_categories.dart';
 import 'package:ecommerce_admin/Views/Desktop/LogIn/desktop_main.dart';
 import 'package:ecommerce_admin/Views/Desktop/Home/desktop_home_page.dart';
 import 'package:ecommerce_admin/Views/Desktop/SubCategories/desktop_sub_categories.dart';
+import 'package:ecommerce_admin/Views/Mobile/Brands/mobile_brands.dart';
 import 'package:ecommerce_admin/Views/Mobile/Categories/mobile_categories.dart';
 import 'package:ecommerce_admin/Views/Mobile/LogIn/mobile_main.dart';
 import 'package:ecommerce_admin/Views/Mobile/Home/mobile_home_page.dart';
 import 'package:ecommerce_admin/Views/Mobile/SubCategories/mobile_sub_categories.dart';
+import 'package:ecommerce_admin/Views/Tablet/Brands/tablet_brands.dart';
 import 'package:ecommerce_admin/Views/Tablet/Categories/tablet_categories.dart';
 import 'package:ecommerce_admin/Views/Tablet/LogIn/tablet_main.dart';
 import 'package:ecommerce_admin/Views/Tablet/Home/tablet_home_page.dart';
@@ -55,6 +58,19 @@ final GoRouter router = GoRouter(
         mobileBody: MobileSubCategoriesPage(),
         tabletBody: TabletSubCategoriesPage(),
         desktopBody: DesktopSubCategoriesPage(),
+      ),
+
+      routes: []
+    ),
+
+
+
+    GoRoute(
+      path: '/Brands',
+      builder: (context, state) => ResponsiveLayout(
+        mobileBody: MobileBrandsPage(),
+        tabletBody: TabletBrandsPage(),
+        desktopBody: DesktopBrandPage(),
       ),
 
       routes: []

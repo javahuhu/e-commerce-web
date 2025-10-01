@@ -838,6 +838,9 @@ class DesktopHomePage extends HookConsumerWidget {
                                             case 2:
                                             context.go('/SubCategories');
                                             break;
+                                            case 3:
+                                            context.go('/Brands');
+                                            break;
                                           }
                                         },
                                         child: Container(

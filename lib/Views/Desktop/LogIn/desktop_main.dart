@@ -14,14 +14,21 @@ class DesktopMainScreen extends HookConsumerWidget {
 
   final toSignUp = StateProvider<bool>((ref) => true);
   final authProvider = StateProvider<AuthService>((ref) => AuthService());
+  final passwordVisible = StateProvider<bool>((ref) => false);
+  final confirmpasswordVisible = StateProvider<bool>((ref) => false);
+  final loginpasswordvisible = StateProvider<bool>((ref) => false);
+   final TextEditingController loginusernamecontroller = TextEditingController();
+   final TextEditingController loginpasswordcontroller = TextEditingController();
+  final TextEditingController usernamecontroller = TextEditingController();
+  final TextEditingController emailcontroller = TextEditingController();
+  final TextEditingController passwordcontroller = TextEditingController();
+  final TextEditingController confirmpasswordcontroller =
+      TextEditingController();
+  final loginKey = GlobalKey<FormState>();
+  final signupKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final TextEditingController usernamecontroller = TextEditingController();
-    final TextEditingController emailcontroller = TextEditingController();
-    final TextEditingController passwordcontroller = TextEditingController();
-    final TextEditingController confirmpasswordcontroller =
-        TextEditingController();
     final controller = useAnimationController(
       duration: const Duration(seconds: 5),
     )..repeat(reverse: true);
@@ -160,11 +167,13 @@ class DesktopMainScreen extends HookConsumerWidget {
                                     _login(
                                       context,
                                       toTablet,
-                                      usernamecontroller,
-                                      passwordcontroller,
+                                      loginusernamecontroller,
+                                      loginpasswordcontroller,
                                       toSignUp,
                                       authProvider,
                                       ref,
+                                      loginKey,
+                                      loginpasswordvisible,
                                     ),
 
                                     _imageLogin(),
@@ -185,6 +194,9 @@ class DesktopMainScreen extends HookConsumerWidget {
                                       toSignUp,
                                       authProvider,
                                       ref,
+                                      signupKey,
+                                      passwordVisible,
+                                      confirmpasswordVisible,
                                     ),
                                   ],
                                 ),
@@ -234,266 +246,296 @@ class DesktopMainScreen extends HookConsumerWidget {
 Widget _login(
   BuildContext context,
   bool toTablet,
-  TextEditingController usernamecontroller,
-  TextEditingController passwordcontroller,
+  TextEditingController loginusernamecontroller,
+  TextEditingController loginpasswordcontroller,
   StateProvider<bool> toSignUp,
   StateProvider<AuthService> authService,
   WidgetRef ref,
+  GlobalKey<FormState> loginKey,
+  StateProvider<bool> loginpasswordvisible,
 ) {
   final logger = Logger();
-  return Expanded(
-    flex: 1,
-    child: Container(
-      height: 600,
-      padding: EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          bottomLeft: Radius.circular(20),
+  final showPass = ref.watch(loginpasswordvisible);
+  return Form(
+    key: loginKey,
+    child: Expanded(
+      flex: 1,
+      child: Container(
+        height: 600,
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            bottomLeft: Radius.circular(20),
+          ),
         ),
-      ),
 
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(height: 20),
-          Text(
-            'LOGIN',
-            style: TextStyle(
-              fontSize: 40,
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Sono',
-            ),
-          ),
-
-          SizedBox(height: 25),
-
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 140),
-            child: TextField(
-              controller: usernamecontroller,
-              decoration: InputDecoration(
-                hintText: 'Username',
-                filled: true,
-                fillColor: bgcolor,
-                prefixIcon: Icon(
-                  Icons.person_outline,
-                  color: Colors.black,
-                  size: 25,
-                ),
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 15,
-                  vertical: 10,
-                ),
-
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
-
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-          ),
-
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 140, vertical: 15),
-            child: TextField(
-              controller: passwordcontroller,
-              decoration: InputDecoration(
-                hintText: 'Password',
-                filled: true,
-                fillColor: bgcolor,
-                prefixIcon: Icon(
-                  Icons.lock_outline,
-                  color: Colors.black,
-                  size: 25,
-                ),
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 15,
-                  vertical: 10,
-                ),
-
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
-
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-          ),
-
-          SizedBox(height: 60),
-          ElevatedButton(
-            onPressed: () async {
-              // Router.neglect(context, () {
-              final sendLogin = ref.read(authService);
-              try {
-                await sendLogin.login(
-                  LoginModel(
-                    username: usernamecontroller.text,
-                    password: passwordcontroller.text,
-                  ),
-                );
-              } catch (e) {
-                logger.e("Error: $e");
-              }
-              if (context.mounted) {
-                context.go('/HomePage');
-              }
-              // });
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.black,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              minimumSize: Size(325, 60),
-            ),
-            child: Text(
-              'Log In',
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(height: 15),
+            Text(
+              'LOGIN',
               style: TextStyle(
-                fontSize: 15,
-                color: const Color.fromARGB(255, 255, 255, 255),
-                fontWeight: FontWeight.w500,
+                fontSize: 40,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Sono',
               ),
             ),
-          ),
 
-          SizedBox(height: 5),
+            SizedBox(height: 25),
 
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: toTablet ? 100 : 120),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Don't Have an Account Yet?"),
-
-                TextButton(
-                  onPressed: () {
-                    ref.read(toSignUp.notifier).state = false;
-                  },
-                  style: ButtonStyle(
-                    overlayColor: WidgetStateProperty.all(Colors.transparent),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 140),
+              child: TextFormField(
+                controller: loginusernamecontroller,
+                decoration: InputDecoration(
+                  hintText: 'Username',
+                  filled: true,
+                  fillColor: bgcolor,
+                  prefixIcon: Icon(
+                    Icons.person_outline,
+                    color: Colors.black,
+                    size: 25,
                   ),
-                  child: Text(
-                    'Sign Up',
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: txtcolor,
-                      fontFamily: 'Sono',
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 15,
+                    vertical: 10,
+                  ),
+
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide.none,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide.none,
+                  ),
+
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Input Username';
+                  }
+                  return null;
+                },
+              ),
+            ),
+
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 140, vertical: 15),
+              child: TextFormField(
+                controller: loginpasswordcontroller,
+                obscureText: !showPass,
+                decoration: InputDecoration(
+                  hintText: 'Password',
+                  filled: true,
+                  fillColor: bgcolor,
+                  prefixIcon: Icon(
+                    Icons.lock_outline,
+                    color: Colors.black,
+                    size: 25,
+                  ),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 15,
+                    vertical: 10,
+                  ),
+
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide.none,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide.none,
+                  ),
+
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide.none,
+                  ),
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      ref.read(loginpasswordvisible.notifier).state = !showPass;
+                    },
+                    icon: Icon(
+                      showPass ? Icons.visibility : Icons.visibility_off,
                     ),
                   ),
                 ),
-              ],
+
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Input Password';
+                  }
+                  return null;
+                },
+              ),
             ),
-          ),
 
-          SizedBox(height: 50),
-          ElevatedButton(
-            onPressed: () {},
-            style: ButtonStyle(
-              minimumSize: WidgetStateProperty.all(Size(325, 60)),
-
-              side: WidgetStateProperty.resolveWith<BorderSide>((
-                Set<WidgetState> states,
-              ) {
-                if (states.contains(WidgetState.hovered)) {
-                  return BorderSide(color: Colors.red, width: 2);
+            SizedBox(height: 60),
+            ElevatedButton(
+              onPressed: () async {
+                // Router.neglect(context, () {
+                if (loginKey.currentState!.validate()) {
+                  final sendLogin = ref.read(authService);
+                  try {
+                    await sendLogin.login(
+                      LoginModel(
+                        username: loginusernamecontroller.text,
+                        password: loginpasswordcontroller.text,
+                      ),
+                    );
+                  } catch (e) {
+                    logger.e("Error: $e");
+                  }
+                  if (context.mounted) {
+                    context.go('/HomePage');
+                  }
                 }
-
-                return BorderSide(color: Colors.black, width: 1);
-              }),
-
-              backgroundColor: WidgetStateProperty.all(Colors.white),
-              elevation: WidgetStateProperty.all(0),
-              splashFactory: NoSplash.splashFactory,
-              overlayColor: WidgetStateProperty.all(Colors.transparent),
+                // });
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                minimumSize: Size(325, 60),
+              ),
+              child: Text(
+                'Log In',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: const Color.fromARGB(255, 255, 255, 255),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
 
-              children: [
-                ClipRRect(
-                  child: Image.asset(
-                    'assets/googleicon.png',
-                    fit: BoxFit.contain,
-                    height: 25,
-                    width: 25,
+            SizedBox(height: 5),
+
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: toTablet ? 100 : 120),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Don't Have an Account Yet?"),
+
+                  TextButton(
+                    onPressed: () {
+                      ref.read(toSignUp.notifier).state = false;
+                    },
+                    style: ButtonStyle(
+                      overlayColor: WidgetStateProperty.all(Colors.transparent),
+                    ),
+                    child: Text(
+                      'Sign Up',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: txtcolor,
+                        fontFamily: 'Sono',
+                      ),
+                    ),
                   ),
-                ),
-
-                SizedBox(width: 25),
-                Text(
-                  'Log In using Google',
-                  style: TextStyle(fontSize: 16, color: Colors.black),
-                ),
-
-                SizedBox(width: 20),
-              ],
+                ],
+              ),
             ),
-          ),
 
-          SizedBox(height: 10),
-          ElevatedButton(
-            onPressed: () {},
-            style: ButtonStyle(
-              minimumSize: WidgetStateProperty.all(Size(325, 60)),
+            SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: () {},
+              style: ButtonStyle(
+                minimumSize: WidgetStateProperty.all(Size(325, 60)),
 
-              side: WidgetStateProperty.resolveWith<BorderSide>((
-                Set<WidgetState> states,
-              ) {
-                if (states.contains(WidgetState.hovered)) {
-                  return BorderSide(color: Colors.blueAccent, width: 2);
-                }
+                side: WidgetStateProperty.resolveWith<BorderSide>((
+                  Set<WidgetState> states,
+                ) {
+                  if (states.contains(WidgetState.hovered)) {
+                    return BorderSide(color: Colors.red, width: 2);
+                  }
 
-                return BorderSide(color: Colors.black, width: 1);
-              }),
+                  return BorderSide(color: Colors.black, width: 1);
+                }),
 
-              backgroundColor: WidgetStateProperty.all(Colors.white),
-              elevation: WidgetStateProperty.all(0),
-              splashFactory: NoSplash.splashFactory,
-              overlayColor: WidgetStateProperty.all(Colors.transparent),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  child: Image.asset(
-                    'assets/facebooklogo.png',
-                    fit: BoxFit.contain,
-                    height: 25,
-                    width: 25,
+                backgroundColor: WidgetStateProperty.all(Colors.white),
+                elevation: WidgetStateProperty.all(0),
+                splashFactory: NoSplash.splashFactory,
+                overlayColor: WidgetStateProperty.all(Colors.transparent),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+
+                children: [
+                  ClipRRect(
+                    child: Image.asset(
+                      'assets/googleicon.png',
+                      fit: BoxFit.contain,
+                      height: 25,
+                      width: 25,
+                    ),
                   ),
-                ),
 
-                SizedBox(width: 25),
-                Text(
-                  'Log In using Facebook',
-                  style: TextStyle(fontSize: 16, color: Colors.black),
-                ),
-              ],
+                  SizedBox(width: 25),
+                  Text(
+                    'Log In using Google',
+                    style: TextStyle(fontSize: 16, color: Colors.black),
+                  ),
+
+                  SizedBox(width: 20),
+                ],
+              ),
             ),
-          ),
-        ],
+
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {},
+              style: ButtonStyle(
+                minimumSize: WidgetStateProperty.all(Size(325, 60)),
+
+                side: WidgetStateProperty.resolveWith<BorderSide>((
+                  Set<WidgetState> states,
+                ) {
+                  if (states.contains(WidgetState.hovered)) {
+                    return BorderSide(color: Colors.blueAccent, width: 2);
+                  }
+
+                  return BorderSide(color: Colors.black, width: 1);
+                }),
+
+                backgroundColor: WidgetStateProperty.all(Colors.white),
+                elevation: WidgetStateProperty.all(0),
+                splashFactory: NoSplash.splashFactory,
+                overlayColor: WidgetStateProperty.all(Colors.transparent),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    child: Image.asset(
+                      'assets/facebooklogo.png',
+                      fit: BoxFit.contain,
+                      height: 25,
+                      width: 25,
+                    ),
+                  ),
+
+                  SizedBox(width: 25),
+                  Text(
+                    'Log In using Facebook',
+                    style: TextStyle(fontSize: 16, color: Colors.black),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     ),
   );
@@ -549,246 +591,340 @@ Widget _signUp(
   StateProvider<bool> toSignUp,
   StateProvider<AuthService> authService,
   WidgetRef ref,
+  GlobalKey<FormState> signupKey,
+  StateProvider<bool> passwordVisible,
+  StateProvider<bool> confirmpasswordVisible,
 ) {
   final logger = Logger();
-  return Expanded(
-    flex: 1,
-    child: Container(
-      height: 600,
-      padding: EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topRight: Radius.circular(20),
-          bottomRight: Radius.circular(20),
+  final visible = ref.watch(passwordVisible);
+  final confirmpassvisible = ref.watch(confirmpasswordVisible);
+  return Form(
+    key: signupKey,
+    child: Expanded(
+      flex: 1,
+      child: Container(
+        height: 600,
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+          ),
         ),
-      ),
 
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(height: 20),
-          Text(
-            'SIGN UP',
-            style: TextStyle(
-              fontSize: 40,
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Sono',
-            ),
-          ),
-
-          SizedBox(height: 25),
-
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 140),
-            child: TextField(
-              controller: usernamecontroller,
-              decoration: InputDecoration(
-                hintText: 'Username',
-                filled: true,
-                fillColor: bgcolor,
-                prefixIcon: Icon(
-                  Icons.person_outline,
-                  color: Colors.black,
-                  size: 25,
-                ),
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 15,
-                  vertical: 10,
-                ),
-
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
-
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-          ),
-
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 140, vertical: 15),
-            child: TextField(
-              controller: emailcontroller,
-              decoration: InputDecoration(
-                hintText: 'Email',
-                filled: true,
-                fillColor: bgcolor,
-                prefixIcon: Icon(
-                  Icons.lock_outline,
-                  color: Colors.black,
-                  size: 25,
-                ),
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 15,
-                  vertical: 10,
-                ),
-
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
-
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-          ),
-
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 140),
-            child: TextField(
-              controller: passwordcontroller,
-              decoration: InputDecoration(
-                hintText: 'Password',
-                filled: true,
-                fillColor: bgcolor,
-                prefixIcon: Icon(
-                  Icons.person_outline,
-                  color: Colors.black,
-                  size: 25,
-                ),
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 15,
-                  vertical: 10,
-                ),
-
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
-
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-          ),
-
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 140, vertical: 15),
-            child: TextField(
-              controller: confirmpasswordcontroller,
-              decoration: InputDecoration(
-                hintText: 'Confirm Password',
-                filled: true,
-                fillColor: bgcolor,
-                prefixIcon: Icon(
-                  Icons.lock_outline,
-                  color: Colors.black,
-                  size: 25,
-                ),
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 15,
-                  vertical: 10,
-                ),
-
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
-
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-          ),
-
-          SizedBox(height: 50),
-          ElevatedButton(
-            onPressed: () async {
-              // Router.neglect(context, () {
-              final sendRegister = ref.read(authService);
-              try {
-                await sendRegister.register(
-                  SignUpModel(
-                    username: usernamecontroller.text,
-                    email: emailcontroller.text,
-                    password: passwordcontroller.text,
-                    confirmpassword: confirmpasswordcontroller.text,
-                  ),
-                );
-              } catch (e) {
-                logger.e("Error: $e");
-              }
-
-              if (context.mounted) {
-                context.go('/HomePage');
-              }
-              // });
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.black,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              minimumSize: Size(325, 60),
-            ),
-            child: Text(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(height: 3),
+            Text(
               'SIGN UP',
               style: TextStyle(
-                fontSize: 15,
-                color: const Color.fromARGB(255, 255, 255, 255),
-                fontWeight: FontWeight.w500,
+                fontSize: 40,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Sono',
               ),
             ),
-          ),
 
-          SizedBox(height: 5),
+            SizedBox(height: 25),
 
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: toTablet ? 100 : 120),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Already Have an Account ?"),
-
-                TextButton(
-                  onPressed: () {
-                    ref.read(toSignUp.notifier).state = true;
-                  },
-                  style: ButtonStyle(
-                    overlayColor: WidgetStateProperty.all(Colors.transparent),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 140),
+              child: TextFormField(
+                controller: usernamecontroller,
+                decoration: InputDecoration(
+                  hintText: 'Username',
+                  filled: true,
+                  fillColor: bgcolor,
+                  prefixIcon: Icon(
+                    Icons.person_outline,
+                    color: Colors.black,
+                    size: 25,
                   ),
-                  child: Text(
-                    'Log In',
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: txtcolor,
-                      fontFamily: 'Sono',
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 15,
+                    vertical: 10,
+                  ),
+
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide.none,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide.none,
+                  ),
+
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please Input Username';
+                  }
+
+                  if (value.length > 18) {
+                    return 'Username must not be more than 18 Characters';
+                  }
+                  return null;
+                },
+              ),
+            ),
+
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 140, vertical: 15),
+              child: TextFormField(
+                controller: emailcontroller,
+                decoration: InputDecoration(
+                  hintText: 'Email',
+                  filled: true,
+                  fillColor: bgcolor,
+                  prefixIcon: Icon(
+                    Icons.lock_outline,
+                    color: Colors.black,
+                    size: 25,
+                  ),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 15,
+                    vertical: 10,
+                  ),
+
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide.none,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide.none,
+                  ),
+
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+
+                validator: (value) {
+                  if (value == null ||
+                      !RegExp(
+                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+                      ).hasMatch(value)) {
+                    return 'Please Input Email';
+                  }
+
+                  return null;
+                },
+              ),
+            ),
+
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 140),
+              child: TextFormField(
+                controller: passwordcontroller,
+                obscureText: !visible,
+                decoration: InputDecoration(
+                  hintText: 'Password',
+                  filled: true,
+                  fillColor: bgcolor,
+                  prefixIcon: Icon(
+                    Icons.person_outline,
+                    color: Colors.black,
+                    size: 25,
+                  ),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 15,
+                    vertical: 10,
+                  ),
+
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide.none,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide.none,
+                  ),
+
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide.none,
+                  ),
+
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      ref.read(passwordVisible.notifier).state = !visible;
+                    },
+                    icon: Icon(
+                      visible ? Icons.visibility : Icons.visibility_off,
                     ),
                   ),
                 ),
-              ],
+
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please Input Password';
+                  }
+
+                  if (value.length < 8) {
+                    return 'Username must be more than 8 Characters';
+                  }
+
+                  if (!value.contains(RegExp(r'[A-Z]'))) {
+                    return 'Uppercase letter is missing';
+                  }
+
+                  if (!value.contains(RegExp(r'[a-z]'))) {
+                    return ' letter is missing';
+                  }
+
+                  if (!value.contains(RegExp(r'[0-9]'))) {
+                    return 'Digit is missing';
+                  }
+
+                  if (!value.contains((RegExp(r'[!@#%^&*(),.?":{}|<>]')))) {
+                    return 'Special character is missing';
+                  }
+
+                  return null;
+                },
+              ),
             ),
-          ),
-        ],
+
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 140, vertical: 15),
+              child: TextFormField(
+                controller: confirmpasswordcontroller,
+                obscureText: !confirmpassvisible,
+                decoration: InputDecoration(
+                  hintText: 'Confirm Password',
+                  filled: true,
+                  fillColor: bgcolor,
+                  prefixIcon: Icon(
+                    Icons.lock_outline,
+                    color: Colors.black,
+                    size: 25,
+                  ),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 15,
+                    vertical: 10,
+                  ),
+
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide.none,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide.none,
+                  ),
+
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide.none,
+                  ),
+
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      ref.read(confirmpasswordVisible.notifier).state =
+                          !confirmpassvisible;
+                    },
+                    icon: Icon(
+                      confirmpassvisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
+                  ),
+                ),
+                validator: (value) {
+                  if (passwordcontroller.text.isEmpty) {
+                    return 'Input a password';
+                  }
+                  if (value != passwordcontroller.text) {
+                    return 'Password does not match';
+                  }
+
+                  return null;
+                },
+              ),
+            ),
+
+            SizedBox(height: 50),
+            ElevatedButton(
+              onPressed: () async {
+                // Router.neglect(context, () {
+
+                if (signupKey.currentState!.validate()) {
+                  final sendRegister = ref.read(authService);
+                  try {
+                    await sendRegister.register(
+                      SignUpModel(
+                        username: usernamecontroller.text,
+                        email: emailcontroller.text,
+                        password: passwordcontroller.text,
+                        confirmpassword: confirmpasswordcontroller.text,
+                      ),
+                    );
+                  } catch (e) {
+                    logger.e("Error: $e");
+                  }
+
+                  if (context.mounted) {
+                    context.go('/HomePage');
+                  }
+                }
+                // });
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                minimumSize: Size(325, 60),
+              ),
+              child: Text(
+                'SIGN UP',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: const Color.fromARGB(255, 255, 255, 255),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+
+            SizedBox(height: 5),
+
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: toTablet ? 100 : 120),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Already Have an Account ?"),
+
+                  TextButton(
+                    onPressed: () {
+                      ref.read(toSignUp.notifier).state = true;
+                    },
+                    style: ButtonStyle(
+                      overlayColor: WidgetStateProperty.all(Colors.transparent),
+                    ),
+                    child: Text(
+                      'Log In',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: txtcolor,
+                        fontFamily: 'Sono',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     ),
   );

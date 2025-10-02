@@ -11,7 +11,10 @@ class LoginModel {
     );
   }
 
-  Map<String, dynamic> toJson() => {"username": username, "password": password};
+  Map<String, dynamic> toJson() => {
+    "username": username.trim(),
+    "password": password.trim(),
+  };
 
   factory LoginModel.fromJson(Map<String, dynamic> json) {
     return LoginModel(username: json['username'], password: json['password']);
@@ -46,10 +49,10 @@ class SignUpModel {
   }
 
   Map<String, dynamic> toJson() => {
-    "username": username,
-    "email": email,
-    "password": password,
-    "confirmpassword": confirmpassword,
+    "username": username.trim(),
+    "email": email.trim(),
+    "password": password.trim(),
+    "confirmpassword": confirmpassword.trim(),
   };
 
   factory SignUpModel.fromJson(Map<String, dynamic> json) {

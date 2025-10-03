@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hooks_riverpod/legacy.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class TabletBrandsPage extends HookConsumerWidget {
-  TabletBrandsPage({super.key});
+class MobileVariantTypePage extends HookConsumerWidget {
+  MobileVariantTypePage({super.key});
 
   final List<Map<String, dynamic>> navbar = [
     {'Icons': "assets/dashboard.png", 'NavigateTo': 'Dashboard'},
@@ -28,60 +29,60 @@ class TabletBrandsPage extends HookConsumerWidget {
 
     {'Icons': "assets/dashboard.png", 'NavigateTo': 'Notification'},
   ];
+
   final List<Map<String, dynamic>> products = [
     {
       "image": "assets/sampleuser.jpg",
-      "subcategory": "Mobile",
-      "category": "Electronics",
+      "variantname": "Mobile",
+      "varianttype": "Electronics",
       "Date": "2024",
       "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "subcategory": "Mobile",
-      "category": "Books",
+      "variantname": "Mobile",
+      "varianttype": "Electronics",
       "Date": "2024",
       "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "subcategory": "Mobile",
-      "category": "Cloths",
+      "variantname": "Mobile",
+      "varianttype": "Electronics",
       "Date": "2024",
       "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "subcategory": "Mobile",
-      "category": "Grossory",
+      "variantname": "Mobile",
+      "varianttype": "Electronics",
       "Date": "2024",
       "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "subcategory": "Mobile",
-      "category": "Slippers",
+      "variantname": "Mobile",
+      "varianttype": "Electronics",
       "Date": "2024",
       "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "subcategory": "Mobile",
-      "category": "Top",
+      "variantname": "Mobile",
+      "varianttype": "Electronics",
       "Date": "2024",
       "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "subcategory": "Mobile",
-      "category": "Bottom",
+      "variantname": "Mobile",
+      "varianttype": "Electronics",
       "Date": "2024",
       "Value": 0.5,
     },
   ];
 
   final isDark = StateProvider<bool>((ref) => false);
-  final thedrawer = StateProvider<bool>((ref) => false);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -114,27 +115,140 @@ class TabletBrandsPage extends HookConsumerWidget {
     ]).animate(CurvedAnimation(parent: controller, curve: Curves.easeInOut));
 
     final dark = ref.watch(isDark);
-    final expandDrawer = ref.watch(thedrawer);
+
     double width = MediaQuery.of(context).size.width;
     double gridWidth = (width > 2265) ? 150 : 20;
 
     return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          _backgroundAnimation(controller, scaleAnimation, colorAnimation),
-          _backdropFilter(),
-          _mainContent(
-            context,
-            ref,
-            dark,
-            expandDrawer,
-            gridWidth,
-            controller,
-            scaleAnimation,
-            colorAnimation,
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(0, 240, 238, 238),
+        elevation: 0,
+        leading: Builder(
+          builder: (context) => GestureDetector(
+            onTap: () {
+              Scaffold.of(context).openDrawer();
+            },
+            child: Transform.translate(
+              offset: Offset(10, 0),
+              child: ClipRRect(
+                child: Image.asset(
+                  'assets/analysis.png',
+                  fit: BoxFit.contain,
+                  height: 60.h,
+                  width: 60.w,
+                ),
+              ),
+            ),
           ),
-        ],
+        ),
+
+        flexibleSpace: ClipRRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: Container(
+              height: 20.h,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color.fromARGB(0, 245, 246, 248), // light gray
+                    Color.fromARGB(0, 217, 219, 225), // lavender gray
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        title: _header(context, ref, dark),
+      ),
+      drawer: Container(
+        padding: EdgeInsets.only(bottom: 10.h),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.r)),
+        width: 100.w,
+        child: Drawer(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color.fromARGB(181, 245, 246, 248),
+                    Color.fromARGB(176, 217, 219, 225),
+                  ],
+                ),
+              ),
+              child: ListView(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 50.h),
+                    child: ListView.separated(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      padding: EdgeInsets.only(left: 0.w),
+                      separatorBuilder: (_, _) => SizedBox(height: 15.h),
+                      itemCount: navbar.length,
+                      itemBuilder: (context, index) {
+                        final icons = navbar[index];
+                        return GestureDetector(
+                          onTap: () {
+                            NavigationPage.navigateTo(context, index);
+                          },
+                          child: Container(
+                            height: 50,
+                            width: 50,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(color: Colors.black12, blurRadius: 2),
+                              ],
+                            ),
+                            child: ClipRRect(
+                              child: Image.asset(
+                                icons['Icons'],
+                                fit: BoxFit.contain,
+                                height: 30,
+                                width: 30,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+
+                  SizedBox(height: 250.h),
+                  _themeToggle(context, ref, dark),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+
+      body: SafeArea(
+        top: true,
+        child: Stack(
+          fit: StackFit.expand,
+
+          children: [
+            _backgroundAnimation(controller, scaleAnimation, colorAnimation),
+            _backdropFilter(),
+            _mainContent(
+              context,
+              ref,
+              dark,
+              gridWidth,
+              controller,
+              scaleAnimation,
+              colorAnimation,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -147,7 +261,7 @@ class TabletBrandsPage extends HookConsumerWidget {
     return Stack(
       children: [
         Positioned(
-          right: -80,
+          right: -150.w,
           top: -80,
           child: AnimatedBuilder(
             animation: controller,
@@ -155,8 +269,8 @@ class TabletBrandsPage extends HookConsumerWidget {
               return Transform.scale(
                 scale: scaleAnimation.value,
                 child: Container(
-                  height: 100,
-                  width: 100,
+                  height: 25.w,
+                  width: 25.w,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     boxShadow: [
@@ -173,7 +287,7 @@ class TabletBrandsPage extends HookConsumerWidget {
           ),
         ),
         Positioned(
-          left: -70,
+          left: -150.w,
           bottom: -70,
           child: AnimatedBuilder(
             animation: controller,
@@ -181,8 +295,8 @@ class TabletBrandsPage extends HookConsumerWidget {
               return Transform.scale(
                 scale: scaleAnimation.value,
                 child: Container(
-                  height: 100,
-                  width: 100,
+                  height: 25.w,
+                  width: 25.w,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     boxShadow: [
@@ -224,7 +338,6 @@ class TabletBrandsPage extends HookConsumerWidget {
     BuildContext context,
     WidgetRef ref,
     bool dark,
-    bool expandDrawer,
     double gridWidth,
     AnimationController controller,
     Animation<double> scaleAnimation,
@@ -236,28 +349,15 @@ class TabletBrandsPage extends HookConsumerWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _sidebar(
-                context,
-                expandDrawer,
-                ref,
-                () => ref.read(thedrawer.notifier).state = !expandDrawer,
-              ),
               Expanded(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   child: Column(
                     children: [
-                      SizedBox(height: 35),
-                      _header(context, ref, dark),
                       _welcomeSection(context),
                       SizedBox(height: 25),
-                      _allProductsSection(
-                        context,
-                        expandDrawer,
-                        ref,
-                        () =>
-                            ref.read(thedrawer.notifier).state = !expandDrawer,
-                      ),
+                      _allProductsSection(context),
+                      SizedBox(height: 25),
 
                       SizedBox(height: 50),
                     ],
@@ -271,155 +371,18 @@ class TabletBrandsPage extends HookConsumerWidget {
     );
   }
 
-  Widget _sidebar(
-    BuildContext context,
-    bool drawer,
-    WidgetRef ref,
-    VoidCallback toggleDrawer,
-  ) {
-    final width = MediaQuery.of(context).size.width;
-    if (width > 850) {
-      return _buildFullSideBar(context, ref);
-    }
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 300),
-      height: 1000,
-      width: drawer ? 160 : 115,
-      child: Column(
-        children: [
-          GestureDetector(
-            onTap: toggleDrawer,
-            child: Transform.translate(
-              offset: Offset(0, -15),
-              child: ClipRRect(
-                child: Image.asset(
-                  'assets/analysis.png',
-                  fit: BoxFit.contain,
-                  height: 115,
-                  width: 115,
-                ),
-              ),
-            ),
-          ),
-
-          if (drawer)
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(top: 50),
-                child: ListView.separated(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  padding: EdgeInsets.only(left: 35),
-                  separatorBuilder: (_, _) => SizedBox(height: 30),
-                  itemCount: navbar.length,
-                  itemBuilder: (context, index) {
-                    final icons = navbar[index];
-                    return GestureDetector(
-                      onTap: () {
-                         NavigationPage.navigateTo(context, index);
-                      },
-                      child: Container(
-                        height: 50,
-                        width: 50,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: const Color.fromARGB(255, 255, 255, 255),
-                          boxShadow: [
-                            BoxShadow(color: Colors.black12, blurRadius: 2),
-                          ],
-                        ),
-                        child: ClipRRect(
-                          child: Image.asset(
-                            icons['Icons'],
-                            fit: BoxFit.contain,
-                            height: 30,
-                            width: 30,
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFullSideBar(BuildContext context, WidgetRef ref) {
-    return Column(
-      children: [
-        Transform.translate(
-          offset: Offset(0, -15),
-          child: ClipRRect(
-            child: Image.asset(
-              'assets/analysis.png',
-              fit: BoxFit.contain,
-              height: 115,
-              width: 115,
-            ),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 50),
-          child: SizedBox(
-            height: 700,
-            width: 160,
-            child: ListView.separated(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              padding: EdgeInsets.only(left: 35),
-              separatorBuilder: (_, _) => SizedBox(height: 30),
-              itemCount: navbar.length,
-              itemBuilder: (context, index) {
-                final icons = navbar[index];
-                return GestureDetector(
-                  onTap: () {
-                     NavigationPage.navigateTo(context, index);
-                  },
-                  child: Container(
-                    height: 50,
-                    width: 50,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: const Color.fromARGB(255, 255, 255, 255),
-                      boxShadow: [
-                        BoxShadow(color: Colors.black12, blurRadius: 2),
-                      ],
-                    ),
-                    child: ClipRRect(
-                      child: Image.asset(
-                        icons['Icons'],
-                        fit: BoxFit.contain,
-                        height: 30,
-                        width: 30,
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _header(BuildContext context, WidgetRef ref, bool dark) {
-    double adjustmode = MediaQuery.of(context).size.width;
-    final adjust = (adjustmode < 810) ? 0 : 105;
     return Padding(
-      padding: EdgeInsets.only(left: 40),
+      padding: EdgeInsets.only(left: 15.w),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('Laza', style: TextStyle(fontSize: 35, color: txtcolor)),
+          Text(
+            'Laza',
+            style: TextStyle(fontSize: 20.sp, color: txtcolor),
+          ),
+
           Spacer(),
-          _themeToggle(context, ref, dark),
-          Spacer(),
-          SizedBox(width: adjust.toDouble()),
           _headerIcons(),
         ],
       ),
@@ -435,9 +398,9 @@ class TabletBrandsPage extends HookConsumerWidget {
         child: AnimatedContainer(
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut,
-          height: 50,
-          width: 100,
-          padding: EdgeInsets.all(4),
+          height: 35.h,
+          width: 80.w,
+          padding: EdgeInsets.all(3),
           decoration: BoxDecoration(
             color: dark ? txtcolor : Colors.grey[300],
             borderRadius: BorderRadius.circular(50),
@@ -446,7 +409,7 @@ class TabletBrandsPage extends HookConsumerWidget {
             alignment: dark ? Alignment.centerLeft : Alignment.centerRight,
             duration: Duration(milliseconds: 300),
             child: Container(
-              width: 40,
+              width: 35,
               height: 40,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -466,24 +429,26 @@ class TabletBrandsPage extends HookConsumerWidget {
 
   Widget _headerIcons() {
     return Padding(
-      padding: EdgeInsets.only(right: 15),
+      padding: EdgeInsets.only(right: 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            padding: EdgeInsets.all(3),
+            height: 35.w,
+            width: 35.w,
             decoration: BoxDecoration(
               color: Colors.white,
               shape: BoxShape.circle,
             ),
             child: IconButton(
+              padding: EdgeInsets.zero,
               onPressed: () {},
               icon: Icon(Icons.search),
-              iconSize: 20,
+              iconSize: 15.sp,
               color: Colors.black,
             ),
           ),
-          SizedBox(width: 10),
+          SizedBox(width: 10.w),
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -494,8 +459,8 @@ class TabletBrandsPage extends HookConsumerWidget {
               child: Image.asset(
                 'assets/sampleuser.jpg',
                 fit: BoxFit.cover,
-                height: 45,
-                width: 45,
+                height: 35.w,
+                width: 35.w,
               ),
             ),
           ),
@@ -515,22 +480,22 @@ class TabletBrandsPage extends HookConsumerWidget {
             children: [
               SizedBox(height: 35),
               Padding(
-                padding: const EdgeInsets.only(top: 20, left: 40),
+                padding: EdgeInsets.only(top: 20.h, left: 24.w),
                 child: Text(
-                  'Brands',
+                  'Variant Type',
                   style: TextStyle(
-                    fontSize: 50,
+                    fontSize: 28.sp,
                     color: txtcolor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 10, left: 45),
+                padding: const EdgeInsets.only(top: 10, left: 37),
                 child: Text(
-                  "Different Brands of Products",
+                  "Different Variant Type of Products",
                   style: TextStyle(
-                    fontSize: 25,
+                    fontSize: 18.sp,
                     color: Color.fromARGB(200, 50, 50, 50),
                   ),
                 ),
@@ -542,21 +507,16 @@ class TabletBrandsPage extends HookConsumerWidget {
     );
   }
 
-  Widget _allProductsSection(
-    BuildContext context,
-    bool drawer,
-    ref,
-    VoidCallback toggleDrawer,
-  ) {
+  Widget _allProductsSection(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 40),
+      padding: EdgeInsets.only(left: 20),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
           child: Container(
-            constraints: BoxConstraints(minHeight: 200),
             width: double.infinity,
+
             margin: EdgeInsets.only(right: 20),
             padding: EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -584,28 +544,28 @@ class TabletBrandsPage extends HookConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "All Brands",
+                          "All Variant",
                           style: TextStyle(
-                            fontSize: 22,
+                            fontSize: 15.sp,
                             fontWeight: FontWeight.bold,
                             color: txtcolor,
                           ),
                         ),
                         Spacer(),
                         Container(
-                          padding: EdgeInsets.all(10),
+                          padding: EdgeInsets.all(7),
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(7),
+                            borderRadius: BorderRadius.circular(7.r),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Icon(Icons.add, color: Colors.black, size: 25),
+                              Icon(Icons.add, color: Colors.black, size: 20.sp),
                               Text(
                                 "Add New",
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 15.sp,
                                   fontWeight: FontWeight.w600,
                                   color: Color.fromARGB(200, 50, 50, 50),
                                 ),
@@ -614,7 +574,7 @@ class TabletBrandsPage extends HookConsumerWidget {
                           ),
                         ),
                         SizedBox(width: 20),
-                        Icon(Icons.refresh, color: Colors.black, size: 25),
+                        Icon(Icons.refresh, color: Colors.black, size: 20.sp),
                       ],
                     ),
                   ),
@@ -646,7 +606,7 @@ class TabletBrandsPage extends HookConsumerWidget {
                           columns: [
                             DataColumn(
                               label: Text(
-                                'Brand Name',
+                                'Variant Name',
                                 style: TextStyle(
                                   color: txtcolor,
                                   fontSize: 15,
@@ -657,7 +617,7 @@ class TabletBrandsPage extends HookConsumerWidget {
 
                             DataColumn(
                               label: Text(
-                                'Sub Category',
+                                'Variant Type',
                                 style: TextStyle(
                                   color: txtcolor,
                                   fontSize: 15,
@@ -722,7 +682,7 @@ class TabletBrandsPage extends HookConsumerWidget {
                                       ),
                                       SizedBox(width: 10),
                                       Text(
-                                        value["subcategory"],
+                                        value["variantname"],
                                         style: TextStyle(
                                           fontSize: 12,
                                           color: txtcolor,
@@ -734,7 +694,7 @@ class TabletBrandsPage extends HookConsumerWidget {
 
                                 DataCell(
                                   Text(
-                                    value['category'],
+                                    value['varianttype'],
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: txtcolor,

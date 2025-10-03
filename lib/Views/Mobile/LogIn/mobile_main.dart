@@ -8,7 +8,8 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/legacy.dart';
-import 'package:logger/web.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 class MobileMainScreen extends HookConsumerWidget {
   MobileMainScreen({super.key});
@@ -238,8 +239,39 @@ Widget _logIn(
   GlobalKey<FormState> loginKey,
   StateProvider<bool> loginpasswordvisible,
 ) {
-  final logger = Logger();
+ 
   final showPass = ref.watch(loginpasswordvisible);
+  final sendLogin = ref.read(authService);
+  Future<void> handleLogin() async {
+    final response = await sendLogin.login(
+      LoginModel(
+        username: loginusernamecontroller.text,
+        password: loginpasswordcontroller.text,
+      ),
+    );
+
+    if (response != null && response['message'] == 'Log In Successfully') {
+      if (context.mounted) {
+        context.go('/HomePage');
+      }
+    } else {
+      if (context.mounted) {
+        showTopSnackBar(
+          Overlay.of(context),
+          Material(
+            color: Colors.transparent,
+            child: AwesomeSnackbarContent(
+              title: 'Failed!',
+              message: 'Check Your Username and Password Properly',
+              contentType: ContentType.failure,
+            ),
+          ),
+          animationDuration: const Duration(milliseconds: 600),
+          displayDuration: const Duration(seconds: 2),
+        );
+      }
+    }
+  }
   return Form(
     key: loginKey,
     autovalidateMode: AutovalidateMode.disabled,
@@ -358,20 +390,7 @@ Widget _logIn(
             onPressed: () async {
               // Router.neglect(context, () {
               if (loginKey.currentState!.validate()) {
-                final sendLogin = ref.read(authService);
-                try {
-                  await sendLogin.login(
-                    LoginModel(
-                      username: loginusernamecontroller.text,
-                      password: loginpasswordcontroller.text,
-                    ),
-                  );
-                } catch (e) {
-                  logger.e('Error: $e');
-                }
-                if (context.mounted) {
-                  context.go('/HomePage');
-                }
+               handleLogin();
               }
               // });
             },
@@ -546,9 +565,43 @@ Widget _signUp(
   StateProvider<bool> passwordVisible,
   StateProvider<bool> confirmpasswordVisible,
 ) {
-  final logger = Logger();
   final visible = ref.watch(passwordVisible);
   final confirmpassvisible = ref.watch(confirmpasswordVisible);
+  final sendRegister = ref.read(authService);
+  Future<void> handleRegister() async {
+    final response = await sendRegister.register(
+      SignUpModel(
+        username: usernamecontroller.text,
+        email: emailcontroller.text,
+        password: passwordcontroller.text,
+        confirmpassword: confirmpasswordcontroller.text,
+      ),
+    );
+
+    if (response != null && response['message'] == 'Registered') {
+      ref.read(selectSignUp.notifier).state = true;
+      usernamecontroller.clear();
+      emailcontroller.clear();
+      passwordcontroller.clear();
+      confirmpasswordcontroller.clear();
+      if (context.mounted) {
+        context.go('/');
+        showTopSnackBar(
+          Overlay.of(context),
+          Material(
+            color: Colors.transparent,
+            child: AwesomeSnackbarContent(
+              title: 'Success!',
+              message: 'You Successfully Registered Please Log In to Proceed',
+              contentType: ContentType.success,
+            ),
+          ),
+          animationDuration: Duration(milliseconds: 800),
+          displayDuration: Duration(milliseconds: 6),
+        );
+      }
+    }
+  }
   return Form(
     key: signupKey,
     autovalidateMode: AutovalidateMode.disabled,
@@ -797,24 +850,7 @@ Widget _signUp(
               // Router.neglect(context, () {
 
               if (signupKey.currentState!.validate()) {
-                final sendRegister = ref.read(authService);
-
-                try {
-                  await sendRegister.register(
-                    SignUpModel(
-                      username: usernamecontroller.text,
-                      email: emailcontroller.text,
-                      password: passwordcontroller.text,
-                      confirmpassword: confirmpasswordcontroller.text,
-                    ),
-                  );
-                } catch (e) {
-                  logger.e("Error: $e");
-                }
-
-                if (context.mounted) {
-                  context.go('/HomePage');
-                }
+                handleRegister();
               }
               // });
             },

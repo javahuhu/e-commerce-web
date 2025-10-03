@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:ecommerce_admin/Router/navigation_page.dart';
 import 'package:ecommerce_admin/core/Theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -33,11 +34,13 @@ class DesktopHomePage extends HookConsumerWidget {
     },
   ];
 
-  final selectedValue = StateProvider<Map<String, String?>>((ref) => {
-    "Select Brand": null,
-    "Select Category": null,
-    "Select Size": null
-  });
+  final selectedValue = StateProvider<Map<String, String?>>(
+    (ref) => {
+      "Select Brand": null,
+      "Select Category": null,
+      "Select Size": null,
+    },
+  );
   void _showAddNew(BuildContext context, WidgetRef ref) {
     showDialog(
       context: context,
@@ -291,7 +294,9 @@ class DesktopHomePage extends HookConsumerWidget {
                                           ),
                                         ),
                                       ),
-                                      value: options.contains(selected[label]) ? selected[label] : null,
+                                      value: options.contains(selected[label])
+                                          ? selected[label]
+                                          : null,
                                       style: TextStyle(
                                         fontSize: 15,
                                         color: const Color.fromARGB(
@@ -308,11 +313,8 @@ class DesktopHomePage extends HookConsumerWidget {
                                         );
                                       }).toList(),
                                       onChanged: (newValue) {
-                                        ref.read(selectedValue.notifier).state = {
-                                          ...selected,
-                                          label: newValue
-                                        };
-                                        
+                                        ref.read(selectedValue.notifier).state =
+                                            {...selected, label: newValue};
                                       },
                                     );
                                   }).toList(),
@@ -421,15 +423,17 @@ class DesktopHomePage extends HookConsumerWidget {
                                   ],
                                 ),
                               ),
-                              SizedBox(height: 50,),
+                              SizedBox(height: 50),
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 30),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
-
-                                     ElevatedButton(
-                                      onPressed: () {},
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        context.pop();
+                                      },
                                       style: ElevatedButton.styleFrom(
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(
@@ -439,8 +443,18 @@ class DesktopHomePage extends HookConsumerWidget {
                                         splashFactory: NoSplash.splashFactory,
                                         shadowColor: Colors.transparent,
                                         elevation: 0,
-                                        backgroundColor: const Color.fromARGB(255, 240, 124, 124),
-                                        foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+                                        backgroundColor: const Color.fromARGB(
+                                          255,
+                                          240,
+                                          124,
+                                          124,
+                                        ),
+                                        foregroundColor: const Color.fromARGB(
+                                          255,
+                                          255,
+                                          255,
+                                          255,
+                                        ),
                                         minimumSize: Size(250, 55),
                                       ),
                                       child: Text(
@@ -449,7 +463,6 @@ class DesktopHomePage extends HookConsumerWidget {
                                       ),
                                     ),
 
-                                    
                                     ElevatedButton(
                                       onPressed: () {},
                                       style: ElevatedButton.styleFrom(
@@ -461,8 +474,18 @@ class DesktopHomePage extends HookConsumerWidget {
                                         splashFactory: NoSplash.splashFactory,
                                         shadowColor: Colors.transparent,
                                         elevation: 0,
-                                        backgroundColor: const Color.fromARGB(255, 128, 196, 130),
-                                        foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+                                        backgroundColor: const Color.fromARGB(
+                                          255,
+                                          128,
+                                          196,
+                                          130,
+                                        ),
+                                        foregroundColor: const Color.fromARGB(
+                                          255,
+                                          255,
+                                          255,
+                                          255,
+                                        ),
                                         minimumSize: Size(250, 55),
                                       ),
                                       child: Text(
@@ -828,20 +851,7 @@ class DesktopHomePage extends HookConsumerWidget {
                                       cursor: SystemMouseCursors.click,
                                       child: GestureDetector(
                                         onTap: () {
-                                          switch (index) {
-                                            case 0:
-                                              context.push('/HomePage');
-                                              break;
-                                            case 1:
-                                              context.go('/Categories');
-                                            break;
-                                            case 2:
-                                            context.go('/SubCategories');
-                                            break;
-                                            case 3:
-                                            context.go('/Brands');
-                                            break;
-                                          }
+                                           NavigationPage.navigateTo(context, index);
                                         },
                                         child: Container(
                                           height: 50,

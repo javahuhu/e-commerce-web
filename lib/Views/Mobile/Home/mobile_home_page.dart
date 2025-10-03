@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:ecommerce_admin/Router/navigation_page.dart';
 import 'package:ecommerce_admin/core/Theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -458,7 +459,9 @@ class MobileHomePage extends HookConsumerWidget {
                                       runSpacing: 10,
                                       children: [
                                         ElevatedButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            context.pop();
+                                          },
                                           style: ElevatedButton.styleFrom(
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
@@ -758,20 +761,7 @@ class MobileHomePage extends HookConsumerWidget {
                         final icons = navbar[index];
                         return GestureDetector(
                           onTap: () {
-                            switch (index) {
-                              case 0:
-                                context.push('/HomePage');
-                                break;
-                              case 1:
-                                context.go('/Categories');
-                                break;
-                              case 2:
-                                context.go('/SubCategories');
-                                break;
-                              case 3:
-                                context.go('/Brands');
-                                break;
-                            }
+                             NavigationPage.navigateTo(context, index);
                           },
                           child: Container(
                             height: 50,

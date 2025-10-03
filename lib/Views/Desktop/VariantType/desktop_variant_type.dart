@@ -6,8 +6,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hooks_riverpod/legacy.dart';
 
-class DesktopCategoriesPage extends HookConsumerWidget {
-  DesktopCategoriesPage({super.key});
+class DesktopVariantTypePage extends HookConsumerWidget {
+  DesktopVariantTypePage({super.key});
 
   final List<Map<String, dynamic>> navbar = [
     {'Icons': "assets/dashboard.png", 'NavigateTo': 'Dashboard'},
@@ -42,43 +42,50 @@ class DesktopCategoriesPage extends HookConsumerWidget {
   final List<Map<String, dynamic>> products = [
     {
       "image": "assets/sampleuser.jpg",
-      "category": "Electronics",
+      "variantname": "Mobile",
+      "varianttype": "Electronics",
       "Date": "2024",
       "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "category": "Books",
+      "variantname": "Mobile",
+      "varianttype": "Electronics",
       "Date": "2024",
       "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "category": "Cloths",
+      "variantname": "Mobile",
+      "varianttype": "Electronics",
       "Date": "2024",
       "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "category": "Grossory",
+      "variantname": "Mobile",
+      "varianttype": "Electronics",
       "Date": "2024",
       "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "category": "Slippers",
+      "variantname": "Mobile",
+      "varianttype": "Electronics",
       "Date": "2024",
       "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "category": "Top",
+      "variantname": "Mobile",
+      "varianttype": "Electronics",
       "Date": "2024",
       "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "category": "Bottom",
+      "variantname": "Mobile",
+      "varianttype": "Electronics",
       "Date": "2024",
       "Value": 0.5,
     },
@@ -421,7 +428,7 @@ class DesktopCategoriesPage extends HookConsumerWidget {
                                           left: 40,
                                         ),
                                         child: Text(
-                                          'Categories',
+                                          'Variant Type',
                                           style: TextStyle(
                                             fontSize: 50,
                                             color: txtcolor,
@@ -435,7 +442,7 @@ class DesktopCategoriesPage extends HookConsumerWidget {
                                           left: 45,
                                         ),
                                         child: Text(
-                                          "Different Categories for Product",
+                                          "Different Variant Type of Products",
                                           style: TextStyle(
                                             fontSize: 25,
                                             color: Color.fromARGB(
@@ -505,7 +512,7 @@ class DesktopCategoriesPage extends HookConsumerWidget {
                                                               .spaceBetween,
                                                       children: [
                                                         Text(
-                                                          'My Categories',
+                                                          'All Variant',
                                                           style: TextStyle(
                                                             color: txtcolor,
                                                             fontSize: 22,
@@ -572,7 +579,7 @@ class DesktopCategoriesPage extends HookConsumerWidget {
                                                   ),
 
                                                   SizedBox(
-                                                    width: 1000,
+                                                    width: 1600,
                                                     child: Theme(
                                                       data: Theme.of(context).copyWith(
                                                         dividerColor:
@@ -596,7 +603,7 @@ class DesktopCategoriesPage extends HookConsumerWidget {
                                                         columns: [
                                                           DataColumn(
                                                             label: Text(
-                                                              'Category Name',
+                                                              'Variant Name',
                                                               style: TextStyle(
                                                                 color: txtcolor,
                                                                 fontSize: 15,
@@ -606,7 +613,18 @@ class DesktopCategoriesPage extends HookConsumerWidget {
                                                               ),
                                                             ),
                                                           ),
-
+                                                          DataColumn(
+                                                            label: Text(
+                                                              'Variant Type',
+                                                              style: TextStyle(
+                                                                color: txtcolor,
+                                                                fontSize: 15,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                          ),
                                                           DataColumn(
                                                             label: Text(
                                                               'Added Date',
@@ -619,29 +637,41 @@ class DesktopCategoriesPage extends HookConsumerWidget {
                                                               ),
                                                             ),
                                                           ),
-
                                                           DataColumn(
-                                                            label: Text(
-                                                              'Edit',
-                                                              style: TextStyle(
-                                                                color: txtcolor,
-                                                                fontSize: 15,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
+                                                            label: SizedBox(
+                                                              width: 42,
+                                                              child: Center(
+                                                                child: Text(
+                                                                  'Edit',
+                                                                  style: TextStyle(
+                                                                    color:
+                                                                        txtcolor,
+                                                                    fontSize:
+                                                                        15,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                                ),
                                                               ),
                                                             ),
                                                           ),
-
                                                           DataColumn(
-                                                            label: Text(
-                                                              'Delete',
-                                                              style: TextStyle(
-                                                                color: txtcolor,
-                                                                fontSize: 15,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
+                                                            label: SizedBox(
+                                                              width: 42.5,
+                                                              child: Center(
+                                                                child: Text(
+                                                                  'Delete',
+                                                                  style: TextStyle(
+                                                                    color:
+                                                                        txtcolor,
+                                                                    fontSize:
+                                                                        15,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                                ),
                                                               ),
                                                             ),
                                                           ),
@@ -666,7 +696,7 @@ class DesktopCategoriesPage extends HookConsumerWidget {
                                                                       width: 10,
                                                                     ),
                                                                     Text(
-                                                                      value["category"],
+                                                                      value["variantname"],
                                                                       style: TextStyle(
                                                                         fontSize:
                                                                             12,
@@ -677,7 +707,17 @@ class DesktopCategoriesPage extends HookConsumerWidget {
                                                                   ],
                                                                 ),
                                                               ),
-
+                                                              DataCell(
+                                                                Text(
+                                                                  value['varianttype'],
+                                                                  style: TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    color:
+                                                                        txtcolor,
+                                                                  ),
+                                                                ),
+                                                              ),
                                                               DataCell(
                                                                 Text(
                                                                   value['Date'],
@@ -689,27 +729,38 @@ class DesktopCategoriesPage extends HookConsumerWidget {
                                                                   ),
                                                                 ),
                                                               ),
-
                                                               DataCell(
-                                                                Icon(
-                                                                  Icons.edit,
-                                                                  color:
-                                                                      const Color.fromARGB(
-                                                                        255,
-                                                                        255,
-                                                                        255,
-                                                                        255,
-                                                                      ),
-                                                                  size: 20,
+                                                                SizedBox(
+                                                                  width: 42,
+                                                                  child: Center(
+                                                                    child: Icon(
+                                                                      Icons
+                                                                          .edit,
+                                                                      color:
+                                                                          const Color.fromARGB(
+                                                                            255,
+                                                                            255,
+                                                                            255,
+                                                                            255,
+                                                                          ),
+                                                                      size: 20,
+                                                                    ),
+                                                                  ),
                                                                 ),
                                                               ),
-
                                                               DataCell(
-                                                                Icon(
-                                                                  Icons.delete,
-                                                                  color: Colors
-                                                                      .red,
-                                                                  size: 20,
+                                                                SizedBox(
+                                                                  width:
+                                                                      42.5, // Match the column width
+                                                                  child: Center(
+                                                                    child: Icon(
+                                                                      Icons
+                                                                          .delete,
+                                                                      color: Colors
+                                                                          .red,
+                                                                      size: 20,
+                                                                    ),
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ],
@@ -727,151 +778,6 @@ class DesktopCategoriesPage extends HookConsumerWidget {
 
                                       SizedBox(height: 50),
                                     ],
-                                  ),
-                                ),
-
-                                Expanded(
-                                  flex: 2,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                      right: 15,
-                                      top: 192,
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(20),
-                                      child: BackdropFilter(
-                                        filter: ImageFilter.blur(
-                                          sigmaX: 5,
-                                          sigmaY: 5,
-                                        ),
-                                        child: Container(
-                                          padding: EdgeInsets.all(20),
-                                          width: double.infinity,
-                                          decoration: BoxDecoration(
-                                            color: bgcolor.withValues(
-                                              alpha: 0.2,
-                                            ),
-                                            border: Border.all(
-                                              color: Colors.white.withValues(
-                                                alpha: 0.5,
-                                              ),
-                                              width: 1.5,
-                                            ),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black.withValues(
-                                                  alpha: 0.05,
-                                                ),
-                                                blurRadius: 10,
-                                                offset: Offset(0, 4),
-                                              ),
-                                            ],
-                                            borderRadius: BorderRadius.circular(
-                                              20,
-                                            ),
-                                          ),
-
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsets.only(
-                                                  left: 15,
-                                                  top: 10,
-                                                ),
-                                                child: Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(
-                                                    'Product Stock',
-                                                    style: TextStyle(
-                                                      fontSize: 22,
-                                                      color: txtcolor,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-
-                                              SizedBox(height: 25),
-                                              ListView.builder(
-                                                physics:
-                                                    NeverScrollableScrollPhysics(),
-                                                shrinkWrap: true,
-                                                itemCount: products.length,
-                                                itemBuilder: (context, index) {
-                                                  final categories =
-                                                      products[index];
-                                                  return Padding(
-                                                    padding: EdgeInsets.only(
-                                                      right: 13,
-                                                      left: 13,
-                                                    ),
-                                                    child: Container(
-                                                      padding: EdgeInsets.all(
-                                                        5,
-                                                      ),
-                                                      margin:
-                                                          EdgeInsets.symmetric(
-                                                            vertical: 10,
-                                                          ),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                              10,
-                                                            ),
-                                                        color: Colors.white,
-                                                      ),
-
-                                                      child: ListTile(
-                                                        leading: Icon(
-                                                          Icons
-                                                              .delivery_dining_outlined,
-                                                          size: 25,
-                                                        ),
-                                                        title: Text(
-                                                          categories['category'],
-                                                          style: TextStyle(
-                                                            fontSize: 18,
-                                                            color: txtcolor,
-                                                          ),
-                                                          textScaler:
-                                                              MediaQuery.of(
-                                                                context,
-                                                              ).textScaler,
-                                                        ),
-                                                        subtitle: Padding(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                top: 5,
-                                                              ),
-                                                          child: LinearProgressIndicator(
-                                                            value:
-                                                                (categories['Value']
-                                                                        as num)
-                                                                    .toDouble(),
-                                                            backgroundColor:
-                                                                Colors
-                                                                    .grey[300],
-                                                            minHeight: 8,
-                                                            borderRadius:
-                                                                BorderRadius.circular(
-                                                                  50,
-                                                                ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
                                   ),
                                 ),
                               ],

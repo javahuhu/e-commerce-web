@@ -6,8 +6,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hooks_riverpod/legacy.dart';
 
-class TabletCategoriesPage extends HookConsumerWidget {
-  TabletCategoriesPage({super.key});
+class TabletVariantTypePage extends HookConsumerWidget {
+  TabletVariantTypePage({super.key});
 
   final List<Map<String, dynamic>> navbar = [
     {'Icons': "assets/dashboard.png", 'NavigateTo': 'Dashboard'},
@@ -28,47 +28,53 @@ class TabletCategoriesPage extends HookConsumerWidget {
 
     {'Icons': "assets/dashboard.png", 'NavigateTo': 'Notification'},
   ];
-
   final List<Map<String, dynamic>> products = [
     {
       "image": "assets/sampleuser.jpg",
-      "category": "Electronics",
+      "variantname": "Mobile",
+      "varianttype": "Electronics",
       "Date": "2024",
       "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "category": "Books",
+      "variantname": "Mobile",
+      "varianttype": "Books",
       "Date": "2024",
       "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "category": "Cloths",
+      "variantname": "Mobile",
+      "varianttype": "Cloths",
       "Date": "2024",
       "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "category": "Grossory",
+      "variantname": "Mobile",
+      "varianttype": "Grossory",
       "Date": "2024",
       "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "category": "Slippers",
+      "variantname": "Mobile",
+      "varianttype": "Slippers",
       "Date": "2024",
       "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "category": "Top",
+      "variantname": "Mobile",
+      "varianttype": "Top",
       "Date": "2024",
       "Value": 0.5,
     },
     {
       "image": "assets/sampleuser.jpg",
-      "category": "Bottom",
+      "variantname": "Mobile",
+      "varianttype": "Bottom",
       "Date": "2024",
       "Value": 0.5,
     },
@@ -252,8 +258,6 @@ class TabletCategoriesPage extends HookConsumerWidget {
                         () =>
                             ref.read(thedrawer.notifier).state = !expandDrawer,
                       ),
-                      SizedBox(height: 25),
-                      _orderDetailsSection(context),
 
                       SizedBox(height: 50),
                     ],
@@ -312,7 +316,7 @@ class TabletCategoriesPage extends HookConsumerWidget {
                     final icons = navbar[index];
                     return GestureDetector(
                       onTap: () {
-                         NavigationPage.navigateTo(context, index);
+                        NavigationPage.navigateTo(context, index);
                       },
                       child: Container(
                         height: 50,
@@ -513,7 +517,7 @@ class TabletCategoriesPage extends HookConsumerWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 20, left: 40),
                 child: Text(
-                  'Categories',
+                  'Variant Type',
                   style: TextStyle(
                     fontSize: 50,
                     color: txtcolor,
@@ -524,7 +528,7 @@ class TabletCategoriesPage extends HookConsumerWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 10, left: 45),
                 child: Text(
-                  "Different Categories for Product",
+                  "Different Variant Type of Products",
                   style: TextStyle(
                     fontSize: 25,
                     color: Color.fromARGB(200, 50, 50, 50),
@@ -536,225 +540,6 @@ class TabletCategoriesPage extends HookConsumerWidget {
         ),
       ],
     );
-  }
-
-  Widget _orderDetailsSection(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    if (screenWidth < 818) {
-      return Padding(
-        padding: EdgeInsets.only(left: 40, top: 15),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-            child: Container(
-              margin: EdgeInsets.only(right: 20),
-              padding: EdgeInsets.all(20),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: bgcolor.withValues(alpha: 0.2),
-                border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.5),
-                  width: 1.5,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 10,
-                    offset: Offset(0, 4),
-                  ),
-                ],
-                borderRadius: BorderRadius.circular(20),
-              ),
-
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 15, top: 10),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Product Stock',
-                        style: TextStyle(
-                          fontSize: 22,
-                          color: txtcolor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height: 25),
-
-                  SizedBox(
-                    width: 500,
-                    child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: screenWidth < 700 ? 1 : 2,
-                        childAspectRatio: _orderDetailsWidth(context),
-                        mainAxisSpacing: 2,
-                        crossAxisSpacing: 15,
-                      ),
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: products.length,
-                      itemBuilder: (context, index) {
-                        final categories = products[index];
-                        return Container(
-                          padding: EdgeInsets.all(5),
-                          margin: EdgeInsets.symmetric(vertical: 10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.8),
-                              width: 1,
-                            ),
-                          ),
-
-                          child: ListTile(
-                            leading: Icon(
-                              Icons.delivery_dining_outlined,
-                              size: 15,
-                            ),
-                            title: Text(
-                              categories['category'],
-                              style: TextStyle(fontSize: 18, color: txtcolor),
-                              textScaler: MediaQuery.of(context).textScaler,
-                            ),
-
-                            subtitle: Padding(
-                              padding: EdgeInsets.only(top: 5),
-                              child: LinearProgressIndicator(
-                                value: (categories['Value'] as num).toDouble(),
-                                backgroundColor: Colors.grey[300],
-                                minHeight: 8,
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-    } else {
-      return Padding(
-        padding: EdgeInsets.only(left: 40, top: 15),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-            child: Container(
-              margin: EdgeInsets.only(right: 20),
-              padding: EdgeInsets.all(20),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: bgcolor.withValues(alpha: 0.2),
-                border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.5),
-                  width: 1.5,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 10,
-                    offset: Offset(0, 4),
-                  ),
-                ],
-                borderRadius: BorderRadius.circular(20),
-              ),
-
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 15, top: 10),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Product Stock',
-                        style: TextStyle(
-                          fontSize: 22,
-                          color: txtcolor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height: 25),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: GridView.builder(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: _orderDetails(context),
-                                childAspectRatio: _orderDetailsRatio(context),
-                                mainAxisSpacing: 2,
-                                crossAxisSpacing: 10,
-                              ),
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: products.length,
-                          itemBuilder: (context, index) {
-                            final categories = products[index];
-                            return Container(
-                              padding: EdgeInsets.all(5),
-                              margin: EdgeInsets.symmetric(vertical: 10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: Colors.white.withValues(alpha: 0.8),
-                                  width: 1,
-                                ),
-                              ),
-
-                              child: ListTile(
-                                leading: Icon(
-                                  Icons.delivery_dining_outlined,
-                                  size: 15,
-                                ),
-                                title: Text(
-                                  categories['category'],
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: txtcolor,
-                                  ),
-                                  textScaler: MediaQuery.of(context).textScaler,
-                                ),
-
-                                subtitle: Padding(
-                                  padding: EdgeInsets.only(top: 5),
-                                  child: LinearProgressIndicator(
-                                    value: (categories['Value'] as num)
-                                        .toDouble(),
-                                    backgroundColor: Colors.grey[300],
-                                    minHeight: 8,
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-    }
   }
 
   Widget _allProductsSection(
@@ -799,7 +584,7 @@ class TabletCategoriesPage extends HookConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "My Categories",
+                          "All Variant",
                           style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
@@ -861,7 +646,18 @@ class TabletCategoriesPage extends HookConsumerWidget {
                           columns: [
                             DataColumn(
                               label: Text(
-                                'Category Name',
+                                'Variant Name',
+                                style: TextStyle(
+                                  color: txtcolor,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+
+                            DataColumn(
+                              label: Text(
+                                'Variant Type',
                                 style: TextStyle(
                                   color: txtcolor,
                                   fontSize: 15,
@@ -882,23 +678,32 @@ class TabletCategoriesPage extends HookConsumerWidget {
                             ),
 
                             DataColumn(
-                              label: Text(
-                                'Edit',
-                                style: TextStyle(
-                                  color: txtcolor,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
+                              label: SizedBox(
+                                width: 42,
+                                child: Center(
+                                  child: Text(
+                                    'Edit',
+                                    style: TextStyle(
+                                      color: txtcolor,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-
                             DataColumn(
-                              label: Text(
-                                'Delete',
-                                style: TextStyle(
-                                  color: txtcolor,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
+                              label: SizedBox(
+                                width: 42.5,
+                                child: Center(
+                                  child: Text(
+                                    'Delete',
+                                    style: TextStyle(
+                                      color: txtcolor,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
@@ -917,13 +722,23 @@ class TabletCategoriesPage extends HookConsumerWidget {
                                       ),
                                       SizedBox(width: 10),
                                       Text(
-                                        value["category"],
+                                        value["variantname"],
                                         style: TextStyle(
                                           fontSize: 12,
                                           color: txtcolor,
                                         ),
                                       ),
                                     ],
+                                  ),
+                                ),
+
+                                DataCell(
+                                  Text(
+                                    value['varianttype'],
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: txtcolor,
+                                    ),
                                   ),
                                 ),
 
@@ -938,23 +753,32 @@ class TabletCategoriesPage extends HookConsumerWidget {
                                 ),
 
                                 DataCell(
-                                  Icon(
-                                    Icons.edit,
-                                    color: const Color.fromARGB(
-                                      255,
-                                      255,
-                                      255,
-                                      255,
+                                  SizedBox(
+                                    width: 42,
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.edit,
+                                        color: const Color.fromARGB(
+                                          255,
+                                          255,
+                                          255,
+                                          255,
+                                        ),
+                                        size: 20,
+                                      ),
                                     ),
-                                    size: 20,
                                   ),
                                 ),
-
                                 DataCell(
-                                  Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
-                                    size: 20,
+                                  SizedBox(
+                                    width: 42.5, // Match the column width
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                        size: 20,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -972,40 +796,4 @@ class TabletCategoriesPage extends HookConsumerWidget {
       ),
     );
   }
-}
-
-int _orderDetails(BuildContext context) {
-  double screenWidth = MediaQuery.of(context).size.width;
-
-  if (screenWidth <= 952) {
-    return 1;
-  }
-
-  return 2;
-}
-
-double _orderDetailsRatio(BuildContext context) {
-  double screenWidth = MediaQuery.of(context).size.width;
-
-  if (screenWidth >= 897 && screenWidth <= 952) {
-    return 6;
-  } else if (screenWidth >= 816 && screenWidth <= 896) {
-    return 5.5;
-  } else if (screenWidth >= 769 && screenWidth <= 815) {
-    return 3;
-  }
-
-  return 3.3;
-}
-
-double _orderDetailsWidth(BuildContext context) {
-  double screenWidth = MediaQuery.of(context).size.width;
-
-  if (screenWidth >= 600 && screenWidth <= 700) {
-    return 4;
-  } else if (screenWidth >= 501 && screenWidth <= 600) {
-    return 3.5;
-  }
-
-  return 2.3;
 }

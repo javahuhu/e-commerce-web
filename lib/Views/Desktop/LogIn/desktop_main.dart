@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:ecommerce_admin/Core/Auth/auth_service.dart';
+import 'package:ecommerce_admin/Core/Services/auth_service.dart';
 import 'package:ecommerce_admin/Core/Theme/colors.dart';
 import 'package:ecommerce_admin/Model/user_model.dart';
 import 'package:flutter/material.dart';
@@ -283,7 +283,7 @@ Widget _login(
               contentType: ContentType.failure,
             ),
           ),
-          animationDuration: const Duration(milliseconds: 600),
+          animationDuration: const Duration(milliseconds: 300),
           displayDuration: const Duration(seconds: 2),
         );
       }

@@ -1,33 +1,350 @@
+import 'dart:io';
 import 'dart:ui';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:ecommerce_admin/Core/Constants/nav_bar_items.dart';
+import 'package:ecommerce_admin/Model/categories_model.dart';
+import 'package:ecommerce_admin/Provider/category_provider.dart';
 import 'package:ecommerce_admin/Router/navigation_page.dart';
 import 'package:ecommerce_admin/core/Theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:glassmorphism/glassmorphism.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hooks_riverpod/legacy.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:flutter/foundation.dart';
 
 class DesktopCategoriesPage extends HookConsumerWidget {
   DesktopCategoriesPage({super.key});
 
-  final List<Map<String, dynamic>> navbar = [
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Dashboard'},
+  void addCategories(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final width = MediaQuery.of(context).size.width;
 
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Category'},
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (width < 1100 && context.mounted) {
+                context.pop();
+              }
+            });
 
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'SubCategory'},
+            return HookConsumer(
+              builder: (context, ref, child) {
+                final selectedFile = useState<File?>(null);
+                final categoryname = useTextEditingController();
+                Future<void> pickFile() async {
+                  final result = await FilePicker.platform.pickFiles(
+                    type: FileType.image,
+                  );
 
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Brands'},
+                  if (result != null && result.files.single.path != null) {
+                    selectedFile.value = File(result.files.single.path!);
+                  }
+                }
 
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Variant Type'},
+                Future<void> saveCategory() async {
+                  if (selectedFile.value == null && categoryname.text.isEmpty) {
+                    showTopSnackBar(
+                      Overlay.of(context),
+                      Material(
+                        color: Colors.transparent,
+                        child: AwesomeSnackbarContent(
+                          title: 'Upload Image',
+                          message: 'Upload Image or Input the Category Name',
+                          contentType: ContentType.failure,
+                        ),
+                      ),
+                      animationDuration: Duration(milliseconds: 300),
+                      displayDuration: Duration(seconds: 3),
+                    );
+                  }
 
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Orders'},
+                  try {
+                    final useCase = ref.watch(categoryUsecasesProvider);
 
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Coupons'},
+                    final category = CategoriesModel(
+                      imageFile: selectedFile.value!,
+                      categoryname: categoryname.text,
+                    );
 
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Posters'},
+                    final success = await useCase.execute(category);
 
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Notification'},
-  ];
+                    if (success && context.mounted) {
+                      context.pop();
+                      showTopSnackBar(
+                        Overlay.of(context),
+                        Material(
+                          color: Colors.transparent,
+                          child: AwesomeSnackbarContent(
+                            title: "Success",
+                            message: "Categories Successfully Saved",
+                            contentType: ContentType.success,
+                          ),
+                        ),
+                        animationDuration: Duration(milliseconds: 300),
+                        displayDuration: Duration(seconds: 3),
+                      );
+                    }
+                  } catch (e) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+                    }
+                  }
+                }
+
+                return Dialog(
+                  elevation: 5,
+                  child: Container(
+                    height: 500,
+                    width: 400,
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 230, 233, 243),
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+
+                    child: Column(
+                      children: [
+                        Center(
+                          child: Text(
+                            "Add Category",
+                            style: TextStyle(
+                              fontFamily: 'Sono',
+                              fontSize: 35,
+                              color: txtcolor,
+                            ),
+                          ),
+                        ),
+
+                        GlassmorphicContainer(
+                          width: double.infinity,
+                          height: 400,
+                          borderRadius: 20,
+                          linearGradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Color.fromARGB(
+                                255,
+                                255,
+                                255,
+                                255,
+                              ).withValues(alpha: 0.1),
+                              Color.fromARGB(
+                                255,
+                                255,
+                                255,
+                                255,
+                              ).withValues(alpha: 0.1),
+                            ],
+                            stops: [0.1, 1],
+                          ),
+                          border: 2,
+                          blur: 5,
+                          borderGradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Color.fromARGB(
+                                255,
+                                255,
+                                255,
+                                255,
+                              ).withValues(alpha: 0.3),
+                              Color.fromARGB(
+                                255,
+                                255,
+                                255,
+                                255,
+                              ).withValues(alpha: 0.3),
+                            ],
+                          ),
+
+                          child: Column(
+                            children: [
+                              SizedBox(height: 30),
+                              selectedFile.value != null
+                                  ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                      child: kIsWeb
+                                          ? Image.network(
+                                              selectedFile
+                                                  .value!
+                                                  .path, // or use a different approach for web
+                                              width: 150,
+                                              height: 150,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Image.file(
+                                              selectedFile.value!,
+                                              width: 150,
+                                              height: 150,
+                                              fit: BoxFit.cover,
+                                            ),
+                                    )
+                                  : GestureDetector(
+                                      onTap: () {
+                                        pickFile();
+                                      },
+                                      child: MouseRegion(
+                                        cursor: SystemMouseCursors.click,
+                                        child: Container(
+                                          width: 150,
+                                          height: 150,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                          ),
+
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.camera_alt_rounded,
+                                                size: 50,
+                                                color: Colors.black,
+                                              ),
+
+                                              Text(
+                                                "Category",
+                                                style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+
+                              SizedBox(height: 25),
+
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 25),
+                                child: TextFormField(
+                                  controller: categoryname,
+                                  decoration: InputDecoration(
+                                    labelText: 'Category Name',
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        width: 2,
+                                        color: Colors.black54,
+                                      ),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        width: 2,
+                                        color: Colors.black,
+                                      ),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                              SizedBox(height: 50),
+
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 30),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        context.pop();
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                        ),
+                                        splashFactory: NoSplash.splashFactory,
+                                        shadowColor: Colors.transparent,
+                                        elevation: 0,
+                                        backgroundColor: const Color.fromARGB(
+                                          255,
+                                          240,
+                                          124,
+                                          124,
+                                        ),
+                                        foregroundColor: const Color.fromARGB(
+                                          255,
+                                          255,
+                                          255,
+                                          255,
+                                        ),
+                                        minimumSize: Size(150, 55),
+                                      ),
+                                      child: Text(
+                                        'Cancel',
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                    ),
+
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        saveCategory();
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                        ),
+                                        splashFactory: NoSplash.splashFactory,
+                                        shadowColor: Colors.transparent,
+                                        elevation: 0,
+                                        backgroundColor: const Color.fromARGB(
+                                          255,
+                                          128,
+                                          196,
+                                          130,
+                                        ),
+                                        foregroundColor: const Color.fromARGB(
+                                          255,
+                                          255,
+                                          255,
+                                          255,
+                                        ),
+                                        minimumSize: Size(150, 55),
+                                      ),
+                                      child: Text(
+                                        'Save',
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+  }
 
   final List<Map<String, dynamic>> myproducts = [
     {'Icons': Icons.production_quantity_limits, "text": 'All Products'},
@@ -247,7 +564,10 @@ class DesktopCategoriesPage extends HookConsumerWidget {
                                       cursor: SystemMouseCursors.click,
                                       child: GestureDetector(
                                         onTap: () {
-                                           NavigationPage.navigateTo(context, index);
+                                          NavigationPage.navigateTo(
+                                            context,
+                                            index,
+                                          );
                                         },
                                         child: Container(
                                           height: 50,
@@ -541,20 +861,34 @@ class DesktopCategoriesPage extends HookConsumerWidget {
                                                                 size: 25,
                                                               ),
 
-                                                              Text(
-                                                                "Add New",
-                                                                style: TextStyle(
-                                                                  fontSize: 18,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600,
-                                                                  color:
-                                                                      Color.fromARGB(
-                                                                        200,
-                                                                        50,
-                                                                        50,
-                                                                        50,
-                                                                      ),
+                                                              MouseRegion(
+                                                                cursor:
+                                                                    SystemMouseCursors
+                                                                        .click,
+                                                                child: GestureDetector(
+                                                                  onTap: () {
+                                                                    addCategories(
+                                                                      context,
+                                                                      ref,
+                                                                    );
+                                                                  },
+                                                                  child: Text(
+                                                                    "Add New",
+                                                                    style: TextStyle(
+                                                                      fontSize:
+                                                                          18,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                      color:
+                                                                          Color.fromARGB(
+                                                                            200,
+                                                                            50,
+                                                                            50,
+                                                                            50,
+                                                                          ),
+                                                                    ),
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ],

@@ -1,8 +1,11 @@
 import 'dart:ui';
+import 'package:ecommerce_admin/Core/Constants/nav_bar_items.dart';
 import 'package:ecommerce_admin/Router/navigation_page.dart';
 import 'package:ecommerce_admin/core/Theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:glassmorphism/glassmorphism.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hooks_riverpod/legacy.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,25 +13,242 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class MobileCategoriesPage extends HookConsumerWidget {
   MobileCategoriesPage({super.key});
 
-  final List<Map<String, dynamic>> navbar = [
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Dashboard'},
+  void addCategories(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final width = MediaQuery.of(context).size.width;
+            final height = MediaQuery.of(context).size.height;
 
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Category'},
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (width >= 575 && context.mounted) {
+                context.pop();
+              }
+            });
 
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'SubCategory'},
+            return Consumer(
+              builder: (context, ref, child) {
+                return Dialog(
+                  elevation: 5,
+                  child: Container(
+                    height: height * 0.74,
+                    width: 400,
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 230, 233, 243),
+                      borderRadius: BorderRadius.circular(25),
+                    ),
 
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Brands'},
+                    child: Column(
+                      children: [
+                        Center(
+                          child: Text(
+                            "Add Category",
+                            style: TextStyle(
+                              fontFamily: 'Sono',
+                              fontSize: 22.sp,
+                              color: txtcolor,
+                            ),
+                          ),
+                        ),
 
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Variant Type'},
+                        GlassmorphicContainer(
+                          width: double.infinity,
+                          height: height * 0.63,
+                          borderRadius: 20,
+                          linearGradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Color.fromARGB(
+                                255,
+                                255,
+                                255,
+                                255,
+                              ).withValues(alpha: 0.1),
+                              Color.fromARGB(
+                                255,
+                                255,
+                                255,
+                                255,
+                              ).withValues(alpha: 0.1),
+                            ],
+                            stops: [0.1, 1],
+                          ),
+                          border: 2,
+                          blur: 5,
+                          borderGradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Color.fromARGB(
+                                255,
+                                255,
+                                255,
+                                255,
+                              ).withValues(alpha: 0.3),
+                              Color.fromARGB(
+                                255,
+                                255,
+                                255,
+                                255,
+                              ).withValues(alpha: 0.3),
+                            ],
+                          ),
 
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Orders'},
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                SizedBox(height: 30),
+                                MouseRegion(
+                                  cursor: SystemMouseCursors.click,
+                                  child: Container(
+                                    width: 150.w,
+                                    height: 150.h,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10.r),
+                                    ),
 
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Coupons'},
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.camera_alt_rounded,
+                                          size: 50.sp,
+                                          color: Colors.black,
+                                        ),
 
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Posters'},
+                                        Text(
+                                          "Category",
+                                          style: TextStyle(
+                                            fontSize: 15.sp,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
 
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Notification'},
-  ];
+                                SizedBox(height: 25),
+
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 25),
+                                  child: TextField(
+                                    decoration: InputDecoration(
+                                      labelText: 'Category Name',
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          width: 2,
+                                          color: Colors.black54,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          width: 2,
+                                          color: Colors.black,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                SizedBox(height: 50),
+
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 20),
+                                  child: Column(  
+                                    children: [
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          context.pop();
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                          ),
+                                          splashFactory: NoSplash.splashFactory,
+                                          shadowColor: Colors.transparent,
+                                          elevation: 0,
+                                          backgroundColor: const Color.fromARGB(
+                                            255,
+                                            240,
+                                            124,
+                                            124,
+                                          ),
+                                          foregroundColor: const Color.fromARGB(
+                                            255,
+                                            255,
+                                            255,
+                                            255,
+                                          ),
+                                          minimumSize: Size(150, 55),
+                                        ),
+                                        child: Text(
+                                          'Cancel',
+                                          style: TextStyle(fontSize: 15),
+                                        ),
+                                      ),
+
+                                      SizedBox(height: 10),
+
+                                      ElevatedButton(
+                                        onPressed: () {},
+                                        style: ElevatedButton.styleFrom(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                          ),
+                                          splashFactory: NoSplash.splashFactory,
+                                          shadowColor: Colors.transparent,
+                                          elevation: 0,
+                                          backgroundColor: const Color.fromARGB(
+                                            255,
+                                            128,
+                                            196,
+                                            130,
+                                          ),
+                                          foregroundColor: const Color.fromARGB(
+                                            255,
+                                            255,
+                                            255,
+                                            255,
+                                          ),
+                                          minimumSize: Size(150, 55),
+                                        ),
+                                        child: Text(
+                                          'Save',
+                                          style: TextStyle(fontSize: 15),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+  }
 
   final List<Map<String, dynamic>> products = [
     {
@@ -187,7 +407,7 @@ class MobileCategoriesPage extends HookConsumerWidget {
                         final icons = navbar[index];
                         return GestureDetector(
                           onTap: () {
-                             NavigationPage.navigateTo(context, index);
+                            NavigationPage.navigateTo(context, index);
                           },
                           child: Container(
                             height: 50,
@@ -239,6 +459,7 @@ class MobileCategoriesPage extends HookConsumerWidget {
               controller,
               scaleAnimation,
               colorAnimation,
+              addCategories,
             ),
           ],
         ),
@@ -335,6 +556,7 @@ class MobileCategoriesPage extends HookConsumerWidget {
     AnimationController controller,
     Animation<double> scaleAnimation,
     Animation<Color?> colorAnimation,
+    void Function(BuildContext, WidgetRef) addCategories,
   ) {
     return Column(
       children: [
@@ -349,7 +571,7 @@ class MobileCategoriesPage extends HookConsumerWidget {
                     children: [
                       _welcomeSection(context),
                       SizedBox(height: 25),
-                      _allProductsSection(context),
+                      _allProductsSection(context, addCategories, ref),
                       SizedBox(height: 25),
                       _orderDetailsSection(context),
 
@@ -604,7 +826,7 @@ class MobileCategoriesPage extends HookConsumerWidget {
     );
   }
 
-  Widget _allProductsSection(BuildContext context) {
+  Widget _allProductsSection(BuildContext context, addCategories, WidgetRef ref) {
     return Padding(
       padding: EdgeInsets.only(left: 20),
       child: ClipRRect(
@@ -649,25 +871,34 @@ class MobileCategoriesPage extends HookConsumerWidget {
                           ),
                         ),
                         Spacer(),
-                        Container(
-                          padding: EdgeInsets.all(7),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(7.r),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Icon(Icons.add, color: Colors.black, size: 20.sp),
-                              Text(
-                                "Add New",
-                                style: TextStyle(
-                                  fontSize: 15.sp,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color.fromARGB(200, 50, 50, 50),
+                        GestureDetector(
+                          onTap: () {
+                            addCategories(context,ref);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(7),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(7.r),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Icon(
+                                  Icons.add,
+                                  color: Colors.black,
+                                  size: 20.sp,
                                 ),
-                              ),
-                            ],
+                                Text(
+                                  "Add New",
+                                  style: TextStyle(
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: Color.fromARGB(200, 50, 50, 50),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         SizedBox(width: 20),

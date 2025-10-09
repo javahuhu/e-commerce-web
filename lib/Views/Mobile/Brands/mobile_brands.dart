@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:ecommerce_admin/Core/Constants/nav_bar_items.dart';
 import 'package:ecommerce_admin/Router/navigation_page.dart';
 import 'package:ecommerce_admin/core/Theme/colors.dart';
 import 'package:flutter/material.dart';
@@ -10,25 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class MobileBrandsPage extends HookConsumerWidget {
   MobileBrandsPage({super.key});
 
-  final List<Map<String, dynamic>> navbar = [
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Dashboard'},
 
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Category'},
-
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'SubCategory'},
-
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Brands'},
-
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Variant Type'},
-
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Orders'},
-
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Coupons'},
-
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Posters'},
-
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Notification'},
-  ];
 
   final List<Map<String, dynamic>> products = [
     {

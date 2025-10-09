@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:ecommerce_admin/Core/Constants/nav_bar_items.dart';
 import 'package:ecommerce_admin/Router/navigation_page.dart';
 import 'package:ecommerce_admin/core/Theme/colors.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +63,7 @@ class MobileHomePage extends HookConsumerWidget {
                 return Dialog(
                   elevation: 5,
                   child: Container(
-                    height: theTry * 0.575,
+                    height: theTry * 0.745,
                     width: 1000,
                     padding: EdgeInsets.all(20),
                     decoration: BoxDecoration(
@@ -85,7 +86,7 @@ class MobileHomePage extends HookConsumerWidget {
                         SizedBox(height: 10),
                         GlassmorphicContainer(
                           width: double.infinity,
-                          height: theTry * 0.45,
+                          height: theTry * 0.62,
                           borderRadius: 20,
                           blur: 5,
                           border: 2,
@@ -547,25 +548,7 @@ class MobileHomePage extends HookConsumerWidget {
     );
   }
 
-  final List<Map<String, dynamic>> navbar = [
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Dashboard'},
 
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Category'},
-
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'SubCategory'},
-
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Brands'},
-
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Variant Type'},
-
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Orders'},
-
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Coupons'},
-
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Posters'},
-
-    {'Icons': "assets/dashboard.png", 'NavigateTo': 'Notification'},
-  ];
 
   final List<Map<String, dynamic>> myproducts = [
     {'Icons': Icons.production_quantity_limits, "text": 'All Products'},

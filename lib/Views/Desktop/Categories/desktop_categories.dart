@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:ecommerce_admin/Core/Constants/nav_bar_items.dart';
@@ -14,7 +13,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hooks_riverpod/legacy.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
-import 'package:flutter/foundation.dart';
 
 class DesktopCategoriesPage extends HookConsumerWidget {
   DesktopCategoriesPage({super.key});
@@ -35,15 +33,16 @@ class DesktopCategoriesPage extends HookConsumerWidget {
 
             return HookConsumer(
               builder: (context, ref, child) {
-                final selectedFile = useState<File?>(null);
+                final selectedFile = useState<PlatformFile?>(null);
                 final categoryname = useTextEditingController();
                 Future<void> pickFile() async {
                   final result = await FilePicker.platform.pickFiles(
                     type: FileType.image,
+                    withData: true,
                   );
 
-                  if (result != null && result.files.single.path != null) {
-                    selectedFile.value = File(result.files.single.path!);
+                  if (result != null && result.files.isNotEmpty) {
+                    selectedFile.value = result.files.single;
                   }
                 }
 
@@ -172,22 +171,13 @@ class DesktopCategoriesPage extends HookConsumerWidget {
                               SizedBox(height: 30),
                               selectedFile.value != null
                                   ? ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                      child: kIsWeb
-                                          ? Image.network(
-                                              selectedFile
-                                                  .value!
-                                                  .path, // or use a different approach for web
-                                              width: 150,
-                                              height: 150,
-                                              fit: BoxFit.cover,
-                                            )
-                                          : Image.file(
-                                              selectedFile.value!,
-                                              width: 150,
-                                              height: 150,
-                                              fit: BoxFit.cover,
-                                            ),
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.memory(
+                                        selectedFile.value!.bytes!,
+                                        width: 150,
+                                        height: 150,
+                                        fit: BoxFit.cover,
+                                      ),
                                     )
                                   : GestureDetector(
                                       onTap: () {

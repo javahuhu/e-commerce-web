@@ -1,6 +1,5 @@
-
-import 'package:http/http.dart' as http;
 import 'package:ecommerce_admin/Model/categories_model.dart';
+import 'package:http/http.dart' as http;
 
 class CategoriesDatasource {
   final String baseurl = "http://localhost:5268/api/category";
@@ -12,15 +11,24 @@ class CategoriesDatasource {
         Uri.parse("$baseurl/Categories"),
       );
 
-      request.fields['categoryName'] = categories.categoryname;
+      final name = categories.toJson();
+      request.fields['categoryName'] = name["category_name"];
 
       request.files.add(
-        await http.MultipartFile.fromPath('image', categories.imageFile.path),
+        http.MultipartFile.fromBytes(
+          'image',
+          categories.imageFile.bytes!,
+          filename: categories.imageFile.name,
+        ),
       );
 
       var response = await request.send();
 
-      return response.statusCode == 200;
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
     } catch (e) {
       return false;
     }

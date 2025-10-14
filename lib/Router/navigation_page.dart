@@ -5,7 +5,7 @@ class NavigationPage {
  static void navigateTo(BuildContext context, int index) {
     switch (index) {
       case 0:
-        context.go('/HomePage');
+        context.push('/HomePage');
         break;
       case 1:
         context.push('/Categories');

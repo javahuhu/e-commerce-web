@@ -1,5 +1,5 @@
 import 'package:ecommerce_admin/Domain/Repositories/categories_repositories.dart';
-import 'package:ecommerce_admin/Model/categories_model.dart';
+import 'package:ecommerce_admin/Model/CategoriesModel/categories_model.dart';
 
 class AddCategoriesUsecase {
   final CategoryRepository repository;

@@ -1,9 +1,12 @@
 import 'dart:ui';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:ecommerce_admin/Core/Constants/nav_bar_items.dart';
 import 'package:ecommerce_admin/Router/navigation_page.dart';
 import 'package:ecommerce_admin/core/Theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:glassmorphism/glassmorphism.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hooks_riverpod/legacy.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,7 +14,271 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class MobileSubCategoriesPage extends HookConsumerWidget {
   MobileSubCategoriesPage({super.key});
 
-  
+  final items = Provider<List<String>>((ref) {
+    return ['Electronics', 'Clothing', 'Food', 'Books'];
+  });
+
+  final selectedValue = StateProvider<String?>((ref) => null);
+
+  void addSubCategories(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final width = MediaQuery.of(context).size.width;
+            final height = MediaQuery.of(context).size.height;
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (width >= 575 && context.mounted) {
+                context.pop();
+              }
+            });
+
+            return HookConsumer(
+              builder: (context, ref, child) {
+                final selecteditem = ref.watch(items);
+                final selectedfinal = ref.watch(selectedValue);
+                return Dialog(
+                  elevation: 5,
+                  child: Container(
+                    height: height * 0.63,
+                    width: 600,
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 230, 233, 243),
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+
+                    child: Column(
+                      children: [
+                        Center(
+                          child: Text(
+                            "ADD SUB CATEGORY",
+                            style: TextStyle(
+                              fontFamily: 'Sono',
+                              fontSize: 22.sp,
+                              color: txtcolor,
+                            ),
+                          ),
+                        ),
+
+                        GlassmorphicContainer(
+                          width: double.infinity,
+                          height: height * 0.5,
+                          borderRadius: 20,
+                          linearGradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Color.fromARGB(
+                                255,
+                                255,
+                                255,
+                                255,
+                              ).withValues(alpha: 0.1),
+                              Color.fromARGB(
+                                255,
+                                255,
+                                255,
+                                255,
+                              ).withValues(alpha: 0.1),
+                            ],
+                            stops: [0.1, 1],
+                          ),
+                          border: 2,
+                          blur: 5,
+                          borderGradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Color.fromARGB(
+                                255,
+                                255,
+                                255,
+                                255,
+                              ).withValues(alpha: 0.3),
+                              Color.fromARGB(
+                                255,
+                                255,
+                                255,
+                                255,
+                              ).withValues(alpha: 0.3),
+                            ],
+                          ),
+
+                          child: Center(
+                            child: Column(
+                              children: [
+                                SizedBox(height: width > 400 ? 100 : 35),
+                                Wrap(
+                                  spacing: 25,
+                                  runSpacing: 25,
+                                  alignment: WrapAlignment.center,
+                                  children: [
+                                    DropdownButton2(
+                                      underline: SizedBox.shrink(),
+                                      hint: Text(
+                                        'Sample 1',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+
+                                      items: selecteditem
+                                          .map(
+                                            (String item) =>
+                                                DropdownMenuItem<String>(
+                                                  value: item,
+                                                  child: Text(
+                                                    item,
+                                                    style: const TextStyle(
+                                                      fontSize: 14,
+                                                    ),
+                                                  ),
+                                                ),
+                                          )
+                                          .toList(),
+
+                                      value: selectedfinal,
+                                      onChanged: (value) {
+                                        ref.read(selectedValue.notifier).state =
+                                            value;
+                                      },
+
+                                      buttonStyleData: ButtonStyleData(
+                                        height: 48,
+                                        width: 200,
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                          border: Border.all(
+                                            color: Colors.black54,
+                                            width: 2,
+                                          ),
+                                        ),
+                                      ),
+                                      dropdownStyleData: DropdownStyleData(
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+
+                                    SizedBox(
+                                      height: 48,
+                                      width: 200,
+                                      child: TextFormField(
+                                        decoration: InputDecoration(
+                                          labelText: 'Sub Category Name',
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              width: 2,
+                                              color: Colors.black54,
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                          ),
+
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              width: 2,
+                                              color: Colors.black,
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                                SizedBox(height: width > 400 ? 95 : 30),
+
+                                Wrap(
+                                  spacing: width > 400 ? 30 : 25,
+                                  runSpacing: 25,
+                                  alignment: WrapAlignment.center,
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        context.pop();
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        foregroundColor: const Color.fromARGB(
+                                          255,
+                                          255,
+                                          255,
+                                          255,
+                                        ),
+
+                                        backgroundColor: const Color.fromARGB(
+                                          255,
+                                          240,
+                                          124,
+                                          124,
+                                        ),
+                                        minimumSize: Size(150, 50),
+                                      ),
+                                      child: Text(
+                                        'Cancel',
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                    ),
+
+                                    ElevatedButton(
+                                      onPressed: () {},
+                                      style: ElevatedButton.styleFrom(
+                                        foregroundColor: const Color.fromARGB(
+                                          255,
+                                          255,
+                                          255,
+                                          255,
+                                        ),
+
+                                        backgroundColor: const Color.fromARGB(
+                                          255,
+                                          128,
+                                          196,
+                                          130,
+                                        ),
+
+                                        minimumSize: Size(150, 50),
+                                      ),
+                                      child: Text(
+                                        'Save',
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
   final List<Map<String, dynamic>> products = [
     {
       "image": "assets/sampleuser.jpg",
@@ -176,7 +443,7 @@ class MobileSubCategoriesPage extends HookConsumerWidget {
                         final icons = navbar[index];
                         return GestureDetector(
                           onTap: () {
-                             NavigationPage.navigateTo(context, index);
+                            NavigationPage.navigateTo(context, index);
                           },
                           child: Container(
                             height: 50,
@@ -338,7 +605,7 @@ class MobileSubCategoriesPage extends HookConsumerWidget {
                     children: [
                       _welcomeSection(context),
                       SizedBox(height: 25),
-                      _allProductsSection(context),
+                      _allProductsSection(context, ref),
                       SizedBox(height: 25),
 
                       SizedBox(height: 50),
@@ -489,7 +756,7 @@ class MobileSubCategoriesPage extends HookConsumerWidget {
     );
   }
 
-  Widget _allProductsSection(BuildContext context) {
+  Widget _allProductsSection(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: EdgeInsets.only(left: 20),
       child: ClipRRect(
@@ -534,25 +801,38 @@ class MobileSubCategoriesPage extends HookConsumerWidget {
                           ),
                         ),
                         Spacer(),
-                        Container(
-                          padding: EdgeInsets.all(7),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(7.r),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Icon(Icons.add, color: Colors.black, size: 20.sp),
-                              Text(
-                                "Add New",
-                                style: TextStyle(
-                                  fontSize: 15.sp,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color.fromARGB(200, 50, 50, 50),
-                                ),
+                        MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                            onTap: () {
+                              addSubCategories(context, ref);
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(7),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(7.r),
                               ),
-                            ],
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Icon(
+                                    Icons.add,
+                                    color: Colors.black,
+                                    size: 20.sp,
+                                  ),
+                                  Text(
+                                    "Add New",
+                                    style: TextStyle(
+                                      fontSize: 15.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color.fromARGB(200, 50, 50, 50),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                         SizedBox(width: 20),

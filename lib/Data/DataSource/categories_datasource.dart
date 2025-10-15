@@ -1,4 +1,7 @@
-import 'package:ecommerce_admin/Model/categories_model.dart';
+import 'dart:convert';
+
+import 'package:ecommerce_admin/Model/CategoriesModel/categories_model.dart';
+import 'package:ecommerce_admin/Model/CategoriesModel/categories_model_response.dart';
 import 'package:http/http.dart' as http;
 
 class CategoriesDatasource {
@@ -33,4 +36,18 @@ class CategoriesDatasource {
       return false;
     }
   }
+
+  Future<List<CategoriesModelResponse>> getCategories() async {
+    final uri = Uri.parse("$baseurl/GetCategories");
+
+    final response = await http.get(uri);
+
+    if (response.statusCode == 200) {
+      final List data = jsonDecode(response.body);
+      return data.map((e) => CategoriesModelResponse.fromJson(e)).toList();
+    } else {
+      throw Exception("Failed to load categories");
+    }
+  }
+  
 }

@@ -1,5 +1,8 @@
 import 'dart:ui';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:ecommerce_admin/Core/Constants/nav_bar_items.dart';
+import 'package:ecommerce_admin/Model/CategoriesModel/categories_model.dart';
+import 'package:ecommerce_admin/Provider/category_provider.dart';
 import 'package:ecommerce_admin/Router/navigation_page.dart';
 import 'package:ecommerce_admin/core/Theme/colors.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +12,9 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hooks_riverpod/legacy.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 
 class MobileCategoriesPage extends HookConsumerWidget {
   MobileCategoriesPage({super.key});
@@ -28,8 +34,76 @@ class MobileCategoriesPage extends HookConsumerWidget {
               }
             });
 
-            return Consumer(
+            return HookConsumer(
               builder: (context, ref, child) {
+                final selectFile = useState<PlatformFile?>(null);
+                final categoryname = useTextEditingController();
+
+                Future<void> pickFile() async {
+                  final result = await FilePicker.platform.pickFiles(
+                    type: FileType.image,
+                    withData: true,
+                  );
+
+                  if (result != null && result.files.isNotEmpty) {
+                    selectFile.value = result.files.single;
+                  }
+                }
+
+                Future<void> saveCategory() async {
+                  if (selectFile.value == null && categoryname.text.isEmpty) {
+                    showTopSnackBar(
+                      Overlay.of(context),
+                      Material(
+                        color: Colors.transparent,
+                        child: AwesomeSnackbarContent(
+                          title: 'Upload Image',
+                          message: 'Upload Image or Input the Category Name',
+                          contentType: ContentType.failure,
+                        ),
+                      ),
+
+                      animationDuration: Duration(milliseconds: 300),
+                      displayDuration: Duration(seconds: 3),
+                    );
+                  }
+                  try {
+                    final useCase = ref.watch(categoryUsecasesProvider);
+
+                    final category = CategoriesModel(
+                      imageFile: selectFile.value!,
+                      categoryname: categoryname.text,
+                    );
+
+                    final success = await useCase.execute(category);
+
+                    if (success && context.mounted) {
+                      showTopSnackBar(
+                        Overlay.of(context),
+                        Material(
+                          color: Colors.transparent,
+                          child: AwesomeSnackbarContent(
+                            title: 'Success',
+                            message: 'Categories Successfully Saved',
+                            contentType: ContentType.success,
+                          ),
+                        ),
+
+                        animationDuration: Duration(milliseconds: 300),
+                        displayDuration: Duration(seconds: 300),
+                      );
+
+                      ref.invalidate(categoryUsecasesProvider);
+                    }
+                  } catch (e) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+                    }
+                  }
+                }
+
                 return Dialog(
                   elevation: 5,
                   child: Container(
@@ -102,37 +176,54 @@ class MobileCategoriesPage extends HookConsumerWidget {
                             child: Column(
                               children: [
                                 SizedBox(height: 30),
-                                MouseRegion(
-                                  cursor: SystemMouseCursors.click,
-                                  child: Container(
-                                    width: 150.w,
-                                    height: 150.h,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10.r),
-                                    ),
 
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.camera_alt_rounded,
-                                          size: 50.sp,
-                                          color: Colors.black,
+                                selectFile.value != null
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.memory(
+                                          selectFile.value!.bytes!,
+                                          width: 150,
+                                          height: 150,
+                                          fit: BoxFit.cover,
                                         ),
+                                      )
+                                    : GestureDetector(
+                                        onTap: () {
+                                          pickFile();
+                                        },
+                                        child: MouseRegion(
+                                          cursor: SystemMouseCursors.click,
+                                          child: Container(
+                                            width: 150.w,
+                                            height: 150.h,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(10.r),
+                                            ),
 
-                                        Text(
-                                          "Category",
-                                          style: TextStyle(
-                                            fontSize: 15.sp,
-                                            color: Colors.black,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  Icons.camera_alt_rounded,
+                                                  size: 50.sp,
+                                                  color: Colors.black,
+                                                ),
+
+                                                Text(
+                                                  "Category",
+                                                  style: TextStyle(
+                                                    fontSize: 15.sp,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
+                                      ),
 
                                 SizedBox(height: 25),
 
@@ -164,7 +255,7 @@ class MobileCategoriesPage extends HookConsumerWidget {
 
                                 Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 20),
-                                  child: Column(  
+                                  child: Column(
                                     children: [
                                       ElevatedButton(
                                         onPressed: () {
@@ -202,7 +293,9 @@ class MobileCategoriesPage extends HookConsumerWidget {
                                       SizedBox(height: 10),
 
                                       ElevatedButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          saveCategory();
+                                        },
                                         style: ElevatedButton.styleFrom(
                                           shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(
@@ -826,223 +919,254 @@ class MobileCategoriesPage extends HookConsumerWidget {
     );
   }
 
-  Widget _allProductsSection(BuildContext context, addCategories, WidgetRef ref) {
-    return Padding(
-      padding: EdgeInsets.only(left: 20),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-          child: Container(
-            width: double.infinity,
+  Widget _allProductsSection(
+    BuildContext context,
+    addCategories,
+    WidgetRef ref,
+  ) {
+    final categoryResponse = ref.watch(categoryResponseProvider);
 
-            margin: EdgeInsets.only(right: 20),
-            padding: EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: bgcolor.withValues(alpha: 0.2),
-              border: Border.all(
-                color: Colors.white.withValues(alpha: 0.5),
-                width: 1.5,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: Offset(0, 4),
+    return categoryResponse.when(
+      data: (category) {
+        return Padding(
+          padding: EdgeInsets.only(left: 20),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              child: Container(
+                width: double.infinity,
+
+                margin: EdgeInsets.only(right: 20),
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: bgcolor.withValues(alpha: 0.2),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.5),
+                    width: 1.5,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+                      blurRadius: 10,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
+                  borderRadius: BorderRadius.circular(20),
                 ),
-              ],
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 0),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "My Products",
-                          style: TextStyle(
-                            fontSize: 15.sp,
-                            fontWeight: FontWeight.bold,
-                            color: txtcolor,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 0),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "My Products",
+                              style: TextStyle(
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.bold,
+                                color: txtcolor,
+                              ),
+                            ),
+                            Spacer(),
+                            GestureDetector(
+                              onTap: () {
+                                addCategories(context, ref);
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(7),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(7.r),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Icon(
+                                      Icons.add,
+                                      color: Colors.black,
+                                      size: 20.sp,
+                                    ),
+                                    Text(
+                                      "Add New",
+                                      style: TextStyle(
+                                        fontSize: 15.sp,
+                                        fontWeight: FontWeight.w600,
+                                        color: Color.fromARGB(200, 50, 50, 50),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 20),
+                            Icon(
+                              Icons.refresh,
+                              color: Colors.black,
+                              size: 20.sp,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(
+                      width: 1000,
+                      child: Theme(
+                        data: Theme.of(context).copyWith(
+                          dividerColor: Colors.transparent,
+                          dividerTheme: const DividerThemeData(
+                            color: Colors.transparent,
+                            space: 0,
+                            thickness: 0,
+                            indent: 0,
+                            endIndent: 0,
                           ),
                         ),
-                        Spacer(),
-                        GestureDetector(
-                          onTap: () {
-                            addCategories(context,ref);
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(7),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(7.r),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Icon(
-                                  Icons.add,
-                                  color: Colors.black,
-                                  size: 20.sp,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: DataTable(
+                              dividerThickness: 0.0,
+                              columnSpacing: 100,
+                              horizontalMargin: 2,
+                              dataRowMaxHeight: 60,
+                              headingRowHeight: 60,
+                              columns: [
+                                DataColumn(
+                                  label: Text(
+                                    'Category Name',
+                                    style: TextStyle(
+                                      color: txtcolor,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
-                                Text(
-                                  "Add New",
-                                  style: TextStyle(
-                                    fontSize: 15.sp,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color.fromARGB(200, 50, 50, 50),
+
+                                DataColumn(
+                                  label: Text(
+                                    'Added Date',
+                                    style: TextStyle(
+                                      color: txtcolor,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+
+                                DataColumn(
+                                  label: Text(
+                                    'Edit',
+                                    style: TextStyle(
+                                      color: txtcolor,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+
+                                DataColumn(
+                                  label: Text(
+                                    'Delete',
+                                    style: TextStyle(
+                                      color: txtcolor,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 20),
-                        Icon(Icons.refresh, color: Colors.black, size: 20.sp),
-                      ],
-                    ),
-                  ),
-                ),
-
-                SizedBox(
-                  width: 1000,
-                  child: Theme(
-                    data: Theme.of(context).copyWith(
-                      dividerColor: Colors.transparent,
-                      dividerTheme: const DividerThemeData(
-                        color: Colors.transparent,
-                        space: 0,
-                        thickness: 0,
-                        indent: 0,
-                        endIndent: 0,
-                      ),
-                    ),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: DataTable(
-                          dividerThickness: 0.0,
-                          columnSpacing: 100,
-                          horizontalMargin: 2,
-                          dataRowMaxHeight: 60,
-                          headingRowHeight: 60,
-                          columns: [
-                            DataColumn(
-                              label: Text(
-                                'Category Name',
-                                style: TextStyle(
-                                  color: txtcolor,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-
-                            DataColumn(
-                              label: Text(
-                                'Added Date',
-                                style: TextStyle(
-                                  color: txtcolor,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-
-                            DataColumn(
-                              label: Text(
-                                'Edit',
-                                style: TextStyle(
-                                  color: txtcolor,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-
-                            DataColumn(
-                              label: Text(
-                                'Delete',
-                                style: TextStyle(
-                                  color: txtcolor,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                          rows: products.asMap().entries.map((entry) {
-                            final value = entry.value;
-                            return DataRow(
-                              cells: [
-                                DataCell(
-                                  Row(
-                                    children: [
-                                      Image.asset(
-                                        value['image'],
-                                        width: 30,
-                                        height: 30,
+                              rows: category.asMap().entries.map((entry) {
+                                final result = entry.value;
+                                return DataRow(
+                                  cells: [
+                                    DataCell(
+                                      Row(
+                                        children: [
+                                          Image.network(
+                                            result.imgUrl,
+                                            width: 30,
+                                            height: 30,
+                                          ),
+                                          SizedBox(width: 10),
+                                          Text(
+                                            result.categoryName,
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: txtcolor,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      SizedBox(width: 10),
+                                    ),
+
+                                    DataCell(
                                       Text(
-                                        value["category"],
+                                        result.createdAt.toString(),
                                         style: TextStyle(
                                           fontSize: 12,
                                           color: txtcolor,
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ),
-
-                                DataCell(
-                                  Text(
-                                    value['Date'],
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: txtcolor,
                                     ),
-                                  ),
-                                ),
 
-                                DataCell(
-                                  Icon(
-                                    Icons.edit,
-                                    color: const Color.fromARGB(
-                                      255,
-                                      255,
-                                      255,
-                                      255,
+                                    DataCell(
+                                      Icon(
+                                        Icons.edit,
+                                        color: const Color.fromARGB(
+                                          255,
+                                          255,
+                                          255,
+                                          255,
+                                        ),
+                                        size: 20,
+                                      ),
                                     ),
-                                    size: 20,
-                                  ),
-                                ),
 
-                                DataCell(
-                                  Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
-                                    size: 20,
-                                  ),
-                                ),
-                              ],
-                            );
-                          }).toList(),
+                                    DataCell(
+                                      Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }).toList(),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
+        );
+      },
+      loading: () => Shimmer(
+        duration: Duration(milliseconds: 3),
+        interval: Duration(milliseconds: 3),
+        color: Colors.white,
+        colorOpacity: 0,
+        enabled: true,
+        direction: ShimmerDirection.fromLTRB(),
+        child: Container(color: Colors.grey[100]),
       ),
+
+      error: (error, stackTrace) => (Center(
+        child: Text(
+          'Error: $error',
+          style: TextStyle(fontFamily: 'Sono', fontSize: 30, color: txtcolor),
+        ),
+      )),
     );
   }
 }

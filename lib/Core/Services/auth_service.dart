@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:ecommerce_admin/Model/user_model.dart';
+import 'package:ecommerce_admin/Domain/Entities/UserEntities/user_entities.dart';
 
 class AuthService {
-  final String baseurl = "http://localhost:5268/api/auth";
+  final String baseurl = "http://localhost:5013/api/auth";
 
   Future<Map<String, dynamic>?> login(LoginModel login) async {
     try {
@@ -14,7 +14,8 @@ class AuthService {
       );
 
       if (response.statusCode == 200) {
-        return jsonDecode(response.body) as Map<String, dynamic>;
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        return data;
       } else {
         return jsonDecode(response.body) as Map<String, dynamic>;
       }

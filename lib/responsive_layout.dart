@@ -16,7 +16,7 @@ const  ResponsiveLayout({
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        if (constraints.maxWidth < 574) {
+        if (constraints.maxWidth < 576) {
           return mobileBody;
         } else if (constraints.maxWidth < 1100) {
           return tabletBody;

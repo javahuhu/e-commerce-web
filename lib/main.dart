@@ -1,4 +1,4 @@
-import 'package:ecommerce_admin/Router/app_router.dart';
+import 'package:ecommerce_admin/Presentation/Router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       designSize: const Size(360, 690),
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: (_, __) {
+      builder: (_, _) {
         return MaterialApp.router(
           debugShowCheckedModeBanner: false,
           routerConfig: router,

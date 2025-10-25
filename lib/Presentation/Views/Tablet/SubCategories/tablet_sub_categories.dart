@@ -1,0 +1,1205 @@
+import 'dart:ui';
+import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:ecommerce_admin/Core/Constants/nav_bar_items.dart';
+import 'package:ecommerce_admin/Data/Models/subcategory_model_response.dart';
+import 'package:ecommerce_admin/Domain/Entities/CategoriesEntities/categories_entities_response.dart';
+import 'package:ecommerce_admin/Domain/Entities/SubCategoriesEntities/subcategories_entities.dart';
+import 'package:ecommerce_admin/Presentation/Provider/category_provider.dart';
+import 'package:ecommerce_admin/Presentation/Provider/subcategories_provider.dart';
+import 'package:ecommerce_admin/Presentation/Router/navigation_page.dart';
+import 'package:ecommerce_admin/core/Theme/colors.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:glassmorphism/glassmorphism.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hooks_riverpod/legacy.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
+
+class TabletSubCategoriesPage extends HookConsumerWidget {
+  TabletSubCategoriesPage({super.key});
+
+  final selectedCategory = StateProvider<String?>((ref) => null);
+
+  void addSubCategories(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final width = MediaQuery.of(context).size.width;
+
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (width <= 575 && context.mounted ||
+                  width > 1080 && context.mounted) {
+                context.pop();
+              }
+            });
+
+            return HookConsumer(
+              builder: (context, ref, child) {
+                final selectedfinal = ref.watch(selectedCategory);
+                final categoriesResult = ref.watch(categoryResponseProvider);
+                final subcategoryName = useTextEditingController();
+
+                Future<void> sendSubCategory() async {
+                  final categories =
+                      ref.read(categoryResponseProvider).value ?? [];
+
+                  final selectedCat = categories.firstWhere(
+                    (cat) => cat.id == selectedfinal,
+                  );
+
+                  if (selectedfinal == null || subcategoryName.text.isEmpty) {
+                    return showTopSnackBar(
+                      Overlay.of(context),
+                      Material(
+                        color: Colors.transparent,
+                        child: AwesomeSnackbarContent(
+                          title: "Error",
+                          message: 'Failed to add Sub Category Check input',
+                          contentType: ContentType.failure,
+                        ),
+                      ),
+                    );
+                  }
+
+                  try {
+                    final useCase = ref.watch(subcategoryUsecasesProvider);
+
+                    final response = SubCategoriesEntities(
+                      category: selectedCat.categoryName,
+                      subcategoryName: subcategoryName.text,
+                    );
+
+                    final success = await useCase.execute(response);
+
+                    if (success != null && context.mounted) {
+                      showTopSnackBar(
+                        Overlay.of(context),
+                        Material(
+                          color: Colors.transparent,
+                          child: AwesomeSnackbarContent(
+                            title: 'Success',
+                            message:
+                                'You have Successfully Added Sub Categories',
+                            contentType: ContentType.success,
+                          ),
+                        ),
+                      );
+
+                      ref.read(selectedCategory.notifier).state = null;
+                      subcategoryName.clear();
+
+                      context.pop();
+                      ref.invalidate(subcategoryResponseProvider);
+                    }
+                  } catch (e) {
+                    if (context.mounted) {
+                      showTopSnackBar(
+                        Overlay.of(context),
+                        Material(
+                          color: Colors.transparent,
+                          child: AwesomeSnackbarContent(
+                            title: "Error",
+                            message: 'Failed to Add Sub Category',
+                            contentType: ContentType.failure,
+                          ),
+                        ),
+                      );
+                    }
+                  }
+                }
+
+                return categoriesResult.when(
+                  data: (categories) {
+                    return Dialog(
+                      elevation: 5,
+                      child: Container(
+                        height: 340,
+                        width: 600,
+                        padding: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 230, 233, 243),
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+
+                        child: Column(
+                          children: [
+                            Center(
+                              child: Text(
+                                "Add Sub Category",
+                                style: TextStyle(
+                                  fontFamily: 'Sono',
+                                  fontSize: 35,
+                                  color: txtcolor,
+                                ),
+                              ),
+                            ),
+
+                            GlassmorphicContainer(
+                              width: double.infinity,
+                              height: 250,
+                              borderRadius: 20,
+                              linearGradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Color.fromARGB(
+                                    255,
+                                    255,
+                                    255,
+                                    255,
+                                  ).withValues(alpha: 0.1),
+                                  Color.fromARGB(
+                                    255,
+                                    255,
+                                    255,
+                                    255,
+                                  ).withValues(alpha: 0.1),
+                                ],
+                                stops: [0.1, 1],
+                              ),
+                              border: 2,
+                              blur: 5,
+                              borderGradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Color.fromARGB(
+                                    255,
+                                    255,
+                                    255,
+                                    255,
+                                  ).withValues(alpha: 0.3),
+                                  Color.fromARGB(
+                                    255,
+                                    255,
+                                    255,
+                                    255,
+                                  ).withValues(alpha: 0.3),
+                                ],
+                              ),
+
+                              child: Center(
+                                child: Column(
+                                  children: [
+                                    SizedBox(height: width > 647 ? 60 : 30),
+                                    Wrap(
+                                      spacing: 25,
+                                      runSpacing: 25,
+                                      alignment: WrapAlignment.center,
+                                      children: [
+                                        DropdownButton2(
+                                          underline: SizedBox.shrink(),
+                                          hint: Text(
+                                            'Sample 1',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+
+                                          items: categories
+                                              .map<
+                                                DropdownMenuItem<
+                                                  CategoriesEntitiesResponse
+                                                >
+                                              >(
+                                                (category) =>
+                                                    DropdownMenuItem<
+                                                      CategoriesEntitiesResponse
+                                                    >(
+                                                      value: category,
+                                                      child: Text(
+                                                        category.categoryName,
+                                                        style: const TextStyle(
+                                                          fontSize: 14,
+                                                        ),
+                                                      ),
+                                                    ),
+                                              )
+                                              .toList(),
+
+                                          value: selectedfinal != null
+                                              ? categories.firstWhere(
+                                                  (cat) =>
+                                                      cat.id == selectedfinal,
+                                                  orElse: () =>
+                                                      categories.first,
+                                                )
+                                              : null,
+                                          onChanged:
+                                              (CategoriesEntitiesResponse? value) {
+                                                if (value != null) {
+                                                  ref
+                                                          .read(
+                                                            selectedCategory
+                                                                .notifier,
+                                                          )
+                                                          .state =
+                                                      value.id;
+                                                }
+                                              },
+
+                                          buttonStyleData: ButtonStyleData(
+                                            height: 48,
+                                            width: 250,
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              border: Border.all(
+                                                color: Colors.black54,
+                                                width: 2,
+                                              ),
+                                            ),
+                                          ),
+                                          dropdownStyleData: DropdownStyleData(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                          ),
+                                        ),
+
+                                        SizedBox(
+                                          height: 48,
+                                          width: 250,
+                                          child: TextFormField(
+                                            controller: subcategoryName,
+                                            decoration: InputDecoration(
+                                              labelText: 'Sub Category Name',
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  width: 2,
+                                                  color: Colors.black54,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  width: 2,
+                                                  color: Colors.black,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                    SizedBox(height: width > 647 ? 55 : 25),
+
+                                    Wrap(
+                                      spacing: 25,
+                                      runSpacing: 25,
+                                      alignment: WrapAlignment.center,
+                                      children: [
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            context.pop();
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            foregroundColor:
+                                                const Color.fromARGB(
+                                                  255,
+                                                  255,
+                                                  255,
+                                                  255,
+                                                ),
+
+                                            backgroundColor:
+                                                const Color.fromARGB(
+                                                  255,
+                                                  240,
+                                                  124,
+                                                  124,
+                                                ),
+                                            minimumSize: Size(150, 50),
+                                          ),
+                                          child: Text(
+                                            'Cancel',
+                                            style: TextStyle(fontSize: 15),
+                                          ),
+                                        ),
+
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            sendSubCategory();
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            foregroundColor:
+                                                const Color.fromARGB(
+                                                  255,
+                                                  255,
+                                                  255,
+                                                  255,
+                                                ),
+
+                                            backgroundColor:
+                                                const Color.fromARGB(
+                                                  255,
+                                                  128,
+                                                  196,
+                                                  130,
+                                                ),
+
+                                            minimumSize: Size(150, 50),
+                                          ),
+                                          child: Text(
+                                            'Save',
+                                            style: TextStyle(fontSize: 15),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+
+                  loading: () => Shimmer(
+                    duration: Duration(milliseconds: 3),
+                    interval: Duration(milliseconds: 3),
+                    color: Colors.white,
+                    colorOpacity: 0,
+                    enabled: true,
+                    direction: ShimmerDirection.fromLTRB(),
+                    child: Container(color: Colors.grey[100]),
+                  ),
+                  error: (error, stackTrace) => Center(
+                    child: Text(
+                      "Error: $error",
+                      style: TextStyle(
+                        fontFamily: 'Sono',
+                        fontSize: 30,
+                        color: txtcolor,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
+  final List<Map<String, dynamic>> products = [
+    {
+      "image": "assets/sampleuser.jpg",
+      "subcategory": "Mobile",
+      "category": "Electronics",
+      "Date": "2024",
+      "Value": 0.5,
+    },
+    {
+      "image": "assets/sampleuser.jpg",
+      "subcategory": "Mobile",
+      "category": "Books",
+      "Date": "2024",
+      "Value": 0.5,
+    },
+    {
+      "image": "assets/sampleuser.jpg",
+      "subcategory": "Mobile",
+      "category": "Cloths",
+      "Date": "2024",
+      "Value": 0.5,
+    },
+    {
+      "image": "assets/sampleuser.jpg",
+      "subcategory": "Mobile",
+      "category": "Grossory",
+      "Date": "2024",
+      "Value": 0.5,
+    },
+    {
+      "image": "assets/sampleuser.jpg",
+      "subcategory": "Mobile",
+      "category": "Slippers",
+      "Date": "2024",
+      "Value": 0.5,
+    },
+    {
+      "image": "assets/sampleuser.jpg",
+      "subcategory": "Mobile",
+      "category": "Top",
+      "Date": "2024",
+      "Value": 0.5,
+    },
+    {
+      "image": "assets/sampleuser.jpg",
+      "subcategory": "Mobile",
+      "category": "Bottom",
+      "Date": "2024",
+      "Value": 0.5,
+    },
+  ];
+
+  final isDark = StateProvider<bool>((ref) => false);
+  final thedrawer = StateProvider<bool>((ref) => false);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controller = useAnimationController(
+      duration: const Duration(seconds: 6),
+    )..repeat(reverse: true);
+
+    final scaleAnimation = Tween<double>(
+      begin: 0.7,
+      end: 1.05,
+    ).animate(CurvedAnimation(parent: controller, curve: Curves.easeInOut));
+
+    final colorAnimation = TweenSequence<Color?>([
+      TweenSequenceItem(
+        tween: ColorTween(begin: Colors.blue, end: Colors.purple),
+        weight: 1,
+      ),
+      TweenSequenceItem(
+        tween: ColorTween(begin: Colors.purple, end: Colors.pink),
+        weight: 1,
+      ),
+      TweenSequenceItem(
+        tween: ColorTween(begin: Colors.pink, end: Colors.teal),
+        weight: 1,
+      ),
+      TweenSequenceItem(
+        tween: ColorTween(begin: Colors.teal, end: Colors.blue),
+        weight: 1,
+      ),
+    ]).animate(CurvedAnimation(parent: controller, curve: Curves.easeInOut));
+
+    final dark = ref.watch(isDark);
+    final expandDrawer = ref.watch(thedrawer);
+    double width = MediaQuery.of(context).size.width;
+    double gridWidth = (width > 2265) ? 150 : 20;
+
+    final subcategories = ref.watch(subcategoryResponseProvider);
+    return subcategories.when(
+      data: (subcategory) {
+        return Scaffold(
+          body: Stack(
+            fit: StackFit.expand,
+            children: [
+              _backgroundAnimation(controller, scaleAnimation, colorAnimation),
+              _backdropFilter(),
+              _mainContent(
+                context,
+                ref,
+                dark,
+                expandDrawer,
+                gridWidth,
+                controller,
+                scaleAnimation,
+                colorAnimation,
+                subcategory,
+              ),
+            ],
+          ),
+        );
+      },
+      loading: () => Shimmer(
+        duration: Duration(milliseconds: 3),
+        interval: Duration(milliseconds: 3),
+        color: Colors.white,
+        colorOpacity: 0,
+        enabled: true,
+        direction: ShimmerDirection.fromLTRB(),
+        child: Container(color: Colors.grey[100]),
+      ),
+      error: (error, stackTrace) => Center(
+        child: Text(
+          "Error: $error",
+          style: TextStyle(fontFamily: 'Sono', fontSize: 30, color: txtcolor),
+        ),
+      ),
+    );
+  }
+
+  Widget _backgroundAnimation(
+    AnimationController controller,
+    Animation<double> scaleAnimation,
+    Animation<Color?> colorAnimation,
+  ) {
+    return Stack(
+      children: [
+        Positioned(
+          right: -80,
+          top: -80,
+          child: AnimatedBuilder(
+            animation: controller,
+            builder: (context, child) {
+              return Transform.scale(
+                scale: scaleAnimation.value,
+                child: Container(
+                  height: 100,
+                  width: 100,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: colorAnimation.value ?? Colors.deepPurpleAccent,
+                        blurRadius: 100,
+                        spreadRadius: 300,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        Positioned(
+          left: -70,
+          bottom: -70,
+          child: AnimatedBuilder(
+            animation: controller,
+            builder: (context, child) {
+              return Transform.scale(
+                scale: scaleAnimation.value,
+                child: Container(
+                  height: 100,
+                  width: 100,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: colorAnimation.value ?? Colors.deepPurpleAccent,
+                        blurRadius: 100,
+                        spreadRadius: 300,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _backdropFilter() {
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color.fromARGB(181, 245, 246, 248), // light gray
+              Color.fromARGB(176, 217, 219, 225), // lavender gray
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _mainContent(
+    BuildContext context,
+    WidgetRef ref,
+    bool dark,
+    bool expandDrawer,
+    double gridWidth,
+    AnimationController controller,
+    Animation<double> scaleAnimation,
+    Animation<Color?> colorAnimation,
+    List<SubcategoryModelResponse> subcategory,
+  ) {
+    return Column(
+      children: [
+        Expanded(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _sidebar(
+                context,
+                expandDrawer,
+                ref,
+                () => ref.read(thedrawer.notifier).state = !expandDrawer,
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    children: [
+                      SizedBox(height: 35),
+                      _header(context, ref, dark),
+                      _welcomeSection(context),
+                      SizedBox(height: 25),
+                      _allProductsSection(
+                        context,
+                        expandDrawer,
+                        ref,
+                        () =>
+                            ref.read(thedrawer.notifier).state = !expandDrawer,
+                        subcategory,
+                      ),
+
+                      SizedBox(height: 50),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _sidebar(
+    BuildContext context,
+    bool drawer,
+    WidgetRef ref,
+    VoidCallback toggleDrawer,
+  ) {
+    final width = MediaQuery.of(context).size.width;
+    if (width > 850) {
+      return _buildFullSideBar(context, ref);
+    }
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 300),
+      height: 1000,
+      width: drawer ? 160 : 115,
+      child: Column(
+        children: [
+          GestureDetector(
+            onTap: toggleDrawer,
+            child: Transform.translate(
+              offset: Offset(0, -15),
+              child: ClipRRect(
+                child: Image.asset(
+                  'assets/analysis.png',
+                  fit: BoxFit.contain,
+                  height: 115,
+                  width: 115,
+                ),
+              ),
+            ),
+          ),
+
+          if (drawer)
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(top: 50),
+                child: ListView.separated(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  padding: EdgeInsets.only(left: 35),
+                  separatorBuilder: (_, _) => SizedBox(height: 30),
+                  itemCount: navbar.length,
+                  itemBuilder: (context, index) {
+                    final icons = navbar[index];
+                    return GestureDetector(
+                      onTap: () {
+                        NavigationPage.navigateTo(context, index);
+                      },
+                      child: Container(
+                        height: 50,
+                        width: 50,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: const Color.fromARGB(255, 255, 255, 255),
+                          boxShadow: [
+                            BoxShadow(color: Colors.black12, blurRadius: 2),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          child: Image.asset(
+                            icons['Icons'],
+                            fit: BoxFit.contain,
+                            height: 30,
+                            width: 30,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFullSideBar(BuildContext context, WidgetRef ref) {
+    return Column(
+      children: [
+        Transform.translate(
+          offset: Offset(0, -15),
+          child: ClipRRect(
+            child: Image.asset(
+              'assets/analysis.png',
+              fit: BoxFit.contain,
+              height: 115,
+              width: 115,
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: 50),
+          child: SizedBox(
+            height: 700,
+            width: 160,
+            child: ListView.separated(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              padding: EdgeInsets.only(left: 35),
+              separatorBuilder: (_, _) => SizedBox(height: 30),
+              itemCount: navbar.length,
+              itemBuilder: (context, index) {
+                final icons = navbar[index];
+                return GestureDetector(
+                  onTap: () {
+                    NavigationPage.navigateTo(context, index);
+                  },
+                  child: Container(
+                    height: 50,
+                    width: 50,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: const Color.fromARGB(255, 255, 255, 255),
+                      boxShadow: [
+                        BoxShadow(color: Colors.black12, blurRadius: 2),
+                      ],
+                    ),
+                    child: ClipRRect(
+                      child: Image.asset(
+                        icons['Icons'],
+                        fit: BoxFit.contain,
+                        height: 30,
+                        width: 30,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _header(BuildContext context, WidgetRef ref, bool dark) {
+    double adjustmode = MediaQuery.of(context).size.width;
+    final adjust = (adjustmode < 810) ? 0 : 105;
+    return Padding(
+      padding: EdgeInsets.only(left: 40),
+      child: Row(
+        children: [
+          Text('Laza', style: TextStyle(fontSize: 35, color: txtcolor)),
+          Spacer(),
+          _themeToggle(context, ref, dark),
+          Spacer(),
+          SizedBox(width: adjust.toDouble()),
+          _headerIcons(),
+        ],
+      ),
+    );
+  }
+
+  Widget _themeToggle(BuildContext context, WidgetRef ref, bool dark) {
+    return Center(
+      child: GestureDetector(
+        onTap: () {
+          ref.read(isDark.notifier).state = !dark;
+        },
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+          height: 50,
+          width: 100,
+          padding: EdgeInsets.all(4),
+          decoration: BoxDecoration(
+            color: dark ? txtcolor : Colors.grey[300],
+            borderRadius: BorderRadius.circular(50),
+          ),
+          child: AnimatedAlign(
+            alignment: dark ? Alignment.centerLeft : Alignment.centerRight,
+            duration: Duration(milliseconds: 300),
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                dark ? Icons.dark_mode : Icons.light_mode,
+                size: 19,
+                color: dark ? txtcolor : Colors.amberAccent,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _headerIcons() {
+    return Padding(
+      padding: EdgeInsets.only(right: 15),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            padding: EdgeInsets.all(3),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+            ),
+            child: IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.search),
+              iconSize: 20,
+              color: Colors.black,
+            ),
+          ),
+          SizedBox(width: 10),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(500),
+              child: Image.asset(
+                'assets/sampleuser.jpg',
+                fit: BoxFit.cover,
+                height: 45,
+                width: 45,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _welcomeSection(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          flex: 5,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 35),
+              Padding(
+                padding: const EdgeInsets.only(top: 20, left: 40),
+                child: Text(
+                  'Sub Categories',
+                  style: TextStyle(
+                    fontSize: 50,
+                    color: txtcolor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10, left: 45),
+                child: Text(
+                  "Different Sub Categories of Products",
+                  style: TextStyle(
+                    fontSize: 25,
+                    color: Color.fromARGB(200, 50, 50, 50),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _allProductsSection(
+    BuildContext context,
+    bool drawer,
+    ref,
+    VoidCallback toggleDrawer,
+    List<SubcategoryModelResponse> subcategory,
+  ) {
+    return Padding(
+      padding: EdgeInsets.only(left: 40),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+          child: Container(
+            constraints: BoxConstraints(minHeight: 200),
+            width: double.infinity,
+            margin: EdgeInsets.only(right: 20),
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: bgcolor.withValues(alpha: 0.2),
+              border: Border.all(
+                color: Colors.white.withValues(alpha: 0.5),
+                width: 1.5,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                  offset: Offset(0, 4),
+                ),
+              ],
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "All Sub Categories",
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: txtcolor,
+                          ),
+                        ),
+                        Spacer(),
+
+                        MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                            onTap: () {
+                              addSubCategories(context, ref);
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(7),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Icon(
+                                    Icons.add,
+                                    color: Colors.black,
+                                    size: 25,
+                                  ),
+                                  Text(
+                                    "Add New",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color.fromARGB(200, 50, 50, 50),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 20),
+                        Icon(Icons.refresh, color: Colors.black, size: 25),
+                      ],
+                    ),
+                  ),
+                ),
+
+                SizedBox(
+                  width: 1000,
+                  child: Theme(
+                    data: Theme.of(context).copyWith(
+                      dividerColor: Colors.transparent,
+                      dividerTheme: const DividerThemeData(
+                        color: Colors.transparent,
+                        space: 0,
+                        thickness: 0,
+                        indent: 0,
+                        endIndent: 0,
+                      ),
+                    ),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: DataTable(
+                          dividerThickness: 0.0,
+                          columnSpacing: 100,
+                          horizontalMargin: 2,
+                          dataRowMaxHeight: 60,
+                          headingRowHeight: 60,
+                          columns: [
+                            DataColumn(
+                              label: Text(
+                                'Sub Category Name',
+                                style: TextStyle(
+                                  color: txtcolor,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+
+                            DataColumn(
+                              label: Text(
+                                'Category',
+                                style: TextStyle(
+                                  color: txtcolor,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+
+                            DataColumn(
+                              label: Text(
+                                'Added Date',
+                                style: TextStyle(
+                                  color: txtcolor,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+
+                            DataColumn(
+                              label: SizedBox(
+                                width: 42,
+                                child: Center(
+                                  child: Text(
+                                    'Edit',
+                                    style: TextStyle(
+                                      color: txtcolor,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: SizedBox(
+                                width: 42.5,
+                                child: Center(
+                                  child: Text(
+                                    'Delete',
+                                    style: TextStyle(
+                                      color: txtcolor,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                          rows: subcategory.asMap().entries.map((entry) {
+                            final value = entry.value;
+                            return DataRow(
+                              cells: [
+                                DataCell(
+                                  Row(
+                                    children: [
+                                      Text(
+                                        value.subcategoryName.toString(),
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: txtcolor,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+
+                                DataCell(
+                                  Text(
+                                    value.category.toString(),
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: txtcolor,
+                                    ),
+                                  ),
+                                ),
+
+                                DataCell(
+                                  Text(
+                                    value.createdAt.toString(),
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: txtcolor,
+                                    ),
+                                  ),
+                                ),
+
+                                DataCell(
+                                  SizedBox(
+                                    width: 42,
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.edit,
+                                        color: const Color.fromARGB(
+                                          255,
+                                          255,
+                                          255,
+                                          255,
+                                        ),
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  SizedBox(
+                                    width: 42.5, // Match the column width
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
